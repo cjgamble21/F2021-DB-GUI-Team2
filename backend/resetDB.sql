@@ -1,4 +1,6 @@
-USE db;
+CREATE DATABASE IF NOT EXISTS `db`;
+
+USE `db`;
 
 DROP TABLE IF EXISTS `trainerSkills`;
 DROP TABLE IF EXISTS `sessions`;
