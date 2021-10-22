@@ -138,8 +138,9 @@ module.exports = function routes(app, logger) {
         logger.error('Problem with MySQL connection');
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-        var hash = sha512(req.body.password);
-        connection.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES (?, ?)', [req.body.username, hash], 
+        let hash = sha512(req.body.password);
+        console.log(hash);
+        connection.query("INSERT INTO `db`.`users` (`username`, `password`) VALUES ('" + req.body.username + "', '" + hash + "')",  
         function (err) {
             connection.release();
             if (err) {
