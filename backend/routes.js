@@ -1,5 +1,7 @@
 const pool = require('./db');
 
+var sha512 = require('js-sha512');
+
 module.exports = function routes(app, logger) {
   // GET /
   app.get('/', (req, res) => {
@@ -136,7 +138,8 @@ module.exports = function routes(app, logger) {
         logger.error('Problem with MySQL connection');
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-        connection.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES (?, ?)', [req.body.username, req.body.password], 
+        var hash = sha512(req.body.password);
+        connection.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES (?, ?)', [req.body.username, hash], 
         function (err) {
             connection.release();
             if (err) {
