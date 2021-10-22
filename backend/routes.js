@@ -97,8 +97,35 @@ module.exports = function routes(app, logger) {
   });      
              
   // BEGIN OF PROJECT ROUTES 
-  // app.use('/api', router);
 
+  // route for logging in as a registered user
+  app.post('/api/login', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).send('Problem obtaining MySQL connection');
+      } else {
+        conn.query('SELECT * FROM `db`.`users` WHERE username = ?', req.body.username,
+        function (err, result) {
+          conn.release();
+          if (err) {
+            logger.error("Error fetching vals\n", err);
+          } else {
+            if (req.body.password == result[0].password) {
+              res.status(200).send('Username and password combo match');
+              console.log("Success");
+            } else {
+              res.status(400).send('Username and password combo do not match');
+              console.log("Failure");
+            } 
+          }
+        });
+      }
+    });
+  });
+
+
+  // route for registering a user
   app.post('/api/register', async (req, res) => {
     pool.getConnection(function (err, connection) {
       if (err) {
@@ -106,7 +133,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         connection.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES (?, ?)', [req.body.username, req.body.password], 
-        function (err, data, fields) {
+        function (err) {
             connection.release();
             if (err) {
               logger.error("Error fetching vals \n", err);
