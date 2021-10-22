@@ -116,13 +116,16 @@ module.exports = function routes(app, logger) {
             if (result.length > 0) {
               if (req.body.password == result[0].password) {
                 res.status(200).send('Username and password combo match');
+                console.log("Success");
               } else {
-                res.status(404).send('Username and password combo do not match');
+                res.status(400).send('Username and password combo do not match');
                 logger.error("Error comparing username and password", err);
+                console.log("Failure");
               } 
             } else {
-              res.status(404).send('Username does not exist');
+              res.status(400).send('Username does not exist');
               logger.error("Error finding username");
+              console.log("User doesn't exist");
             }
           }
         });
