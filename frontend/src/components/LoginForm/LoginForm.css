@@ -1,0 +1,11 @@
+label {
+    padding-right: .5rem;
+}
+
+.registerMessage {
+    margin-top: 10vh;
+}
+
+* {
+    box-sizing: border-box;
+}
