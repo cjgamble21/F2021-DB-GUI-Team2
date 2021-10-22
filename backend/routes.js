@@ -1,4 +1,4 @@
-const pool = require('./db')
+const pool = require('./db');
 
 module.exports = function routes(app, logger) {
   // GET /
@@ -89,10 +89,31 @@ module.exports = function routes(app, logger) {
           } else {
             res.status(200).json({
               "data": rows
-            });
+            });       
           }
         });
       }
     });
+  });      
+             
+  // BEGIN OF PROJECT ROUTES 
+  // app.use('/api', router);
+
+  app.post('/api/register', async (req, res) => {
+    pool.getConnection(function (err, connection) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        connection.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES (?, ?)', [req.body.username, req.body.password], 
+        function (err, data, fields) {
+            connection.release();
+            if (err) {
+              logger.error("Error fetching vals \n", err);
+            } 
+        });
+      }
+    });
   });
+
 }

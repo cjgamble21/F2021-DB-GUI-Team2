@@ -26,6 +26,8 @@ app.use(cors({
   origin: '*'
 }));
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
+app.use(express.json()) //For JSON requests
+app.use(express.urlencoded({extended: true}));
 
 //include routes
 routes(app, logger);
