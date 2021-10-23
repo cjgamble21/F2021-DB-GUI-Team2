@@ -116,16 +116,13 @@ module.exports = function routes(app, logger) {
             if (result.length > 0) {
               if (req.body.password == result[0].password) {
                 res.status(200).send('Username and password combo match');
-                console.log("Success");
               } else {
-                res.status(400).send('Username and password combo do not match');
+                res.status(401).send('Username and password combo do not match');
                 logger.error("Error comparing username and password", err);
-                console.log("Failure");
               } 
             } else {
-              res.status(400).send('Username does not exist');
+              res.status(401).send('Username does not exist');
               logger.error("Error finding username");
-              console.log("User doesn't exist");
             }
           }
         });
@@ -136,14 +133,12 @@ module.exports = function routes(app, logger) {
 
   // route for registering a user
   app.post('/api/register', async (req, res) => {
-    pool.getConnection(function (err, connection) {
+    pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-        let hash = sha512(req.body.password);
-        console.log(hash);
-        connection.query("INSERT INTO `db`.`users` (`username`, `password`) VALUES ('" + req.body.username + "', '" + hash + "')",  
+        connection.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES (?, ?)', [req.body.username, req.body.password], 
         function (err) {
             connection.release();
             if (err) {
