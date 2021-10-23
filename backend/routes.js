@@ -138,9 +138,9 @@ module.exports = function routes(app, logger) {
         logger.error('Problem with MySQL connection');
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-        connection.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES (?, ?)', [req.body.username, req.body.password], 
+        conn.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES (?, ?)', [req.body.username, req.body.password], 
         function (err) {
-            connection.release();
+            conn.release();
             if (err) {
               logger.error("Error fetching vals \n", err);
             } 
