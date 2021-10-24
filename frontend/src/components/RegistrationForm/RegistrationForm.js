@@ -29,7 +29,7 @@ function RegistrationForm(props) {
                 "password":state.password,
                 "userType":state.userType,
             }
-            axios.post(API_BASE_URL+'/multplynumber', payload)
+            axios.post(API_BASE_URL+'/api/register', payload)
                 .then(function (response) {
                     if(response.status === 200){
                         setState(prevState => ({

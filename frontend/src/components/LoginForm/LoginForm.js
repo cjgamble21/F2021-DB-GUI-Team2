@@ -24,7 +24,7 @@ function LoginForm(props) {
             "email":state.email,
             "password":state.password,
         }
-        axios.post(API_BASE_URL+'/multplynumber', payload)
+        axios.post(API_BASE_URL+'/api/login', payload)
             .then(function (response) {
                 if(response.status === 200){
                     setState(prevState => ({
@@ -35,11 +35,8 @@ function LoginForm(props) {
                     redirectToHome();
                     props.showError(null)
                 }
-                else if(response.code === 204){
-                    props.showError("Username and password do not match");
-                }
                 else{
-                    props.showError("Username does not exists");
+                    props.showError("Incorrect Login information");
                 }
             })
             .catch(function (error) {
@@ -70,6 +67,7 @@ function LoginForm(props) {
                 </div>
                 <div className="form-group text-left">
                 <label htmlFor="exampleInputPassword1">Password</label>
+                <br/>
                 <input type="password" 
                        className="form-control" 
                        id="password" 
