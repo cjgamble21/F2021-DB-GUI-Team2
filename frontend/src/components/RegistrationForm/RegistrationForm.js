@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 
 function RegistrationForm(props) {
     const [state , setState] = useState({
-        email : "",
+        username : "",
         password : "",
         userType : "",
         confirmPassword: "",
@@ -21,11 +21,11 @@ function RegistrationForm(props) {
     }
 
     const sendDetailsToServer = () => {
-        if(state.email.length && state.password.length && state.userType.length) {
+        if(state.username.length && state.password.length && state.userType.length) {
             props.showError(null);
             const payload={
                 "userType":state,
-                "email":state.email,
+                "username":state.username,
                 "password":state.password,
                 "userType":state.userType,
             }
@@ -78,17 +78,17 @@ function RegistrationForm(props) {
                         value={state.userType} 
                         onChange={handleChange}>
                         <option value="">choose an option</option>
-                        <option value="Trainer">Trainer</option>
-                        <option value="Trainee">Trainee</option>
+                        <option value="Member">Member</option>
+                        <option value="Owner">Owner</option>
                     </select>
                 </div>
                 <div className="form-group text-left">
-                    <label htmlFor="exampleInputEmail1">Email address</label>
-                    <input type="email" 
+                    <label htmlFor="exampleInputUsername1">Username</label>
+                    <input type="username" 
                        className="form-control" 
-                       id="email" 
-                       aria-describedby="emailHelp" 
-                       placeholder="Enter email" 
+                       id="username" 
+                       aria-describedby="usernameHelp" 
+                       placeholder="Enter username" 
                        onChange={handleChange}
                 />
                 </div>

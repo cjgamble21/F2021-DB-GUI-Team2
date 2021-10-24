@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 
 function LoginForm(props) {
     const [state , setState] = useState({
-        email : "",
+        username : "",
         password : "",
         successMessage: null
     })
@@ -21,7 +21,7 @@ function LoginForm(props) {
     const handleSubmitClick = (e) => {
         e.preventDefault();
         const payload={
-            "email":state.email,
+            "username":state.username,
             "password":state.password,
         }
         axios.post(API_BASE_URL+'/api/login', payload)
@@ -55,13 +55,13 @@ function LoginForm(props) {
         <div className="card">
             <form>
                 <div className="form-group text-left">
-                <label htmlFor="exampleInputEmail1">Email address</label>
-                <input type="email" 
+                <label htmlFor="exampleInputUserName1">Email address</label>
+                <input type="username" 
                        className="form-control" 
-                       id="email" 
-                       aria-describedby="emailHelp" 
-                       placeholder="Enter email" 
-                       value={state.email}
+                       id="username" 
+                       aria-describedby="usernameHelp" 
+                       placeholder="Enter username" 
+                       value={state.username}
                        onChange={handleChange}
                 />
                 </div>
