@@ -55,7 +55,7 @@ function LoginForm(props) {
         <div className="card">
             <form>
                 <div className="form-group text-left">
-                <label htmlFor="exampleInputUserName1">Email address</label>
+                <label htmlFor="exampleInputUserName1">Username</label>
                 <input type="username" 
                        className="form-control" 
                        id="username" 
