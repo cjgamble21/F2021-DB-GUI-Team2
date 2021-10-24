@@ -1,6 +1,7 @@
+const { registerUser } = require('./controller');
 const pool = require('./db');
 
-var sha512 = require('js-sha512');
+const controller = require('./controller');
 
 module.exports = function routes(app, logger) {
   // GET /
@@ -107,25 +108,8 @@ module.exports = function routes(app, logger) {
         logger.error('Problem with MySQL connection');
         res.status(400).send('Problem obtaining MySQL connection');
       } else {
-        conn.query('SELECT * FROM `db`.`users` WHERE username = ?', req.body.username,
-        function (err, result) {
-          conn.release();
-          if (err) {
-            logger.error("Error fetching vals\n", err);
-          } else {
-            if (result.length > 0) {
-              if (req.body.password == result[0].password) {
-                res.status(200).send('Username and password combo match');
-              } else {
-                res.status(401).send('Username and password combo do not match');
-                logger.error("Error comparing username and password", err);
-              } 
-            } else {
-              res.status(401).send('Username does not exist');
-              logger.error("Error finding username");
-            }
-          }
-        });
+        controller.loginUser(req, res, conn);
+        conn.release();
       }
     });
   });
@@ -138,13 +122,8 @@ module.exports = function routes(app, logger) {
         logger.error('Problem with MySQL connection');
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-        conn.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES (?, ?)', [req.body.username, req.body.password], 
-        function (err) {
-            conn.release();
-            if (err) {
-              logger.error("Error fetching vals \n", err);
-            } 
-        });
+        controller.registerUser(req, res, conn);
+        conn.release();
       }
     });
   });
