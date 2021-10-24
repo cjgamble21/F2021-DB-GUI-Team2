@@ -25,7 +25,7 @@ CREATE TABLE `profiles` (
     `userID`        int             NOT NULL,
 	PRIMARY KEY(`profileID`),
     KEY `userID` (`userID`),
-    CONSTRAINT `profiles_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `profiles` (`profileID`)
+    CONSTRAINT `profiles_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*
