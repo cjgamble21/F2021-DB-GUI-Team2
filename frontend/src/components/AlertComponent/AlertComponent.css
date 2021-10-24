@@ -1,4 +1,7 @@
 .alertMessage {
     min-width: 200px;
     justify-content: space-between;
+    margin-top: 1rem;
+    padding: .5rem 1rem;
+    background-color: red;
 }

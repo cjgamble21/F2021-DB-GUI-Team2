@@ -24,9 +24,9 @@ function Header(props) {
         props.history.push('/login')
     }
     return(
-        <nav className="navbar navbar-dark bg-primary">
-            <div className="row col-12 d-flex justify-content-center text-white">
-                <span className="h3">{props.title || title}</span>
+        <nav>
+            <div>
+                <span className="h3 align-items-center ">{props.title || title}</span>
                 {renderLogout()}
             </div>
         </nav>

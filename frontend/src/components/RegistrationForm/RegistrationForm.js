@@ -71,6 +71,7 @@ function RegistrationForm(props) {
             <form>
                 <div className="form-group text-left">
                     <label htmlFor="exampleUserType">User Type</label>
+                    <br/>
                     <select className="User Type" 
                         id="userType"
                         value={state.userType} 
@@ -79,7 +80,6 @@ function RegistrationForm(props) {
                         <option value="Trainer">Trainer</option>
                         <option value="Trainee">Trainee</option>
                     </select>
-
                 </div>
                 <div className="form-group text-left">
                     <label htmlFor="exampleInputEmail1">Email address</label>

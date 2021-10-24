@@ -83,8 +83,8 @@ function App () {
   return (
     <Router>
     <div className="App">
-      <Header title={title}/>
         <div className="container d-flex align-items-center flex-column">
+          <Header title={title}/>
           <Switch>
             <Route path="/" exact={true}>
               <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>

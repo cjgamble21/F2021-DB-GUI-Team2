@@ -1,11 +1,9 @@
 label {
-    padding-right: .5rem;
+    padding-right: 1rem;
+    margin: 1rem;
+    font-weight: bold;
 }
 
 .registerMessage {
-    margin-top: 10vh;
-}
-
-* {
-    box-sizing: border-box;
+    margin-top: 1rem;
 }
