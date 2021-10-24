@@ -24,11 +24,12 @@ function RegistrationForm(props) {
         if(state.email.length && state.password.length && state.userType.length) {
             props.showError(null);
             const payload={
+                "userType":state,
                 "email":state.email,
                 "password":state.password,
                 "userType":state.userType,
             }
-            axios.post(API_BASE_URL+'/user/register', payload)
+            axios.post(API_BASE_URL+'/multplynumber', payload)
                 .then(function (response) {
                     if(response.status === 200){
                         setState(prevState => ({
