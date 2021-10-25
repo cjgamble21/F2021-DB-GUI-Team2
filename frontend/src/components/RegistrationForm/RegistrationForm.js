@@ -12,6 +12,7 @@ function RegistrationForm(props) {
         confirmPassword: "",
         successMessage: null
     })
+    
     const handleChange = (e) => {
         const {id , value} = e.target   
         setState(prevState => ({
@@ -80,6 +81,7 @@ function RegistrationForm(props) {
                         <option value="">choose an option</option>
                         <option value="Member">Member</option>
                         <option value="Owner">Owner</option>
+                        <option value="Trainer">Trainer</option>
                     </select>
                 </div>
                 <div className="form-group text-left">

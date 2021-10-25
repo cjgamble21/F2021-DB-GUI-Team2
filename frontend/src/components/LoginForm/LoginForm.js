@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 
 function LoginForm(props) {
     const [state , setState] = useState({
+        userType: "",
         username : "",
         password : "",
         successMessage: null
@@ -21,6 +22,7 @@ function LoginForm(props) {
     const handleSubmitClick = (e) => {
         e.preventDefault();
         const payload={
+            "userType":state.userType,
             "username":state.username,
             "password":state.password,
         }
@@ -44,8 +46,22 @@ function LoginForm(props) {
             });
     }
     const redirectToHome = () => {
-        props.updateTitle('Home')
-        props.history.push('/home');
+        if(state.userType == "Member"){
+            props.updateTitle('Member Homepage');
+            props.history.push('/UserHomePage');
+        }
+        else if(state.userType == "Trainer"){
+            props.updateTitle('Trainer Homepage');
+            props.history.push('/TrainerHomePage');
+        }
+        else if(state.userType == "Owner"){
+            props.updateTitle('Gym Owner Homepage');
+            props.history.push('/GymOwnerHomePage');
+        }
+        else{
+            props.updateTitle('Home');
+            props.history.push('/home');
+        }
     }
     const redirectToRegister = () => {
         props.history.push('/register'); 
@@ -55,8 +71,21 @@ function LoginForm(props) {
         <div className="card">
             <form>
                 <div className="form-group text-left">
-                <label htmlFor="exampleInputUserName1">Username</label>
-                <input type="username" 
+                    <label htmlFor="exampleUserType">User Type</label>
+                    <br/>
+                    <select className="User Type" 
+                        id="userType"
+                        value={state.userType} 
+                        onChange={handleChange}>
+                        <option value="">choose an option</option>
+                        <option value="Member">Member</option>
+                        <option value="Owner">Owner</option>
+                        <option value="Trainer">Trainer</option>
+                    </select>
+                </div>
+                <div className="form-group text-left">
+                    <label htmlFor="exampleInputUserName1">Username</label>
+                    <input type="username" 
                        className="form-control" 
                        id="username" 
                        aria-describedby="usernameHelp" 
@@ -66,15 +95,15 @@ function LoginForm(props) {
                 />
                 </div>
                 <div className="form-group text-left">
-                <label htmlFor="exampleInputPassword1">Password</label>
-                <br/>
-                <input type="password" 
+                    <label htmlFor="exampleInputPassword1">Password</label>
+                    <br/>
+                    <input type="password" 
                        className="form-control" 
                        id="password" 
                        placeholder="Password"
                        value={state.password}
                        onChange={handleChange} 
-                />
+                    />
                 </div>
                 <div className="form-check">
                 </div>
