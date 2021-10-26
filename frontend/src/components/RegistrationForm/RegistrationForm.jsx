@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import './RegistrationForm.css';
-import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
+import {ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
 
 function RegistrationForm(props) {
@@ -25,12 +25,11 @@ function RegistrationForm(props) {
         if(state.username.length && state.password.length && state.userType.length) {
             props.showError(null);
             const payload={
-                "userType":state,
                 "username":state.username,
                 "password":state.password,
                 "userType":state.userType,
             }
-            axios.post(API_BASE_URL+'/api/register', payload)
+            axios.post('http://localhost:8000/api/register', payload)
                 .then(function (response) {
                     if(response.status === 200){
                         setState(prevState => ({
@@ -45,7 +44,7 @@ function RegistrationForm(props) {
                     }
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    window.alert(error);
                 });    
         } else {
             props.showError('Please enter valid username, user type, and password')    
@@ -63,7 +62,7 @@ function RegistrationForm(props) {
     const handleSubmitClick = (e) => {
         e.preventDefault();
         if(state.password === state.confirmPassword) {
-            sendDetailsToServer()    
+            sendDetailsToServer();  
         } else {
             props.showError('Passwords do not match');
         }
@@ -71,7 +70,8 @@ function RegistrationForm(props) {
     return(
         <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
             <form>
-                <div className="form-group text-left">
+                <div clascsName="form-group text-left">
+                    <br/>
                     <label htmlFor="exampleUserType">User Type</label>
                     <br/>
                     <select className="User Type" 

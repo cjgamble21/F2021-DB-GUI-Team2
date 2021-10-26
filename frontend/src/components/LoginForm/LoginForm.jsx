@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import './LoginForm.css';
-import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
+import {ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
 
 function LoginForm(props) {
@@ -26,7 +26,7 @@ function LoginForm(props) {
             "username":state.username,
             "password":state.password,
         }
-        axios.post(API_BASE_URL+'/api/login', payload)
+        axios.post('http://localhost:8000/api/login', payload)
             .then(function (response) {
                 if(response.status === 200){
                     setState(prevState => ({
@@ -46,15 +46,15 @@ function LoginForm(props) {
             });
     }
     const redirectToHome = () => {
-        if(state.userType == "Member"){
+        if(state.userType === "Member"){
             props.updateTitle('Member Homepage');
             props.history.push('/UserHomePage');
         }
-        else if(state.userType == "Trainer"){
+        else if(state.userType === "Trainer"){
             props.updateTitle('Trainer Homepage');
             props.history.push('/TrainerHomePage');
         }
-        else if(state.userType == "Owner"){
+        else if(state.userType === "Owner"){
             props.updateTitle('Gym Owner Homepage');
             props.history.push('/GymOwnerHomePage');
         }
