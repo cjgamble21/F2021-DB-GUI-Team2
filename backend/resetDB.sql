@@ -4,10 +4,22 @@ USE `db`;
 
 DROP TABLE IF EXISTS `trainerSkills`;
 DROP TABLE IF EXISTS `sessions`;
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `workouts`;
 DROP TABLE IF EXISTS `trainers`;
 DROP TABLE IF EXISTS `profiles`;
-DROP TABLE IF EXISTS `workouts`;
+DROP TABLE IF EXISTS `users`;
+
+/*
+ * Table of user accounts
+ */
+CREATE TABLE `users` (
+	`userID`		int				NOT NULL AUTO_INCREMENT,
+	`username`		varchar(50) 	UNIQUE NOT NULL,
+	`password`		varchar(200) 	NOT NULL,
+	`admin`			bool			DEFAULT false,
+	PRIMARY KEY(`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 /*
  * Table of generic profiles
@@ -29,23 +41,12 @@ CREATE TABLE `profiles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*
- * Table of user accounts
- */
-CREATE TABLE `users` (
-	`userID`		int				NOT NULL AUTO_INCREMENT,
-	`username`		varchar(50) 	UNIQUE NOT NULL,
-	`password`		varchar(50) 	NOT NULL,
-	`admin`			bool			DEFAULT false,
-	PRIMARY KEY(`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*
  * Table of trainer accounts
  */
 CREATE TABLE `trainers` (
 	`trainerID`		int 			NOT NULL AUTO_INCREMENT,
 	`username`		varchar(50) 	UNIQUE NOT NULL,
-	`password`		varchar(50) 	NOT NULL,
+	`password`		varchar(200) 	NOT NULL,
 	`profileID`		int				NOT NULL,
 	PRIMARY KEY(`trainerID`),
 	KEY `profileID` (`profileID`),
