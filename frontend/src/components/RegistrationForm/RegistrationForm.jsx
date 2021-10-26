@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import './RegistrationForm.css';
-import {ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
+import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
 
 function RegistrationForm(props) {
@@ -24,12 +24,7 @@ function RegistrationForm(props) {
     const sendDetailsToServer = () => {
         if(state.username.length && state.password.length && state.userType.length) {
             props.showError(null);
-            const payload={
-                "username":state.username,
-                "password":state.password,
-                "userType":state.userType,
-            }
-            axios.post('http://localhost:8000/api/register', payload)
+            axios.post(API_BASE_URL + '/api/register', {username:state.username, password:state.password})
                 .then(function (response) {
                     if(response.status === 200){
                         setState(prevState => ({
