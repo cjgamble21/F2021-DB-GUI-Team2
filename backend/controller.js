@@ -96,3 +96,17 @@ exports.loginUser = function(req, res, conn) {
         });
       }
     }
+
+// function for verification of a valid web token for access of protected routes
+exports.checkAuth = function(req, res, next) {
+  try {
+    const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
+    req.userData = decoded;
+    next();
+  } catch (err) {
+    res.status(401).json({
+      code: 401,
+      message: 'Authorization failed'
+    });
+  }
+}
