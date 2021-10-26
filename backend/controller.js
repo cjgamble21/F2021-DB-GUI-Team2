@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 exports.registerUser = function(req, res, conn) {
     var username = req.body.username;
@@ -60,10 +61,20 @@ exports.loginUser = function(req, res, conn) {
                     response: "Error hashing password."
                   });
                 } else {
+                  // if result of compare function is true, the username and password match
                   if (hashRes) {
+                    // create a JSON web token for the login session to access protected routes
+                    const token = jwt.sign({
+                      username: result[0].username,
+                      userID: result[0].userID
+                    }, process.env.JWT_KEY, 
+                  {
+                    expiresIn: "1h"
+                  });
                     res.status(200).json({
                       code: 200,
-                      response: "Username and password combo match."
+                      response: "Username and password combo match.",
+                      token: token
                     });
                   } else {
                     logger.error("Error comparing username and password", err);
