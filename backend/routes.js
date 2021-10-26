@@ -1,7 +1,4 @@
-const { registerUser } = require('./controller');
-const pool = require('./db');
-
-const controller = require('./controller');
+const pool = require('./db')
 
 module.exports = function routes(app, logger) {
     // GET /
@@ -98,34 +95,4 @@ module.exports = function routes(app, logger) {
             }
         });
     });
-
-    // BEGIN OF PROJECT ROUTES 
-
-    // route for logging in as a registered user
-    app.post('/api/login', async(req, res) => {
-        pool.getConnection(function(err, conn) {
-            if (err) {
-                logger.error('Problem with MySQL connection');
-                res.status(400).send('Problem obtaining MySQL connection');
-            } else {
-                controller.loginUser(req, res, conn);
-                conn.release();
-            }
-        });
-    });
-
-
-    // route for registering a user
-    app.post('/api/register', async(req, res) => {
-        pool.getConnection(function(err, conn) {
-            if (err) {
-                logger.error('Problem with MySQL connection');
-                res.status(400).send('Problem obtaining MySQL connection');
-            } else {
-                controller.registerUser(req, res, conn);
-                conn.release();
-            }
-        });
-    });
-
 }
