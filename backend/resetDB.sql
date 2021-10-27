@@ -47,7 +47,7 @@ CREATE TABLE `profiles` (
 	`pfp`			varchar(50)		DEFAULT NULL,
 	`description`	varchar(500)	DEFAULT NULL,
 	`userType`		int				NOT NULL,
-	PRIMARY KEY(`profileID`, `userType`),
+	PRIMARY KEY(`profileID`),
 	KEY `userType` (`userType`),
 	CONSTRAINT `profiles_ibfk_1` FOREIGN KEY (`userType`) REFERENCES `userTypes` (`userType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
