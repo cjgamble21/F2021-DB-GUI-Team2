@@ -47,8 +47,22 @@ function RegistrationForm(props) {
         
     }
     const redirectToHome = () => {
-        props.updateTitle('Home')
-        props.history.push('/home');
+        if(state.userType === "Member"){
+            props.updateTitle('Member Homepage');
+            props.history.push('/UserHomePage');
+        }
+        else if(state.userType === "Trainer"){
+            props.updateTitle('Trainer Homepage');
+            props.history.push('/TrainerHomePage');
+        }
+        else if(state.userType === "Owner"){
+            props.updateTitle('Gym Owner Homepage');
+            props.history.push('/GymOwnerHomePage');
+        }
+        else{
+            props.updateTitle('Home');
+            props.history.push('/home');
+        }
     }
     const redirectToLogin = () => {
         props.updateTitle('Login')
@@ -87,7 +101,7 @@ function RegistrationForm(props) {
                        aria-describedby="usernameHelp" 
                        placeholder="Enter username" 
                        onChange={handleChange}
-                />
+                    />
                 </div>
                 <div className="form-group text-left">
                     <label htmlFor="exampleInputPassword1">Password</label>

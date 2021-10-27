@@ -4,7 +4,6 @@ import axios from 'axios';
 import Header from './components/Header/Header';
 import LoginForm from './components/LoginForm/LoginForm';
 import RegistrationForm from './components/RegistrationForm/RegistrationForm';
-import Home from './components/Home/Home';
 import GymOwnerHomePage from './components/GymOwnerHomePage/GymOwnerHomePage'
 import {
   BrowserRouter as Router,
@@ -95,9 +94,6 @@ function App () {
             </Route>
             <Route path="/register">
               <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
-            <Route path="/home">
-              <Home/>
             </Route>
             <Route path="/GymOwnerHomePage">
                 <GymOwnerHomePage showError={updateErrorMessage} updateTitle={updateTitle}/>
