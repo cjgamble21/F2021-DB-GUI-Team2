@@ -37,20 +37,21 @@ function LoginForm(props) {
                 }
             })
             .catch(function (error) {
+                redirectToHome();
                 console.log(error);
             });
     }
     const redirectToHome = () => {
         if(state.userType === "Member"){
-            props.updateTitle('Member Homepage');
+            props.updateTitle(state.username);
             props.history.push('/UserHomePage');
         }
         else if(state.userType === "Trainer"){
-            props.updateTitle('Trainer Homepage');
+            props.updateTitle(state.username);
             props.history.push('/TrainerHomePage');
         }
         else if(state.userType === "Owner"){
-            props.updateTitle('Gym Owner Homepage');
+            props.updateTitle(state.username);
             props.history.push('/GymOwnerHomePage');
         }
         else{

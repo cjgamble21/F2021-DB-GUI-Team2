@@ -105,6 +105,7 @@ function RegistrationForm(props) {
                 </div>
                 <div className="form-group text-left">
                     <label htmlFor="exampleInputPassword1">Password</label>
+                    <br/>
                     <input type="password" 
                         className="form-control" 
                         id="password" 
