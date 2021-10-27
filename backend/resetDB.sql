@@ -2,11 +2,8 @@ CREATE DATABASE IF NOT EXISTS `db`;
 
 USE `db`;
 
-DROP TABLE IF EXISTS `trainerSkills`;
 DROP TABLE IF EXISTS `sessions`;
-DROP TABLE IF EXISTS `admins`;
-DROP TABLE IF EXISTS `trainers`;
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `trainerSkills`;
 DROP TABLE IF EXISTS `profiles`;
 DROP TABLE IF EXISTS `userTypes`;
 DROP TABLE IF EXISTS `workouts`;
@@ -60,45 +57,16 @@ INSERT INTO `profiles` (`username`, `password`, `firstName`, `lastName`, `age`, 
 INSERT INTO `profiles` (`username`, `password`, `firstName`, `lastName`, `age`, `gender`, `phone`, `email`, `userType`) VALUES ("exampleAdmin", "examplePassword", "exampleFirst", "exampleLast", 1, "male", "exampleAdminPhone", "exampleAdminEmail", 3);
 
 /*
- * Table of users
- */
-CREATE TABLE `users` (
-	`profileID`		int				NOT NULL,
-	PRIMARY KEY(`profileID`),
-	CONSTRAINT `users_ibfk_1` FOREIGN KEY (`profileID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*
- * Table of trainers
- */
-CREATE TABLE `trainers` (
-	`profileID`		int				NOT NULL,
-	PRIMARY KEY(`profileID`),
-	CONSTRAINT `trainers_ibfk_1` FOREIGN KEY (`profileID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*
- * Table of admins
- */
-CREATE TABLE `admins` (
-	`profileID`		int				NOT NULL,
-	PRIMARY KEY(`profileID`),
-	CONSTRAINT `admins_ibfk_1` FOREIGN KEY (`profileID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*
  * Table of trainer's skills in a given workout from 1-10
  */
 CREATE TABLE `trainerSkills` (
 	`workoutID`		int				NOT NULL,
 	`profileID`		int				NOT NULL,
-	`userType`		int 			DEFAULT 2,
 	`skill`			int				NOT NULL,
 	PRIMARY KEY(`workoutID`),
 	KEY `profileID` (`profileID`),
-	KEY `userType` (`userType`),
 	CONSTRAINT `trainerSkills_ibfk_1` FOREIGN KEY (`workoutID`) REFERENCES `workouts` (`workoutID`) ON DELETE CASCADE,
-	CONSTRAINT `trainerSkills_ibfk_2` FOREIGN KEY (`profileID`) REFERENCES `trainers` (`profileID`) ON DELETE CASCADE,
+	CONSTRAINT `trainerSkills_ibfk_2` FOREIGN KEY (`profileID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE,
 	CONSTRAINT `trainerSkills_validSkills` CHECK (`skill` BETWEEN 1 AND 10)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -114,6 +82,6 @@ CREATE TABLE `sessions` (
 	PRIMARY KEY(`sessionNumber`),
 	KEY `trainerID` (`trainerID`),
 	KEY `userID` (`userID`),
-	CONSTRAINT `sessions_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `trainers` (`profileID`),
-	CONSTRAINT `sessions_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`profileID`)
+	CONSTRAINT `sessions_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `profiles` (`profileID`),
+	CONSTRAINT `sessions_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `profiles` (`profileID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
