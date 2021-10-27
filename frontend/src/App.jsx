@@ -6,6 +6,7 @@ import LoginForm from './components/LoginForm/LoginForm';
 import RegistrationForm from './components/RegistrationForm/RegistrationForm';
 import Home from './components/Home/Home';
 import GymOwnerHomePage from './components/GymOwnerHomePage/GymOwnerHomePage'
+import TrainerHomePage from './components/TrainerHomePage/TrainerHomePage';
 import {
   BrowserRouter as Router,
   Switch,
@@ -101,6 +102,9 @@ function App () {
             </Route>
             <Route path="/GymOwnerHomePage">
                 <GymOwnerHomePage showError={updateErrorMessage} updateTitle={updateTitle}/>
+            </Route>
+            <Route path="/TrainerHomePage">
+                <TrainerHomePage showError={updateErrorMessage} updateTitle={updateTitle}/>
             </Route>
           </Switch>
           <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>

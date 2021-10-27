@@ -1,0 +1,10 @@
+#trainerHeader {
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+}
+
+#trainerBody {
+    display: flex;
+    justify-content: space-between;
+}
