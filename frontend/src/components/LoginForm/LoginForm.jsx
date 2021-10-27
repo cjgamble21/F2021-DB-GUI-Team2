@@ -42,19 +42,16 @@ function LoginForm(props) {
             });
     }
     const redirectToHome = () => {
-        if(state.userType === "Member"){
+        if (state.userType === "Member") {
             props.updateTitle(state.username);
             props.history.push('/UserHomePage');
-        }
-        else if(state.userType === "Trainer"){
+        } else if (state.userType === "Trainer") {
             props.updateTitle(state.username);
             props.history.push('/TrainerHomePage');
-        }
-        else if(state.userType === "Owner"){
+        } else if (state.userType === "Owner") {
             props.updateTitle(state.username);
             props.history.push('/GymOwnerHomePage');
-        }
-        else{
+        } else {
             props.updateTitle('Home');
             props.history.push('/home');
         }
