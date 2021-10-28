@@ -4,36 +4,66 @@ import './TrainerHomePage.css';
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
 
-function TrainerHomePage(props) {
-    const [state , setState] = useState({
-        firstName: "",
-        lastName : "",
-        gender: "",
-        contactInfo: "",
-        credentials:"",
+//function TrainerHomePage(props)
+export default class Login extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            editMode: false,
+            firstName: "John",
+            lastName : "Doe",
+            gender: "Male",
+            age: "22",
+            contactInfo: ["foo@bar.net","123-456-7890"],
+            photo: "https://via.placeholder.com/250",
+            credentials: ["foo", "bar"],
+            workouts:["bar", "foo"]
+    };
 
-    })
-
-    return(
-        <div id="trainer">
-            <h1>Trainer Home Page</h1>
-            <div id="trainerHeader">
-                <img src="https://via.placeholder.com/150"/>
-                <h2>John Doe</h2>
-                <p>Gender Male</p>
-                <p>Age 22</p>
-            </div>
-            <div id="trainerBody">
-                <ul>Credentials
-                    <li>foo</li>
-                    <li>bar</li>
-                </ul>
-                <ul>Workouts
-                    <li>foo</li>
-                    <li>bar</li>
-                </ul>
-            </div>
-        </div>
-    )
+    this.toggleEditMode = this.toggleEditMode.bind(this);
 }
-export default withRouter(TrainerHomePage);
+
+    toggleEditMode () {
+        this.setState({ editMode: !this.state.editMode })
+    };
+
+    ListItems (props) {
+    const toList = props.items;
+    const listItems = toList.map((item) =>
+        <li>{item}</li>
+      );
+      return (
+          <ul>{listItems}</ul>
+      );
+    };
+
+    render () {
+        return(
+            <div id="trainerPage">
+                <h1>Trainer Home Page</h1>
+                <div id="trainerHeader">
+                    <div id="trainerPhoto">
+                        <img src={this.state.photo}/>
+                        {this.state.editMode && (
+                        <p>Edit Photo</p>
+                        )}
+                    </div>
+                    <div id="basicTrainerInfo">
+                        <h2>{this.state.firstName} {this.state.lastName}</h2>
+                        <p>Gender {this.state.gender}</p>
+                        <p>Age {this.state.age}</p>
+                        <h3>Contact Info</h3>
+                        <this.ListItems items={this.state.contactInfo}/>
+                    </div>
+                </div>
+                <div id="trainerBody">
+                    <h2>Credentials</h2>
+                    <this.ListItems items={this.state.credentials}/>
+                    <h2>Workouts</h2>
+                    <this.ListItems items={this.state.workouts}/>
+                </div>
+                <button onClick = {this.toggleEditMode}>Edit Info</button>
+            </div>
+        )
+    }
+}

@@ -1,10 +1,8 @@
-#trainerHeader {
-    display: flex;
-    align-items: center;
-    margin: 2rem 0;
+#trainerPage ul{
+    list-style: none;
+    padding: 0;
 }
 
-#trainerBody {
-    display: flex;
-    justify-content: space-between;
+#trainerPhoto p {
+    font-size: .75rem;
 }
