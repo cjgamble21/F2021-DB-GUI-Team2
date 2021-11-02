@@ -14,7 +14,8 @@ export default class Login extends React.Component {
             lastName : "Doe",
             gender: "Male",
             age: "22",
-            contactInfo: ["foo@bar.net","123-456-7890"],
+            email: "foo@bar.net",
+            phoneNumber: "123-456-7890",
             photo: "https://via.placeholder.com/250",
             credentials: ["foo", "bar"],
             workouts:["bar", "foo"]
@@ -26,6 +27,10 @@ export default class Login extends React.Component {
     toggleEditMode () {
         this.setState({ editMode: !this.state.editMode })
     };
+
+    handleChange(e) {
+        this.setState({value: e.target.value});
+    }
 
     ListItems (props) {
     const toList = props.items;
@@ -48,13 +53,41 @@ export default class Login extends React.Component {
                         <p>Edit Photo</p>
                         )}
                     </div>
+                    {!this.state.editMode && (
                     <div id="basicTrainerInfo">
                         <h2>{this.state.firstName} {this.state.lastName}</h2>
                         <p>Gender {this.state.gender}</p>
                         <p>Age {this.state.age}</p>
                         <h3>Contact Info</h3>
-                        <this.ListItems items={this.state.contactInfo}/>
-                    </div>
+                        <p>{this.state.email}</p>
+                        <p>{this.state.phoneNumber}</p>
+                    </div> )}
+                    {this.state.editMode && (
+                    <div id="basicTrainerInfo">
+                        <input type="text" 
+                        value = {this.state.firstName}
+                        onChange={e => this.setState({ firstName: e.target.value })}/>
+                        <input type="text" 
+                        value = {this.state.lastName}
+                        onChange={e => this.setState({ lastName: e.target.value })}/>
+                        <label>Gender</label>
+                        <select value={this.state.gender}
+                        onChange={e => this.setState({ gender: e.target.value })}>
+                            <option>M</option>
+                            <option>F</option>
+                        </select>
+                        <label>Age</label>
+                        <input type="text" 
+                        value={this.state.age}
+                        onChange={e => this.setState({ age: e.target.value })}/>
+                        <h3>Contact Info</h3>
+                        <input type="text" 
+                        value = {this.state.email}
+                        onChange={e => this.setState({ email: e.target.value })}/>
+                        <input type="text" 
+                        value = {this.state.phoneNumber}
+                        onChange={e => this.setState({ phoneNumber: e.target.value })}/>
+                    </div> )}
                 </div>
                 <div id="trainerBody">
                     <h2>Credentials</h2>
@@ -62,7 +95,12 @@ export default class Login extends React.Component {
                     <h2>Workouts</h2>
                     <this.ListItems items={this.state.workouts}/>
                 </div>
+                {!this.state.editMode && (
                 <button onClick = {this.toggleEditMode}>Edit Info</button>
+                )}
+                {this.state.editMode && (
+                <button onClick = {this.toggleEditMode}>Save Changes</button>
+                )}
             </div>
         )
     }
