@@ -48,9 +48,10 @@ export default class Login extends React.Component {
                 <h1>Trainer Home Page</h1>
                 <div id="trainerHeader">
                     <div id="trainerPhoto">
-                        <img src={this.state.photo}/>
+                        <img src={this.state.photo} alt="trainer-photo"/>
                         {this.state.editMode && (
-                        <p>Edit Photo</p>
+                        <input type="file"
+                        onChange={e => this.setState({ photo: e.target.value })}/>
                         )}
                     </div>
                     {!this.state.editMode && (
