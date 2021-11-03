@@ -86,12 +86,14 @@ CREATE TABLE `trainerSkills` (
 	`workoutID`		int				NOT NULL,
 	`trainerID`		int				NOT NULL,
 	`skill`			int				NOT NULL,
-	PRIMARY KEY(`workoutID`),
+	PRIMARY KEY(`workoutID`, `trainerID`),
+	KEY `workoutID` (`workoutID`),
 	KEY `trainerID` (`trainerID`),
 	CONSTRAINT `trainerSkills_ibfk_1` FOREIGN KEY (`workoutID`) REFERENCES `workouts` (`workoutID`) ON DELETE CASCADE,
 	CONSTRAINT `trainerSkills_ibfk_2` FOREIGN KEY (`trainerID`) REFERENCES `trainers` (`trainerID`) ON DELETE CASCADE,
 	CONSTRAINT `trainerSkills_validSkills` CHECK (`skill` BETWEEN 1 AND 10)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 /*
  * Table of sessions between trainers and users
