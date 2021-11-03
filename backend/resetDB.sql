@@ -39,7 +39,7 @@ INSERT INTO `userTypes` (`description`) VALUES ("admin");
 CREATE TABLE `profiles` (
 	`profileID`		int				NOT NULL AUTO_INCREMENT,
 	`username`		varchar(50)		UNIQUE NOT NULL,
-	`password`		varchar(100)		NOT NULL,
+	`password`		varchar(100)	NOT NULL,
 	`firstName`		varchar(50)		DEFAULT NULL,
 	`lastName`		varchar(50)		DEFAULT NULL,
 	`age`			int				DEFAULT NULL,
