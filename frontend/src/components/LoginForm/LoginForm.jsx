@@ -21,7 +21,7 @@ function LoginForm(props) {
 
     const handleSubmitClick = (e) => {
         e.preventDefault();
-        axios.post(API_BASE_URL + '/api/login', {username:state.username, password:setState.password, userType:setState.userType})
+        axios.post(API_BASE_URL + '/api/login', {username:state.username, password:state.password, userType:state.userType})
             .then(function (response) {
                 if(response.status === 200){
                     setState(prevState => ({
@@ -73,9 +73,9 @@ function LoginForm(props) {
                         value={state.userType} 
                         onChange={handleChange}>
                         <option value="">choose an option</option>
-                        <option value="0">Member</option>
-                        <option value="1">Owner</option>
-                        <option value="2">Trainer</option>
+                        <option value="1">Member</option>
+                        <option value="2">Owner</option>
+                        <option value="3">Trainer</option>
                     </select>
                 </div>
                 <div className="form-group text-left">
