@@ -96,8 +96,7 @@ module.exports = function routes(app, logger) {
                 });
             }
         });
-    });
-  });      
+    });     
              
   // BEGIN OF PROJECT ROUTES 
 
