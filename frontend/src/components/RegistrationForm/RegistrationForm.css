@@ -1,0 +1,15 @@
+.loginText {
+    color: #007bff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+label {
+    padding-right: 1rem;
+    font-weight: bold;
+}
+
+.successMessage {
+    color: green;
+    font-weight: bold;
+}

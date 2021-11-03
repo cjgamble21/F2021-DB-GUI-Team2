@@ -1,0 +1,8 @@
+#trainerPage ul{
+    list-style: none;
+    padding: 0;
+}
+
+#trainerPhoto p {
+    font-size: .75rem;
+}
