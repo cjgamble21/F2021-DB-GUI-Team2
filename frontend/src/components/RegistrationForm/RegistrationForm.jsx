@@ -8,7 +8,7 @@ function RegistrationForm(props) {
     const [state , setState] = useState({
         username : "",
         password : "",
-        userType : "",
+        userType : -1,
         confirmPassword: "",
         successMessage: null
     })
@@ -24,7 +24,7 @@ function RegistrationForm(props) {
     const sendDetailsToServer = () => {
         if(state.username.length && state.password.length && state.userType.length) {
             props.showError(null);
-            axios.post(API_BASE_URL + '/api/register', {username:state.username, password:state.password})
+            axios.post(API_BASE_URL + '/api/register', {username:state.username, password:state.password, userType:state.userType})
                 .then(function (response) {
                     if(response.status === 200){
                         setState(prevState => ({
@@ -74,9 +74,9 @@ function RegistrationForm(props) {
                         value={state.userType} 
                         onChange={handleChange}>
                         <option value="">choose an option</option>
-                        <option value="Member">Member</option>
-                        <option value="Owner">Owner</option>
-                        <option value="Trainer">Trainer</option>
+                        <option value="0">Member</option>
+                        <option value="1">Owner</option>
+                        <option value="2">Trainer</option>
                     </select>
                 </div>
                 <div className="form-group text-left">

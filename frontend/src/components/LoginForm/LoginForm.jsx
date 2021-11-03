@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 
 function LoginForm(props) {
     const [state , setState] = useState({
-        userType: "",
+        userType: -1,
         username : "",
         password : "",
         successMessage: null
@@ -21,7 +21,7 @@ function LoginForm(props) {
 
     const handleSubmitClick = (e) => {
         e.preventDefault();
-        axios.post(API_BASE_URL + '/api/login', {username:state.username, password:setState.password})
+        axios.post(API_BASE_URL + '/api/login', {username:state.username, password:setState.password, userType:setState.userType})
             .then(function (response) {
                 if(response.status === 200){
                     setState(prevState => ({
@@ -41,15 +41,15 @@ function LoginForm(props) {
             });
     }
     const redirectToHome = () => {
-        if(state.userType === "Member"){
+        if(state.userType === 0){
             props.updateTitle('Member Homepage');
             props.history.push('/UserHomePage');
         }
-        else if(state.userType === "Trainer"){
+        else if(state.userType === 1){
             props.updateTitle('Trainer Homepage');
             props.history.push('/TrainerHomePage');
         }
-        else if(state.userType === "Owner"){
+        else if(state.userType === 2){
             props.updateTitle('Gym Owner Homepage');
             props.history.push('/GymOwnerHomePage');
         }
@@ -73,9 +73,9 @@ function LoginForm(props) {
                         value={state.userType} 
                         onChange={handleChange}>
                         <option value="">choose an option</option>
-                        <option value="Member">Member</option>
-                        <option value="Owner">Owner</option>
-                        <option value="Trainer">Trainer</option>
+                        <option value="0">Member</option>
+                        <option value="1">Owner</option>
+                        <option value="2">Trainer</option>
                     </select>
                 </div>
                 <div className="form-group text-left">
