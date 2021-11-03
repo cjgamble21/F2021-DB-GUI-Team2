@@ -1,13 +1,13 @@
-CREATE DATABASE IF NOT EXISTS `db`;
+CREATE DATABASE IF NOT EXISTS `test`;
 
-USE `db`;
+USE `test`;
 
-DROP TABLE IF EXISTS `trainerSkills`;
-DROP TABLE IF EXISTS `sessions`;
-DROP TABLE IF EXISTS `workouts`;
-DROP TABLE IF EXISTS `trainers`;
-DROP TABLE IF EXISTS `profiles`;
-DROP TABLE IF EXISTS `users`;
+-- DROP TABLE IF EXISTS `trainerSkills`;
+-- DROP TABLE IF EXISTS `sessions`;
+-- DROP TABLE IF EXISTS `workouts`;
+-- DROP TABLE IF EXISTS `trainers`;
+-- DROP TABLE IF EXISTS `profiles`;
+-- DROP TABLE IF EXISTS `users`;
 
 /*
  * Table of user accounts
@@ -16,7 +16,7 @@ CREATE TABLE `users` (
 	`userID`		int				NOT NULL AUTO_INCREMENT,
 	`username`		varchar(50) 	UNIQUE NOT NULL,
 	`password`		varchar(200) 	NOT NULL,
-	`admin`			bool			DEFAULT false,
+	`userType`		varchar(10)		NOT NULL
 	PRIMARY KEY(`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -24,8 +24,21 @@ CREATE TABLE `users` (
 /*
  * Table of generic profiles
  */
-CREATE TABLE `profiles` (
-	`profileID`		int				NOT NULL AUTO_INCREMENT,
+CREATE TABLE `memberProfiles` (
+	`memberID`		int				NOT NULL AUTO_INCREMENT,
+	`firstName`		varchar(50)		NOT NULL,
+	`lastName`		varchar(50)		NOT NULL,
+	`age`			int				NOT NULL,
+    `userID`        int             NOT NULL,
+	`userType`		varchar(10)		NOT NULL,
+	PRIMARY KEY(`memberID`),
+    KEY `userID` (`userID`),
+    CONSTRAINT `memberProfiles_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`)
+	CONSTRAINT `memberProfiles_chk_1` CHECK (`userType` = "member")
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `trainerProfiles` (
+	`trainerID`		int 		   NOT NULL AUTO_INCREMENT,
 	`firstName`		varchar(50)		NOT NULL,
 	`lastName`		varchar(50)		NOT NULL,
 	`age`			int				NOT NULL,
@@ -35,23 +48,11 @@ CREATE TABLE `profiles` (
 	`pfp`			varchar(50)		DEFAULT NULL,
 	`description`	varchar(500)	DEFAULT NULL,
     `userID`        int             NOT NULL,
-	PRIMARY KEY(`profileID`),
-    KEY `userID` (`userID`),
-    CONSTRAINT `profiles_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*
- * Table of trainer accounts
- */
-CREATE TABLE `trainers` (
-	`trainerID`		int 			NOT NULL AUTO_INCREMENT,
-	`username`		varchar(50) 	UNIQUE NOT NULL,
-	`password`		varchar(200) 	NOT NULL,
-	`profileID`		int				NOT NULL,
 	PRIMARY KEY(`trainerID`),
-	KEY `profileID` (`profileID`),
-	CONSTRAINT `trainers_ibfk_1` FOREIGN KEY (`profileID`) REFERENCES `profiles` (`profileID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+    KEY `userID` (`userID`),
+    CONSTRAINT `trainerProfiles_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`)
+	CONSTRAINT `trainerProfiles_chk_1` CHECK (`userType` = "trainer")
+) sENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*
  * Table of available workouts at the gym
@@ -73,7 +74,7 @@ CREATE TABLE `trainerSkills` (
 	PRIMARY KEY(`workoutID`),
 	KEY `trainerID` (`trainerID`),
 	CONSTRAINT `trainerSkills_ibfk_1` FOREIGN KEY (`workoutID`) REFERENCES `workouts` (`workoutID`),
-	CONSTRAINT `trainerSkills_ibfk_2` FOREIGN KEY (`trainerID`) REFERENCES `trainers` (`trainerID`),
+	CONSTRAINT `trainerSkills_ibfk_2` FOREIGN KEY (`trainerID`) REFERENCES `trainerProfiles` (`trainerID`),
 	CONSTRAINT `trainerSkills_ibfk_3` CHECK (`skill` BETWEEN 1 AND 10)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -81,15 +82,15 @@ CREATE TABLE `trainerSkills` (
  * Table of sessions between trainers and users
  */
 CREATE TABLE `sessions` (
-	`sessionNumber`	int				NOT NULL AUTO_INCREMENT,
-	`trainerID`		int				NOT NULL,
-	`userID`		int 			NOT NULL,
-	`date`			date 			NOT NULL,
-	`price`			decimal(10,2)	NOT NULL,
-	PRIMARY KEY(`sessionNumber`),
+	`sessionID`		int					NOT NULL AUTO_INCREMENT,
+	`trainerID`		int					NOT NULL,
+	`userID`		int 				NOT NULL,
+	`datetime`		datetime 			NOT NULL,
+	`price`			decimal(10,2)		NOT NULL,
+	PRIMARY KEY(`sessionID`),
 	KEY `trainerID` (`trainerID`),
 	KEY `userID` (`userID`),
-	CONSTRAINT `sessions_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `trainers` (`trainerID`),
+	CONSTRAINT `sessions_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `trainerProfiles` (`trainerID`),
 	CONSTRAINT `sessions_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 exports.registerUser = function(req, res, conn) {
     var username = req.body.username;
     var password = req.body.password;
+    var userType = req.body.userType;
     if (!username || !password) {
       res.status(400).json({
           code: 400,
@@ -18,7 +19,8 @@ exports.registerUser = function(req, res, conn) {
             error: err
           });
         } else {
-          conn.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES (?, ?)', [username, hash], 
+          console.log(userType);
+          conn.query('INSERT INTO `db`.`profiles` (`username`, `password`, `userType`) VALUES (?, ?, ?)', [username, hash, userType], 
           function (err) {
               if (err) {
                 logger.error("Username already exists", err);
@@ -48,7 +50,7 @@ exports.loginUser = function(req, res, conn) {
             response: "Please provide all input fields"
         });
     } else {
-        conn.query('SELECT * FROM `db`.`users` WHERE username = ?', username,
+        conn.query('SELECT * FROM `db`.`profiles` WHERE username = ?', username,
         function (err, result) {
           if (err) {
             logger.error("Error fetching vals\n", err);
@@ -66,7 +68,8 @@ exports.loginUser = function(req, res, conn) {
                     // create a JSON web token for the login session to access protected routes
                     const token = jwt.sign({
                       username: result[0].username,
-                      userID: result[0].userID
+                      userID: result[0].userID,
+                      userType: result[0].userType
                     }, process.env.JWT_KEY, 
                   {
                     expiresIn: "1h"
