@@ -100,27 +100,6 @@ exports.loginUser = function(req, res, conn) {
       }
     }
 
-// function for verification of a valid web token for access of protected routes
-exports.checkAuth = function(req, res, next) {
-  try {
-    const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
-    req.userData = decoded;
-    if (decoded.userType == 0) {
-      next();
-    } else {
-      res.status(401).json({
-        code: 401, 
-        message: 'User not authorized to access that route'
-      });
-    }
-  } catch (err) {
-    res.status(401).json({
-      code: 401,
-      message: 'Authorization failed'
-    });
-  }
-}
-
 exports.userAuthTest = function(req, res, conn) {
   conn.query('SELECT * FROM profiles', async (err, result) => {
       if (err) {

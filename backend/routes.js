@@ -2,6 +2,7 @@ const { registerUser } = require('./controller');
 const pool = require('./db');
 
 const controller = require('./controller');
+const middleware = require('./middleware');
 
 module.exports = function routes(app, logger) {
     // GET /
@@ -38,7 +39,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  app.get('/api/test', controller.checkAuth, async (req, res) => {
+  app.get('/api/test', middleware.checkAuthTrainer, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
