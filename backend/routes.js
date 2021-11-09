@@ -50,6 +50,7 @@ module.exports = function routes(app, logger) {
     })
   });
 
+  // route for getting user info
   app.get('/api/:userID', middleware.checkAuthUser, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -63,5 +64,21 @@ module.exports = function routes(app, logger) {
         conn.release();
       }
     })
+  });
+
+  // route for adding user info to their profile
+  app.put('/api/:userID', middleware.checkAuthUser, async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: "Problem with MySQL connection"
+        });
+      } else {
+        controller.putUserInfo(req, res, conn);
+        conn.release();
+      }
+    });
   });
 }

@@ -137,3 +137,39 @@ exports.getUserInfo = function(req, res, conn) {
       });
     }
 }
+
+exports.putUserInfo = function(req, res, conn) {
+  var userID = req.params.userID;
+  var firstName = req.body.firstName;
+  var lastName = req.body.lastName;
+  var age = req.body.age;
+  var gender = req.body.gender;
+  var phone = req.body.phone;
+  var email = req.body.email;
+  var description = req.body.description;
+  if (!userID) {
+    res.status(400).json({
+      code: 400,
+      message: "Please provide a userID"
+    });
+  } else {
+    conn.query('UPDATE profiles SET firstName = ?, lastName = ?, age = ?, \
+     gender = ?, phone = ?, email = ?, description = ? WHERE profileID = ?', 
+    [firstName, lastName, age, gender, phone, email, description, userID], 
+    async (err, result) => {
+      if (err) {
+        logger.error("Error inserting data");
+        res.status(400).json({
+          code: 400,
+          message: "Error inserting data",
+          error: err
+        });
+      } else {
+        res.status(200).json({
+          code: 200,
+          message: "Data inserted!"
+        });
+      }
+    });
+  }
+}
