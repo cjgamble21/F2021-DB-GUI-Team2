@@ -114,6 +114,7 @@ exports.userAuthTest = function(req, res, conn) {
 
 }
 
+// returns all info in a user's profile (userID is a parameter in the url)
 exports.getUserInfo = function(req, res, conn) {
   var userID = req.params.userID;
     if (!userID) {

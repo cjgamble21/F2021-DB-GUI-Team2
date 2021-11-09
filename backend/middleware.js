@@ -8,14 +8,14 @@ exports.checkAuthUser = function(req, res, next) {
       if (decoded.userType == 1) {
         next();
       } else {
-        res.status(401).json({
-          code: 401,
+        res.status(403).json({
+          code: 403,
           message: 'User does not have access to protected route.'
         });
       }
     } catch (err) {
-      res.status(401).json({
-        code: 401,
+      res.status(403).json({
+        code: 403,
         message: 'Authorization failed.'
       });
     }
@@ -28,14 +28,14 @@ exports.checkAuthTrainer = function(req, res, next) {
         if (decoded.userType == 1 || decoded.userType == 2) {
           next();
         } else {
-          res.status(401).json({
-            code: 401,
+          res.status(403).json({
+            code: 403,
             message: 'User does not have access to protected route.'
           });
         }
       } catch (err) {
-        res.status(401).json({
-          code: 401,
+        res.status(403).json({
+          code: 403,
           message: 'Authorization failed.'
         });
       }
@@ -48,14 +48,14 @@ exports.checkAuthOwner = function(req, res, next) {
         if (decoded.userType == 1 || decoded.userType == 2 || decoded.userType == 3) {
           next();
         } else {
-          res.status(401).json({
-            code: 401,
+          res.status(403).json({
+            code: 403,
             message: 'User does not have access to protected route.'
           });
         }
       } catch (err) {
-        res.status(401).json({
-          code: 401,
+        res.status(403).json({
+          code: 403,
           message: 'Authorization failed.'
         });
       }
