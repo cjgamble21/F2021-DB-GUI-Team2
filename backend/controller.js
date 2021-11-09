@@ -105,7 +105,14 @@ exports.checkAuth = function(req, res, next) {
   try {
     const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
     req.userData = decoded;
-    next();
+    if (decoded.userType == 0) {
+      next();
+    } else {
+      res.status(401).json({
+        code: 401, 
+        message: 'User not authorized to access that route'
+      });
+    }
   } catch (err) {
     res.status(401).json({
       code: 401,
@@ -121,9 +128,8 @@ exports.userAuthTest = function(req, res, conn) {
       } else {
         res.status(200).json({
           code: 200,
-          message: 'Auth success.',
+          message: 'Auth success.'
         });
-        res.end(JSON.stringify(result));
       }
   });
 
