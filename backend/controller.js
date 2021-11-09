@@ -113,3 +113,18 @@ exports.checkAuth = function(req, res, next) {
     });
   }
 }
+
+exports.userAuthTest = function(req, res, conn) {
+  conn.query('SELECT * FROM profiles', async (err, result) => {
+      if (err) {
+        logger.error('Error');
+      } else {
+        res.status(200).json({
+          code: 200,
+          message: 'Auth success.',
+        });
+        res.end(JSON.stringify(result));
+      }
+  });
+
+}
