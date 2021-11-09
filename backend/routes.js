@@ -50,4 +50,18 @@ module.exports = function routes(app, logger) {
     })
   });
 
+  app.get('/api/:userID', middleware.checkAuthUser, async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: "Problem with MySQL connection"
+        });
+      } else {
+        controller.getUserInfo(req, res, conn);
+        conn.release();
+      }
+    })
+  });
 }

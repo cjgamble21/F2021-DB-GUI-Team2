@@ -113,3 +113,26 @@ exports.userAuthTest = function(req, res, conn) {
   });
 
 }
+
+exports.getUserInfo = function(req, res, conn) {
+  var userID = req.params.userID;
+    if (!userID) {
+      res.status(400).json({
+        code: 400,
+        message: "Please provide a userID"
+      });
+    } else {
+      conn.query('SELECT * FROM profiles WHERE profileID = ?', userID, 
+      async (err, result) => {
+        if (err) {
+          logger.error("Error fetching data.");
+          res.status(400).json({
+            code: 400,
+            message: "Error fetching user data."
+          });
+        } else {
+          res.json(result);
+        }
+      });
+    }
+}
