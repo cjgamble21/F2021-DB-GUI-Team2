@@ -167,9 +167,13 @@ exports.putUserInfo = function(req, res, conn) {
 }
 
 var joinKeys = function(object) {
+  // string result of the joined keys
   var result = "";
+
+  // returns the array of keys and array of values given a json object
   var [k, v] = getKeyValues(object);
-  var thing = 0;
+
+  // loop through and push the key value pairs to the string with correct formatting
   for (var i = 0; i < k.length; i++) {
     if (k[i] == "token") {
       continue;
@@ -182,9 +186,14 @@ var joinKeys = function(object) {
 }
 
 var getKeyValues = function(object) {
+  // get the json key-value pairs and assign it to a variable
   const keys = Object.keys(object);
+
+  // initialization of the key and value lists
   var keyList = [];
   var valueList = [];
+
+  // push all of the keys and values to their lists with correct formatting
   for (let i = 0; i < keys.length; i++) {
     keyList[i] = keys[i];
     valueList[i] = '\''.concat(object[keys[i]]).concat('\'');
