@@ -100,16 +100,76 @@ exports.loginUser = function(req, res, conn) {
       }
     }
 
-// function for verification of a valid web token for access of protected routes
-exports.checkAuth = function(req, res, next) {
-  try {
-    const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
-    req.userData = decoded;
-    next();
-  } catch (err) {
-    res.status(401).json({
-      code: 401,
-      message: 'Authorization failed'
+exports.userAuthTest = function(req, res, conn) {
+  conn.query('SELECT * FROM profiles', async (err, result) => {
+      if (err) {
+        logger.error('Error');
+      } else {
+        res.status(200).json({
+          code: 200,
+          message: 'Auth success.'
+        });
+      }
+  });
+
+}
+
+// returns all info in a user's profile (userID is a parameter in the url)
+exports.getUserInfo = function(req, res, conn) {
+  var userID = req.params.userID;
+    if (!userID) {
+      res.status(400).json({
+        code: 400,
+        message: "Please provide a userID"
+      });
+    } else {
+      conn.query('SELECT * FROM profiles WHERE profileID = ?', userID, 
+      async (err, result) => {
+        if (err) {
+          logger.error("Error fetching data.");
+          res.status(400).json({
+            code: 400,
+            message: "Error fetching user data."
+          });
+        } else {
+          res.json(result);
+        }
+      });
+    }
+}
+
+exports.putUserInfo = function(req, res, conn) {
+  var userID = req.params.userID;
+  var firstName = req.body.firstName;
+  var lastName = req.body.lastName;
+  var age = req.body.age;
+  var gender = req.body.gender;
+  var phone = req.body.phone;
+  var email = req.body.email;
+  var description = req.body.description;
+  if (!userID) {
+    res.status(400).json({
+      code: 400,
+      message: "Please provide a userID"
+    });
+  } else {
+    conn.query('UPDATE profiles SET firstName = ?, lastName = ?, age = ?, \
+     gender = ?, phone = ?, email = ?, description = ? WHERE profileID = ?', 
+    [firstName, lastName, age, gender, phone, email, description, userID], 
+    async (err, result) => {
+      if (err) {
+        logger.error("Error inserting data");
+        res.status(400).json({
+          code: 400,
+          message: "Error inserting data",
+          error: err
+        });
+      } else {
+        res.status(200).json({
+          code: 200,
+          message: "Data inserted!"
+        });
+      }
     });
   }
 }
