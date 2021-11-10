@@ -60,7 +60,8 @@ exports.loginUser = function(req, res, conn) {
                 if (err) {
                   res.status(500).json({
                     code: 500, 
-                    response: "Error hashing password."
+                    response: "Error hashing password.",
+                    error: err
                   });
                 } else {
                   // if result of compare function is true, the username and password match
@@ -140,22 +141,13 @@ exports.getUserInfo = function(req, res, conn) {
 
 exports.putUserInfo = function(req, res, conn) {
   var userID = req.params.userID;
-  var firstName = req.body.firstName;
-  var lastName = req.body.lastName;
-  var age = req.body.age;
-  var gender = req.body.gender;
-  var phone = req.body.phone;
-  var email = req.body.email;
-  var description = req.body.description;
   if (!userID) {
     res.status(400).json({
       code: 400,
       message: "Please provide a userID"
     });
   } else {
-    conn.query('UPDATE profiles SET firstName = ?, lastName = ?, age = ?, \
-     gender = ?, phone = ?, email = ?, description = ? WHERE profileID = ?', 
-    [firstName, lastName, age, gender, phone, email, description, userID], 
+    conn.query('UPDATE profiles SET '.concat(joinKeys(req.body)).concat(' WHERE profileID = ?'), userID,
     async (err, result) => {
       if (err) {
         logger.error("Error inserting data");
@@ -172,4 +164,30 @@ exports.putUserInfo = function(req, res, conn) {
       }
     });
   }
+}
+
+var joinKeys = function(object) {
+  var result = "";
+  var [k, v] = getKeyValues(object);
+  var thing = 0;
+  for (var i = 0; i < k.length; i++) {
+    if (k[i] == "token") {
+      continue;
+    }
+    result = result.concat(k[i]).concat('=').concat(v[i]);
+    if (i < k.length-2)
+      result = result.concat(',');
+  }
+  return result;
+}
+
+var getKeyValues = function(object) {
+  const keys = Object.keys(object);
+  var keyList = [];
+  var valueList = [];
+  for (let i = 0; i < keys.length; i++) {
+    keyList[i] = keys[i];
+    valueList[i] = '\''.concat(object[keys[i]]).concat('\'');
+  }
+  return [keyList, valueList];
 }
