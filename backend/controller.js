@@ -147,7 +147,7 @@ exports.putUserInfo = function(req, res, conn) {
       message: "Please provide a userID"
     });
   } else {
-    conn.query('UPDATE profiles SET '.concat(joinKeys(req.body)).concat(' WHERE profileID = ?'), userID,
+    conn.query('UPDATE profiles SET '.concat(updateJoinKeys(req.body)).concat(' WHERE profileID = ?'), userID,
     async (err, result) => {
       if (err) {
         logger.error("Error inserting data");
@@ -166,7 +166,7 @@ exports.putUserInfo = function(req, res, conn) {
   }
 }
 
-var joinKeys = function(object) {
+var updateJoinKeys = function(object) {
   // string result of the joined keys
   var result = "";
 
