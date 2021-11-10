@@ -20,7 +20,7 @@ exports.registerUser = function(req, res, conn) {
           });
         } else {
           console.log(userType);
-          conn.query('INSERT INTO `db`.`profiles` (`username`, `password`, `userType`) VALUES (?, ?, ?)', [username, hash, userType], 
+          conn.query('INSERT INTO profiles (username, password, userType) VALUES (?, ?, ?)', [username, hash, userType], 
           function (err) {
               if (err) {
                 logger.error("Username already exists", err);
@@ -29,10 +29,10 @@ exports.registerUser = function(req, res, conn) {
                     response: "Username already taken."
                 });
               } else {
-                  res.status(200).json({
-                      code: 200,
-                      response: "User registration successful."
-                  });
+                res.status(200).json({
+                  code: 200,
+                  response: "User registration successful."
+                });
               }
           });
         }
@@ -50,7 +50,7 @@ exports.loginUser = function(req, res, conn) {
             response: "Please provide all input fields"
         });
     } else {
-        conn.query('SELECT * FROM `db`.`profiles` WHERE username = ?', username,
+        conn.query('SELECT * FROM profiles WHERE username = ?', username,
         function (err, result) {
           if (err) {
             logger.error("Error fetching vals\n", err);
@@ -72,14 +72,17 @@ exports.loginUser = function(req, res, conn) {
                       userID: result[0].userID,
                       userType: result[0].userType
                     }, process.env.JWT_KEY, 
-                  {
-                    expiresIn: "1h"
-                  });
-                    res.status(200).json({
+                    {
+                      expiresIn: "1h"
+                    });
+
+                    var response = {
                       code: 200,
                       response: "Username and password combo match.",
                       token: token
-                    });
+                    };
+                    response["user"] = result[0];
+                    res.status(200).json(response);
                   } else {
                     logger.error("Error comparing username and password", err);
                     res.status(401).json({
