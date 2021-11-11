@@ -173,6 +173,7 @@ exports.putUserInfo = function(req, res, conn) {
 // HELPER METHODS
 //////////////////////////////////////////////////
 
+// DEFAULT KEYS FOR THE TABLES
 var key = {
   'sessions': ['sessionNumber'],
   'trainerSkills': ['workoutID', 'trainerID'],
@@ -183,6 +184,7 @@ var key = {
   'workouts': ['workoutID']
 };
 
+// DEFAULT VALS TO CHANGE FOR THE TABLES
 var val = {
   'sessions': ['price'],
   'trainerSkills': ['skill'],
@@ -194,18 +196,22 @@ var val = {
 };
 
 exports.get = function(req, res, conn) {
+  // get the params from the link
   var table = req.params.table;
   var variable = req.params.variable;
   var value = req.params.value;
 
+  // get the key-value pairs from the body
   var result = joinKeys(req.body, 'get');
+
+  // set the initial query
   var query = 'SELECT * FROM '.concat(table);
 
   // explicit table, explicit variable, and explicit value
   if (value != null)
     query = query.concat(' WHERE ').concat(variable).concat(' = \'').concat(value).concat('\'');
 
-  // explicit table, implicit default variable, and explicit value or variable to view
+  // explicit table, implicit default variable, and explicit value
   else if (variable != null)
     query = query.concat(' WHERE ').concat(key[table][0]).concat(' = \'').concat(variable).concat('\'');
 
@@ -213,6 +219,7 @@ exports.get = function(req, res, conn) {
   else if (table != null)
     if (result[0].length > 0) { query = query.concat(' WHERE ').concat(result[0]); }
 
+  // send the query
   conn.query(query, async (err, result) => {
     if (err) {
       logger.error('Error getting data');
@@ -227,12 +234,19 @@ exports.get = function(req, res, conn) {
 }
 
 exports.getBody = function(req, res, conn) {
+  // get the params from the body
   var table = req.body.table;
+
+  // get the key-value pairs from the body args
   var result = joinKeys(req.body.args, 'get');
+
+  // set the initial query
   var query = 'SELECT * FROM '.concat(table);
 
+  // append args if key-value pairs exist
   if (result[0].length > 0) { query = query.concat(' WHERE ').concat(result[0]); }
 
+  // send the query
   conn.query(query, async (err, result) => {
     if (err) {
       logger.error('Error getting data');
@@ -247,11 +261,16 @@ exports.getBody = function(req, res, conn) {
 }
 
 exports.post = function(req, res, conn) {
+  // get the params from the link
   var table = req.params.table;
   
+  // get the key-value pairs from the body
   var result = joinKeys(req.body, 'post');
+
+  // set the initial query
   var query = 'INSERT INTO '.concat(table).concat(' (').concat(result[0]).concat(') VALUES (').concat(result[1]).concat(')');
 
+  // send the query
   conn.query(query, async (err, result) => {
     if (err) {
       logger.error('Error inserting into table');
@@ -266,11 +285,16 @@ exports.post = function(req, res, conn) {
 }
 
 exports.postBody = function(req, res, conn) {
+  // get the params from the body
   var table = req.body.table;
   
+  // get the key-value pairs from the body args
   var result = joinKeys(req.body.args, 'post');
+
+  // set the initial query
   var query = 'INSERT INTO '.concat(table).concat(' (').concat(result[0]).concat(') VALUES (').concat(result[1]).concat(')');
 
+  // send the query
   conn.query(query, async (err, result) => {
     if (err) {
       logger.error('Error inserting into table');
@@ -285,18 +309,24 @@ exports.postBody = function(req, res, conn) {
 }
 
 exports.put = function(req, res, conn) {
+  // get the params from the link
   var table = req.params.table;
   var variable = req.params.variable;
   var value = req.params.value;
 
+  // get the key-value pairs from the body
   var result = joinKeys(req.body, 'put');
+
+  // set the initial query
   var query = 'UPDATE '.concat(table).concat(' SET ').concat(result[0]);
 
+  // check for the params
   if (value != null)
     query = query.concat(' WHERE ').concat(variable).concat(' = ').concat(value);
   else
     query = query.concat(' WHERE ').concat(key[table][0]).concat(' = ').concat(variable);
 
+  // send the query
   conn.query(query, async (err, result) => {
     if (err) {
       logger.error('Error updating table');
@@ -311,18 +341,24 @@ exports.put = function(req, res, conn) {
 }
 
 exports.putBody = function(req, res, conn) {
+  // get the params from the body
   var table = req.body.table;
   var variable = req.body.variable;
   var value = req.body.value;
 
+  // get the key-value pairs from the body args
   var result = joinKeys(req.body.args, 'put');
+
+  // set the initial query
   var query = 'UPDATE '.concat(table).concat(' SET ').concat(result[0]);
 
+  // check for the params
   if (value != null)
     query = query.concat(' WHERE ').concat(variable).concat(' = ').concat(value);
   else
     query = query.concat(' WHERE ').concat(key[table][0]).concat(' = ').concat(variable);
 
+  // send the query
   conn.query(query, async (err, result) => {
     if (err) {
       logger.error('Error updating table');
@@ -337,13 +373,18 @@ exports.putBody = function(req, res, conn) {
 }
 
 exports.delete = function(req, res, conn) {
+  // get the params from the link
   var table = req.params.table;
   var variable = req.params.variable;
   var value = req.params.value;
 
+  // get the key-value pairs from the body
   var result = joinKeys(req.body, 'delete');
+
+  // set the initial query
   var query = 'DELETE FROM '.concat(table).concat(' WHERE ')
 
+  // check for the params
   if (value != null)
     query = query.concat(variable).concat(' = ').concat(value);
   else if (variable != null)
@@ -351,6 +392,7 @@ exports.delete = function(req, res, conn) {
   else if (result[0].length > 0)
     query = query.concat(result[0]);
 
+  // send the query
   conn.query(query, async (err, result) => {
     if (err) {
       logger.error('Error updating table');
@@ -365,12 +407,16 @@ exports.delete = function(req, res, conn) {
 }
 
 exports.deleteBody = function(req, res, conn) {
+  // get the params from the body
   var table = req.body.table;
+
+  // get the key-value pairs from the body args
   var result = joinKeys(req.body.args, 'delete');
-  var query = 'DELETE FROM '.concat(table).concat(' WHERE ')
 
-  query = query.concat(result[0]);
+  // set the initial query
+  var query = 'DELETE FROM '.concat(table).concat(' WHERE ').concat(result[0]);
 
+  // send the query
   conn.query(query, async (err, result) => {
     if (err) {
       logger.error('Error updating table');
