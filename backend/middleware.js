@@ -5,7 +5,7 @@ exports.checkAuthUser = function(req, res, next) {
     try {
       const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
       req.userData = decoded;
-      if (decoded.userType == 1) {
+      if (decoded.userType == 1 || decoded.userType == 3) {
         next();
       } else {
         res.status(403).json({
@@ -25,7 +25,7 @@ exports.checkAuthTrainer = function(req, res, next) {
     try {
         const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
         req.userData = decoded;
-        if (decoded.userType == 1 || decoded.userType == 2) {
+        if (decoded.userType == 2 || decoded.userType == 3) {
           next();
         } else {
           res.status(403).json({
@@ -45,7 +45,7 @@ exports.checkAuthOwner = function(req, res, next) {
     try {
         const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
         req.userData = decoded;
-        if (decoded.userType == 1 || decoded.userType == 2 || decoded.userType == 3) {
+        if (decoded.userType == 3) {
           next();
         } else {
           res.status(403).json({

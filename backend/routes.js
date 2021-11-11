@@ -47,7 +47,7 @@ module.exports = function routes(app, logger) {
         controller.userAuthTest(req, res, conn);
         conn.release();
       }
-    })
+    });
   });
 
   // route for getting user info
@@ -63,7 +63,7 @@ module.exports = function routes(app, logger) {
         controller.getUserInfo(req, res, conn);
         conn.release();
       }
-    })
+    });
   });
 
   // route for adding user info to their profile
