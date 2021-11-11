@@ -207,7 +207,7 @@ exports.get = function(req, res, conn) {
 
   // explicit table, implicit default variable, and explicit value or variable to view
   else if (variable != null)
-    query = query.concat(' WHERE ').concat(key[table]).concat(' = \'').concat(variable).concat('\'');
+    query = query.concat(' WHERE ').concat(key[table][0]).concat(' = \'').concat(variable).concat('\'');
 
   // explicit table, variable and value gotten from body
   else if (table != null)
@@ -295,7 +295,7 @@ exports.put = function(req, res, conn) {
   if (value != null)
     query = query.concat(' WHERE ').concat(variable).concat(' = ').concat(value);
   else
-    query = query.concat(' WHERE ').concat(key[table]).concat(' = ').concat(variable);
+    query = query.concat(' WHERE ').concat(key[table][0]).concat(' = ').concat(variable);
 
   conn.query(query, async (err, result) => {
     if (err) {
@@ -321,7 +321,7 @@ exports.putBody = function(req, res, conn) {
   if (value != null)
     query = query.concat(' WHERE ').concat(variable).concat(' = ').concat(value);
   else
-    query = query.concat(' WHERE ').concat(key[table]).concat(' = ').concat(variable);
+    query = query.concat(' WHERE ').concat(key[table][0]).concat(' = ').concat(variable);
 
   conn.query(query, async (err, result) => {
     if (err) {
@@ -347,7 +347,7 @@ exports.delete = function(req, res, conn) {
   if (value != null)
     query = query.concat(variable).concat(' = ').concat(value);
   else if (variable != null)
-    query = query.concat(key[table]).concat(' = ').concat(variable);
+    query = query.concat(key[table][0]).concat(' = ').concat(variable);
   else if (result[0].length > 0)
     query = query.concat(result[0]);
 
