@@ -3,6 +3,8 @@ CREATE DATABASE IF NOT EXISTS `db`;
 USE `db`;
 
 DROP TABLE IF EXISTS `sessions`;
+DROP TABLE IF EXISTS `offers`;
+DROP TABLE IF EXISTS `requests`;
 DROP TABLE IF EXISTS `trainerSkills`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `trainers`;
@@ -54,17 +56,13 @@ CREATE TABLE `profiles` (
 	CONSTRAINT `profiles_ibfk_1` FOREIGN KEY (`userType`) REFERENCES `userTypes` (`userType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `profiles` (`username`, `password`, `firstName`, `lastName`, `age`, `gender`, `phone`, `email`, `userType`) VALUES ("exampleUser", "examplePassword", "exampleFirst", "exampleLast", 1, "male", "exampleUserPhone", "exampleUserEmail", 1);
-INSERT INTO `profiles` (`username`, `password`, `firstName`, `lastName`, `age`, `gender`, `phone`, `email`, `userType`) VALUES ("exampleTrainer", "examplePassword", "exampleFirst", "exampleLast", 1, "male", "exampleTrainerPhone", "exampleTrainerEmail", 2);
-INSERT INTO `profiles` (`username`, `password`, `firstName`, `lastName`, `age`, `gender`, `phone`, `email`, `userType`) VALUES ("exampleAdmin", "examplePassword", "exampleFirst", "exampleLast", 1, "male", "exampleAdminPhone", "exampleAdminEmail", 3);
-
 /*
  * Table of users
  */
 CREATE TABLE `users` (
 	`userID`		int				NOT NULL,
 	PRIMARY KEY(`userID`),
-	CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `profiles` (`profileID`)
+	CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 INSERT INTO `users` (`userID`) VALUES (1);
 INSERT INTO `users` (`userID`) VALUES (3);
@@ -74,10 +72,11 @@ INSERT INTO `users` (`userID`) VALUES (3);
  */
 CREATE TABLE `trainers` (
 	`trainerID`		int				NOT NULL,
+	`rate`			decimal(8,2)	NOT NULL,
 	PRIMARY KEY(`trainerID`),
 	CONSTRAINT `trainers_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-INSERT INTO `trainers` (`trainerID`) VALUES (2);
+INSERT INTO `trainers` (`trainerID`, `rate`) VALUES (2, 12.00);
 
 /*
  * Table of trainer's skills in a given workout from 1-10
@@ -94,6 +93,33 @@ CREATE TABLE `trainerSkills` (
 	CONSTRAINT `trainerSkills_validSkills` CHECK (`skill` BETWEEN 1 AND 10)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+/*
+ * Table of requested sessions
+ */
+CREATE TABLE `requests` (
+	`requestID`		int				NOT NULL AUTO_INCREMENT,
+	`userID`		int				NOT NULL,
+	`trainerID`		int				NOT NULL,
+	`date`			datetime		NOT NULL,
+	PRIMARY KEY(`requestID`),
+	KEY `userID` (`userID`),
+	KEY `trainerID` (`trainerID`),
+	CONSTRAINT `requests_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE,
+	CONSTRAINT `requests_ibfk_2` FOREIGN KEY (`trainerID`) REFERENCES `trainers` (`trainerID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*
+ * Table of offered sessions
+ */
+CREATE TABLE `offers` (
+	`offerID`		int				NOT NULL AUTO_INCREMENT,
+	`trainerID`		int				NOT NULL,
+	`date`			datetime		NOT NULL,
+	`price`			decimal(10,2)	NOT NULL,
+	PRIMARY KEY(`offerID`),
+	KEY `trainerID` (`trainerID`),
+	CONSTRAINT `offers_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `trainers` (`trainerID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*
  * Table of sessions between trainers and users
@@ -102,7 +128,7 @@ CREATE TABLE `sessions` (
 	`sessionNumber`	int				NOT NULL AUTO_INCREMENT,
 	`trainerID`		int				NOT NULL,
 	`userID`		int 			NOT NULL,
-	`date`			date 			NOT NULL,
+	`date`			datetime 		NOT NULL,
 	`price`			decimal(10,2)	NOT NULL,
 	PRIMARY KEY(`sessionNumber`),
 	KEY `trainerID` (`trainerID`),
@@ -110,4 +136,3 @@ CREATE TABLE `sessions` (
 	CONSTRAINT `sessions_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `trainers` (`trainerID`),
 	CONSTRAINT `sessions_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
