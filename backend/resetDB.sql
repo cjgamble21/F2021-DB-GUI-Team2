@@ -64,8 +64,6 @@ CREATE TABLE `users` (
 	PRIMARY KEY(`userID`),
 	CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-INSERT INTO `users` (`userID`) VALUES (1);
-INSERT INTO `users` (`userID`) VALUES (3);
 
 /*
  * Table of trainers
@@ -76,7 +74,6 @@ CREATE TABLE `trainers` (
 	PRIMARY KEY(`trainerID`),
 	CONSTRAINT `trainers_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-INSERT INTO `trainers` (`trainerID`, `rate`) VALUES (2, 12.00);
 
 /*
  * Table of trainer's skills in a given workout from 1-10
