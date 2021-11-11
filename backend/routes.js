@@ -1,4 +1,3 @@
-const { registerUser } = require('./controller');
 const pool = require('./db');
 
 const controller = require('./controller');
