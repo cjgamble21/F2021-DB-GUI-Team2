@@ -83,6 +83,7 @@ module.exports = function routes(app, logger) {
   });
 
   // do stuff
+  // do stuff 2
 
   //////////////////////////////////////////////////
   // GET 
