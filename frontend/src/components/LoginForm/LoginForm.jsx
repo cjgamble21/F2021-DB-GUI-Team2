@@ -21,35 +21,32 @@ function LoginForm(props) {
 
     const handleSubmitClick = (e) => {
         e.preventDefault();
-        axios.post(API_BASE_URL + '/api/login', {username:state.username, password:state.password, userType:state.userType})
-            .then(function (response) {
-                if(response.status === 200){
-                    setState(prevState => ({
-                        ...prevState,
-                        'successMessage' : 'Login successful. Redirecting to home page..'
-                    }))
-                    localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
-                    redirectToHome();
-                    props.showError(null)
-                }
-                else{
-                    props.showError("Incorrect Login information");
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        checkAccount()
     }
+const checkAccount(username, password, userType) {
+    new Promise((resolve, reject) => {
+        let body = {
+            username: state.username,
+            password: state.password,
+            userType: state.userType
+        };
+        axios.post(API_BASE_URL + '/api/login', body, this.config)
+            .then(x => resolve())
+            .catch(error => reject(error));
+    })
+    localStorage.setItem(ACCESS_TOKEN_NAME, response.data.token);
+    redirectToHome();
+}
     const redirectToHome = () => {
-        if(state.userType === 0){
+        if(state.userType === 1){
             props.updateTitle('Member Homepage');
             props.history.push('/UserHomePage');
         }
-        else if(state.userType === 1){
+        else if(state.userType === 2){
             props.updateTitle('Trainer Homepage');
             props.history.push('/TrainerHomePage');
         }
-        else if(state.userType === 2){
+        else if(state.userType === 3){
             props.updateTitle('Gym Owner Homepage');
             props.history.push('/GymOwnerHomePage');
         }

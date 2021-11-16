@@ -86,12 +86,12 @@ function App () {
     <Router>
     <div className="App">
         <div className="container d-flex align-items-center flex-column">
-          <Header title={title}/>
           <Switch>
             <Route path="/" exact={true}>
               <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
             </Route>
             <Route path="/login">
+              <Header title={title}/>
               <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
             </Route>
             <Route path="/register">
@@ -101,7 +101,7 @@ function App () {
               <Home/>
             </Route>
             <Route path="/GymOwnerHomePage">
-                <GymOwnerHomePage showError={updateErrorMessage} updateTitle={updateTitle}/>
+                <GymOwnerHomePage/>
             </Route>
             <Route path="/TrainerHomePage">
                 <TrainerHomePage showError={updateErrorMessage} updateTitle={updateTitle}/>
