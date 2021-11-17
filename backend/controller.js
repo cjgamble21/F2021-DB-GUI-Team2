@@ -88,11 +88,11 @@ exports.loginUser = function(req, res, conn) {
                     res.status(401).json({
                       code: 401,
                       response: 'Username and password combo do not match'
-                  });
+                    });
+                  }
                 }
-              }
-            });
-           } else {
+              });
+            } else {
               res.status(401).json({
                   code: 401,
                   response: 'Username does not exist.'

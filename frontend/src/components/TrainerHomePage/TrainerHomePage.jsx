@@ -14,6 +14,7 @@ export default class Login extends React.Component {
             lastName : "Doe",
             gender: "Male",
             age: "22",
+            rate: "12",
             email: "foo@bar.net",
             phoneNumber: "123-456-7890",
             photo: "https://via.placeholder.com/250",
@@ -59,28 +60,39 @@ export default class Login extends React.Component {
                         <h2>{this.state.firstName} {this.state.lastName}</h2>
                         <p>Gender {this.state.gender}</p>
                         <p>Age {this.state.age}</p>
+                        <p>Rate: ${this.state.rate}/hr</p>
                         <h3>Contact Info</h3>
                         <p>{this.state.email}</p>
                         <p>{this.state.phoneNumber}</p>
                     </div> )}
+                    {/* html for edit mode */}
                     {this.state.editMode && (
                     <div id="basicTrainerInfo">
+                        {/* edit name */}
                         <input type="text" 
                         value = {this.state.firstName}
                         onChange={e => this.setState({ firstName: e.target.value })}/>
                         <input type="text" 
                         value = {this.state.lastName}
                         onChange={e => this.setState({ lastName: e.target.value })}/>
+                        {/* edit gender */}
                         <label>Gender</label>
                         <select value={this.state.gender}
                         onChange={e => this.setState({ gender: e.target.value })}>
                             <option>M</option>
                             <option>F</option>
                         </select>
+                        {/* edit age */}
                         <label>Age</label>
                         <input type="text" 
                         value={this.state.age}
                         onChange={e => this.setState({ age: e.target.value })}/>
+                        {/* edit rate */}
+                        <label>Rate</label>
+                        $<input type="text" 
+                        value={this.state.rate}
+                        onChange={e => this.setState({ rate: e.target.value })}/>/hr
+                        {/* edit contact info */}
                         <h3>Contact Info</h3>
                         <input type="text" 
                         value = {this.state.email}
