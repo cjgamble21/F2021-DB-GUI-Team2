@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 exports.checkAuthUser = function(req, res, next) {
     try {
       const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
-      req.userData = decoded;
+      req.user = decoded;
       if (decoded.userType == 1 || decoded.userType == 3) {
         next();
       } else {
@@ -24,7 +24,7 @@ exports.checkAuthUser = function(req, res, next) {
 exports.checkAuthTrainer = function(req, res, next) {
     try {
         const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
-        req.userData = decoded;
+        req.user = decoded;
         if (decoded.userType == 2 || decoded.userType == 3) {
           next();
         } else {
@@ -44,7 +44,7 @@ exports.checkAuthTrainer = function(req, res, next) {
 exports.checkAuthOwner = function(req, res, next) {
     try {
         const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
-        req.userData = decoded;
+        req.user = decoded;
         if (decoded.userType == 3) {
           next();
         } else {
