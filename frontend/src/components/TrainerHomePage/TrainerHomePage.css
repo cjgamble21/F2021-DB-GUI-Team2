@@ -1,4 +1,14 @@
-#trainerPage ul{
+#trainerPage {
+    display: flex;
+    margin-top: 1rem;
+}
+
+.card {
+    padding: 1rem;
+    border: 2px solid lightgray;
+}
+
+#trainerPage ul {
     list-style: none;
     padding: 0;
 }
