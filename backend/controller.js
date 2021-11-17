@@ -69,7 +69,7 @@ exports.loginUser = function(req, res, conn) {
                     // create a JSON web token for the login session to access protected routes
                     const token = jwt.sign({
                       username: result[0].username,
-                      userID: result[0].userID,
+                      profileID: result[0].profileID,
                       userType: result[0].userType
                     }, process.env.JWT_KEY, 
                     {
@@ -170,7 +170,7 @@ exports.putUserInfo = function(req, res, conn) {
 }
 
 //////////////////////////////////////////////////
-// HELPER METHODS
+// DYNAMIC METHODS
 //////////////////////////////////////////////////
 
 // DEFAULT KEYS FOR THE TABLES

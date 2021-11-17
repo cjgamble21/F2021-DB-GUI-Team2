@@ -39,17 +39,6 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  app.get('/api/test', middleware.checkAuthTrainer, async (req, res) => {
-    pool.getConnection(function (err, conn) {
-      if (err) {
-        logger.error('Problem with MySQL connection');
-      } else {
-        controller.userAuthTest(req, res, conn);
-        conn.release();
-      }
-    });
-  });
-
   // route for getting user info
   app.get('/api/:userID', middleware.checkAuthUser, async (req, res) => {
     pool.getConnection(function (err, conn) {
@@ -82,8 +71,6 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // do stuff
-
   //////////////////////////////////////////////////
   // TEST PATHS
   //////////////////////////////////////////////////
@@ -99,9 +86,8 @@ module.exports = function routes(app, logger) {
         });
       } else {
         req.body.table = 'profiles';
-        req.body.args = {
-          profileID = req.user.profileID
-        };
+        req.body.args = {};
+        req.body.args.profileID = req.user.profileID;
         controller.getBody(req, res, conn);
         conn.release();
       }
@@ -119,9 +105,8 @@ module.exports = function routes(app, logger) {
         });
       } else {
         req.body.table = 'profiles';
-        req.body.args = {
-          profileID = req.user.profileID
-        };
+        req.body.args = {};
+        req.body.args.profileID = req.user.profileID;
         controller.getBody(req, res, conn);
         conn.release();
       }
