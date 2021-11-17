@@ -4,7 +4,7 @@ import './GymOwnerHomePage.css';
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
 
-export default class Login extends React.Component {
+export default class GynOwnerHomePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -31,8 +31,8 @@ export default class Login extends React.Component {
         return (
             <div className="main">
                 <h1>{state.gymName}</h1>
-                <p>{state.description}</p>
                 <img src={state.logoUrl} />
+                <p>{state.description}</p>
                 <ul className="trainerList">{
                     this.state.trainers.map((x, i) => <li key={i}>
                         <div className="trainer">
