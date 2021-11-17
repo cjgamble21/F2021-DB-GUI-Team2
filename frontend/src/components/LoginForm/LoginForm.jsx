@@ -23,7 +23,7 @@ function LoginForm(props) {
         e.preventDefault();
         checkAccount()
     }
-const checkAccount(username, password, userType) {
+const checkAccount = (username, password, userType) => {
     new Promise((resolve, reject) => {
         let body = {
             username: state.username,
@@ -33,8 +33,8 @@ const checkAccount(username, password, userType) {
         axios.post(API_BASE_URL + '/api/login', body, this.config)
             .then(x => resolve())
             .catch(error => reject(error));
+ //       localStorage.setItem(ACCESS_TOKEN_NAME, response.data.token);
     })
-    localStorage.setItem(ACCESS_TOKEN_NAME, response.data.token);
     redirectToHome();
 }
     const redirectToHome = () => {

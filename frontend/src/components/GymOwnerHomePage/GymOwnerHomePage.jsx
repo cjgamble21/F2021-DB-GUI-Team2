@@ -30,9 +30,9 @@ export default class GynOwnerHomePage extends React.Component {
     render() {
         return (
             <div className="main">
-                <h1>{state.gymName}</h1>
-                <img src={state.logoUrl} />
-                <p>{state.description}</p>
+                <h1>{this.state.gymName}</h1>
+                <img src={this.state.logoUrl} />
+                <p>{this.state.description}</p>
                 <ul className="trainerList">{
                     this.state.trainers.map((x, i) => <li key={i}>
                         <div className="trainer">
@@ -55,4 +55,3 @@ export default class GynOwnerHomePage extends React.Component {
         )
     }
 }
-export default withRouter(GymOwnerHomePage);
