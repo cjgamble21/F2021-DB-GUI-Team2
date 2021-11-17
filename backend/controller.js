@@ -142,6 +142,34 @@ exports.getUserInfo = function(req, res, conn) {
     }
 }
 
+// #Write a get method to join the two tables on controller.js
+// #Ex: join profiles and trainers -> make sure rate is added but only
+// #have rows where profileID == trainerID
+exports.getJoinRate = function(req, res, conn){
+  var userID = req.params.userID;
+    if (!userID) {
+      res.status(400).json({
+        code: 400,
+        message: 'Please provide a userID'
+      });
+    } else {
+        conn.query('SELECT * FROM profiles WHERE' +
+            'profileID = ? JOIN trainers ' +
+            'ON p.profileID = t.profileID');
+        async (err, result) => {
+        if (err) {
+          logger.error('Error fetching data.');
+          res.status(400).json({
+            code: 400,
+            message: 'Error fetching user data.'
+          });
+        } else {
+          res.json(result);
+        }
+      });
+    }
+}
+
 exports.putUserInfo = function(req, res, conn) {
   var userID = req.params.userID;
   if (!userID) {
