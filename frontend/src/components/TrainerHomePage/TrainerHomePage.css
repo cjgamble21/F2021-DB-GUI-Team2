@@ -1,18 +1,79 @@
 #trainerPage {
-    display: flex;
+    display: grid;
     margin-top: 1rem;
 }
 
-.card {
-    padding: 1rem;
+#trainerInfoCard {
     border: 2px solid lightgray;
+    padding: 1rem;
+    width: 30rem;
+    aspect-ratio: 1.6;
 }
 
-#trainerPage ul {
+#trainerCardContent {
+    display: flex;
+}
+
+#trainerPhoto {
+    text-align: initial;
+    width: 33%;
+}
+
+#trainerPage input[type="file"] {
+    color: rgba(0, 0, 0, 0)
+}
+
+#basicTrainerInfo {
+    width: 100%;
+}
+
+.trainerAttribute input[type="text"],
+input[type="tel"] {
+    width: 7rem;
+}
+
+#trainerPage input[type="number"] {
+    width: 2.4rem;
+}
+
+#trainerAttribute-list {
+    display: flex;
+    padding: 0 1rem;
+    justify-content: space-evenly;
+}
+
+#trainerName {
+    width: 100%;
+}
+
+#trainerName input {
+    font-size: 2rem;
+    width: 33%;
+    margin: 1rem .5rem;
+}
+
+.trainerAttribute {
+    padding: 0 .4rem;
+}
+
+.trainerAttribute h3 {
+    margin: 0 !important;
+}
+
+#trainerCredentials {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#trainerCredentials>div {
+    border: 1px solid lightgray;
+}
+
+#trainerCredentials ul {
     list-style: none;
     padding: 0;
 }
 
-#trainerPhoto p {
-    font-size: .75rem;
+#trainerPage .react-calendar {
+    margin: auto;
 }
