@@ -3,14 +3,18 @@ import axios from 'axios';
 import './TrainerHomePage.css';
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
+import { TrainerRepository } from '../../api/TrainerRepository';
 
 //function TrainerHomePage(props)
 export default class Login extends React.Component {
+
+    trainerRepo = new TrainerRepository;
+
     constructor(props) {
         super(props);
         this.state = {
             editMode: false,
-            firstName: "John",
+            firstName: "",
             lastName : "Doe",
             gender: "Male",
             age: "22",
@@ -18,7 +22,9 @@ export default class Login extends React.Component {
             phoneNumber: "123-456-7890",
             photo: "https://via.placeholder.com/250",
             credentials: ["foo", "bar"],
-            workouts:["bar", "foo"]
+            workouts:["bar", "foo"],
+            token : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QzIiwidXNlclR5cGUiOjMsImlhdCI6MTYzNzUyODA5OCwiZXhwIjoxNjM3NTMxNjk4fQ.Lr8bGIoTc4EaOS8E_Lqb6ltwcySwYqDITBxVznZr9rs'
+            
     };
 
     this.toggleEditMode = this.toggleEditMode.bind(this);
@@ -27,6 +33,43 @@ export default class Login extends React.Component {
     toggleEditMode () {
         this.setState({ editMode: !this.state.editMode })
     };
+
+    initalizeProfile(token){
+
+        this.trainerRepo.getTrainer(token).then(account =>{
+            let accArray = account[0];
+            if(accArray){
+
+                if (accArray.firstName)
+                    this.setState({ firstName: accArray.firstName });
+                // if (accArray.lastName)
+                //     req.body.args.lastName = req.body.lastName;
+                // if (accArray.age)
+                //     req.body.args.age = req.body.age;
+                // if (accArray.gender)
+                //     req.body.args.gender = req.body.gender;
+                // if (accArray.phone)
+                //     req.body.args.phone = req.body.phone;
+                // if (accArray.email)
+                //     req.body.args.email = req.body.email;
+                // if (accArray.pfp)
+                //     req.body.args.pfp = req.body.pfp;
+                // if (accArray.description)
+                //     req.body.args.description = req.body.description;
+
+            }
+
+
+        })
+            
+
+    }
+    
+    componentDidMount(token){
+        this.initalizeProfile(token);
+    }
+
+    
 
     handleChange(e) {
         this.setState({value: e.target.value});

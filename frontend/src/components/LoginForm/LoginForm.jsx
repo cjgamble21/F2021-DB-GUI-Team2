@@ -3,6 +3,7 @@ import axios from 'axios';
 import './LoginForm.css';
 import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
+//import { UserHomePage} from '../UserHomePage'
 
 function LoginForm(props) {
     const [state , setState] = useState({
@@ -29,6 +30,7 @@ function LoginForm(props) {
                         'successMessage' : 'Login successful. Redirecting to home page..'
                     }))
                     localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
+                    console.log("Login Success");
                     redirectToHome();
                     props.showError(null)
                 }
@@ -41,15 +43,17 @@ function LoginForm(props) {
             });
     }
     const redirectToHome = () => {
-        if(state.userType === 0){
+        
+        if(state.userType === '1'){
             props.updateTitle('Member Homepage');
-            props.history.push('/UserHomePage');
+            props.history.push('/UserDashboard');
+            
         }
-        else if(state.userType === 1){
+        else if(state.userType === '2'){
             props.updateTitle('Trainer Homepage');
             props.history.push('/TrainerHomePage');
         }
-        else if(state.userType === 2){
+        else if(state.userType === '3'){
             props.updateTitle('Gym Owner Homepage');
             props.history.push('/GymOwnerHomePage');
         }
@@ -74,8 +78,8 @@ function LoginForm(props) {
                         onChange={handleChange}>
                         <option value="">choose an option</option>
                         <option value="1">Member</option>
-                        <option value="2">Owner</option>
-                        <option value="3">Trainer</option>
+                        <option value="3">Owner</option>
+                        <option value="2">Trainer</option>
                     </select>
                 </div>
                 <div className="form-group text-left">
