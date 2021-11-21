@@ -8,6 +8,7 @@ import Home from './components/Home/Home';
 import GymOwnerHomePage from './components/GymOwnerHomePage/GymOwnerHomePage'
 import TrainerHomePage from './components/TrainerHomePage/TrainerHomePage';
 import UserHomePage from './components/UserHomePage/UserHomePage';
+import Gym from './components/Gym/Gym';
 import {
   BrowserRouter as Router,
   Switch,
@@ -109,6 +110,9 @@ function App () {
             </Route>
             <Route path="/TrainerHomePage">
                 <TrainerHomePage showError={updateErrorMessage} updateTitle={updateTitle}/>
+            </Route>
+            <Route path="/Gym">
+                <Gym showError={updateErrorMessage} updateTitle={updateTitle}/>
             </Route>
           </Switch>
           <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>

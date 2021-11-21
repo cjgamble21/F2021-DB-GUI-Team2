@@ -2,8 +2,8 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-export class PostsRepository {
-
+export class TrainerRepository {
+    //remember to change URL 
     url = 'http://ec2-3-128-160-107.us-east-2.compute.amazonaws.com:8000';
 
     config = {

@@ -41,15 +41,16 @@ function LoginForm(props) {
             });
     }
     const redirectToHome = () => {
-        if(state.userType === 0){
+        debugger;
+        if(state.userType == 0){
             props.updateTitle('Member Homepage');
             props.history.push('/UserHomePage');
         }
-        else if(state.userType === 1){
+        else if(state.userType == 1){
             props.updateTitle('Trainer Homepage');
             props.history.push('/TrainerHomePage');
         }
-        else if(state.userType === 2){
+        else if(state.userType == 2){
             props.updateTitle('Gym Owner Homepage');
             props.history.push('/GymOwnerHomePage');
         }

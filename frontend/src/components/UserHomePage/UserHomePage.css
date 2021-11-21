@@ -1,4 +1,19 @@
 #userPage ul{
     list-style: none;
-    padding: 0;
+}
+
+.row{
+    padding: 20px;
+}
+
+caption{
+    caption-side: top;
+    text-align : center !important;
+}
+
+td,th{
+    vertical-align: middle;
+}
+td a{
+    display: block;
 }

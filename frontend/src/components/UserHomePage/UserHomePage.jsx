@@ -3,28 +3,39 @@ import axios from 'axios';
 import './UserHomePage.css';
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
-import { TrainerRepository } from '../api/TrainerRepository';
+import { TrainerRepository } from '../../api/TrainerRepository';
+import { Link } from 'react-router-dom';
 
 //function UserHomePage(props) {}
 export default class UserHomePage extends React.Component {
 
-    //const trainerRepo = new TrainerRepository();
+    trainerRepo = new TrainerRepository();
     
     constructor(props) {
         super(props);
         this.state = {
             editMode: false,
+            userToken:'',
             firstName: "John",
             lastName : "Lawrimore",
             gender: "Male",
             age: "22",
             email: "foo@bar.net",
             phoneNumber: "123-456-7890",
-            photo: "https://via.placeholder.com/250"
+            photo: "https://via.placeholder.com/500",
+            trainers: []
     };
 
     this.toggleEditMode = this.toggleEditMode.bind(this);
 }
+//     componentDidMount(){
+//         this.trainerRepo.getTrainer(window.username)
+//         .then(profile => {
+//             console.log(profile)
+//             let userProfile = profile[0]
+//             this.setState(userProfile)
+//     })
+// }
 
     toggleEditMode () {
         this.setState({ editMode: !this.state.editMode })
@@ -45,13 +56,13 @@ export default class UserHomePage extends React.Component {
     };
 
     render(){
-        return(
-            <div class="float-container">
+        return(<>
+            
                 <div className = "row">
                     <div className = "col-sm-6">
-                        <div className = "card">
+                        <div className = "card w-70">
                             <div id="userPhoto">
-                                <img className = "card-img-top" src={this.state.photo} alt="user-photo"/>
+                                <img className = "card-img-top rounded-circle" src={this.state.photo} alt="user-photo"/>
                                 {this.state.editMode && (
                                 <input type="file"
                                 onChange={e => this.setState({ photo: e.target.value })}/>
@@ -91,48 +102,92 @@ export default class UserHomePage extends React.Component {
                                 <input type="text" 
                                 value = {this.state.phoneNumber}
                                 onChange={e => this.setState({ phoneNumber: e.target.value })}/>
+                            </div> )}
 
-                                {!this.state.editMode && (
-                                <button type="button" class="btn btn-primary" onClick = {this.toggleEditMode}>Edit Info</button>
+                            {!this.state.editMode && (
+                                <button className="btn btn-primary" onClick = {this.toggleEditMode}>Edit Info</button>
                                 )}
                                 {this.state.editMode && (
                                 <button type="button" class="btn btn-primary" onClick = {this.toggleEditMode}>Save Changes</button>
                                 )}
-                            </div> )}
                         </div>
                     </div>
-                </div>
                 
                 
-                <div className = "row">
-                    <div className = "col-sm-6">
-                        <div className = "card">
+                
+                                 
+                    <div className = "col-sm-6 align-self-center">
+                        <div className = "card w-100 border-light mb-3">
                             <table className = "table table-hover">
+                                <caption> Trainer List</caption>
                                 <thead className = "table-dark">
                                     <tr>
                                         <th>Name</th>
                                         <th>Location</th>
                                         <th>Workouts</th>
+                                        <th>Hourly Rate</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Bob the Builder</td>
+                                        <td><Link to= "/TrainerHomepage">Bob the Builder</Link></td>
                                         <td>Dallas,TX</td>
-                                        <td>Cardio,Strength</td>
+                                        <td>Cardio, Strength</td>
+                                        <td>$50</td>
+                                        
                                     </tr>
                                     <tr>
-                                        <td>Dora the Explorer</td>
+                                        <td><Link to= "/TrainerHomepage">Dora the Explorer</Link></td>
                                         <td>Houston,TX</td>
-                                        <td>Walking,Critical Thinking</td>
+                                        <td>Walking, Critical Thinking</td>
+                                        <td>$60</td>
                                     </tr>
+
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <div className = "row">
+                    <table className = "table table-image table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Rating</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td className = "w-25">
+                                <img src="https://dmn-dallas-news-prod.cdn.arcpublishing.com/resizer/VTPjV_pQiFWY-M3I_hKalJJ2-jg=/1660x934/smart/filters:no_upscale()/arc-anglerfish-arc2-prod-dmn.s3.amazonaws.com/public/OVEHMMLGRU52CVDGZ6GDOVMNNU.jpg" className="img-fluid img-thumbnail" alt="Sheep"/>
+                                </td>
+                                <td><Link to = "/Gym">LifeTime Fitness</Link></td>
+                                <td>5910 N US 75-Central Expy 1000, Dallas, TX 75206</td>
+                            </tr>
+
+                            <tr>
+                                <td className = "w-25">
+                                <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/sheep-3.jpg" className="img-fluid img-thumbnail" alt="Sheep"/>
+                                </td>
+                                <td><Link to = "/Gym">24 Hour Fitness</Link></td>
+                                <td>11100 Central Expressway Dallas, TX 75206</td>
+
+                            </tr>
+                        </tbody>
+
+
+                    </table>
+
+
+
+                </div>
             
-        )
+            
+        </>);
     }
 }

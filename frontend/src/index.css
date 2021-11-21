@@ -36,7 +36,7 @@ label {
     max-width: min-content;
     border-radius: 1rem;
     background-color: white;
-    text-align: center;
+    text-align: center; 
     margin-left: auto;
     margin-right: auto;
     width: fit-content;

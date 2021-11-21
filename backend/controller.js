@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 exports.registerUser = function(req, res, conn) {
     var username = req.body.username;
     var password = req.body.password;
-    var userType = req.body.userType;
+    var userType = parseInt(req.body.userType);
     if (!username || !password) {
       res.status(400).json({
           code: 400,
@@ -19,7 +19,7 @@ exports.registerUser = function(req, res, conn) {
             error: err
           });
         } else {
-          console.log(userType);
+          console.log(req.body);
           conn.query('INSERT INTO profiles (username, password, userType) VALUES (?, ?, ?)', [username, hash, userType], 
           function (err) {
               if (err) {
