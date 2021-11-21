@@ -39,38 +39,6 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // route for getting user info
-  app.get('/api/:userID', middleware.checkAuthUser, async (req, res) => {
-    pool.getConnection(function (err, conn) {
-      if (err) {
-        logger.error('Problem with MySQL connection');
-        res.status(400).json({
-          code: 400,
-          message: 'Problem with MySQL connection'
-        });
-      } else {
-        controller.getUserInfo(req, res, conn);
-        conn.release();
-      }
-    });
-  });
-
-  // route for adding user info to their profile
-  app.put('/api/:userID', middleware.checkAuthUser, async (req, res) => {
-    pool.getConnection(function (err, conn) {
-      if (err) {
-        logger.error('Problem with MySQL connection');
-        res.status(400).json({
-          code: 400,
-          message: 'Problem with MySQL connection'
-        });
-      } else {
-        controller.putUserInfo(req, res, conn);
-        conn.release();
-      }
-    });
-  });
-
   //////////////////////////////////////////////////
   // TEST PATHS
   //////////////////////////////////////////////////
@@ -94,7 +62,41 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // /api/d/user/sessions
+  // /api/UserDashboard
+  app.put('/api/UserDashboard', middleware.checkAuthUser, async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem obtaining MySQL connection'
+        });
+      } else {
+        req.body.table = 'profiles';
+        req.body.args = {};
+        if (req.body.firstName)
+          req.body.args.firstName = req.body.firstName;
+        if (req.body.lastName)
+          req.body.args.lastName = req.body.lastName;
+        if (req.body.age)
+          req.body.args.age = req.body.age;
+        if (req.body.gender)
+          req.body.args.gender = req.body.gender;
+        if (req.body.phone)
+          req.body.args.phone = req.body.phone;
+        if (req.body.email)
+          req.body.args.email = req.body.email;
+        if (req.body.pfp)
+          req.body.args.pfp = req.body.pfp;
+        if (req.body.description)
+          req.body.args.description = req.body.description;
+        controller.putBody(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/UserSessions
   app.get('/api/UserSessions', middleware.checkAuthUser, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -115,7 +117,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // /api/d/trainer/dashboard
+  // /api/TrainerDashboard
   app.get('/api/TrainerDashboard', middleware.checkAuthTrainer, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -134,7 +136,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // /api/d/session
+  // /api/TrainerSessions
   app.get('/api/TrainerSessions', middleware.checkAuthTrainer, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
