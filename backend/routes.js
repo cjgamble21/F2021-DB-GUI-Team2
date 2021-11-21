@@ -76,7 +76,7 @@ module.exports = function routes(app, logger) {
   //////////////////////////////////////////////////
 
   // /api/d/user/dashboard
-  app.get('/api/d/UserDashboard', middleware.checkAuthUser, async (req, res) => {
+  app.get('/api/UserDashboard', middleware.checkAuthUser, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -95,7 +95,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/user/sessions
-  app.get('/api/d/UserSessions', middleware.checkAuthUser, async (req, res) => {
+  app.get('/api/UserSessions', middleware.checkAuthUser, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -116,7 +116,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/trainer/dashboard
-  app.get('/api/d/TrainerDashboard', middleware.checkAuthTrainer, async (req, res) => {
+  app.get('/api/TrainerDashboard', middleware.checkAuthTrainer, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -135,7 +135,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/session
-  app.get('/api/d/TrainerSessions', middleware.checkAuthTrainer, async (req, res) => {
+  app.get('/api/TrainerSessions', middleware.checkAuthTrainer, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
