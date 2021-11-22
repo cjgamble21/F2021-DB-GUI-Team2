@@ -136,6 +136,40 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  // /api/TrainerDashboard
+  app.put('/api/TrainerDashboard', middleware.checkAuthTrainer, async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem obtaining MySQL connection'
+        });
+      } else {
+        req.body.table = 'profiles';
+        req.body.args = {};
+        if (req.body.firstName)
+          req.body.args.firstName = req.body.firstName;
+        if (req.body.lastName)
+          req.body.args.lastName = req.body.lastName;
+        if (req.body.age)
+          req.body.args.age = req.body.age;
+        if (req.body.gender)
+          req.body.args.gender = req.body.gender;
+        if (req.body.phone)
+          req.body.args.phone = req.body.phone;
+        if (req.body.email)
+          req.body.args.email = req.body.email;
+        if (req.body.pfp)
+          req.body.args.pfp = req.body.pfp;
+        if (req.body.description)
+          req.body.args.description = req.body.description;
+        controller.putBody(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
   // /api/TrainerSessions
   app.get('/api/TrainerSessions', middleware.checkAuthTrainer, async (req, res) => {
     pool.getConnection(function (err, conn) {
