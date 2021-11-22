@@ -5,12 +5,14 @@ import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
 
 function LoginForm(props) {
+
     const [state , setState] = useState({
-        userType: -1,
         username : "",
         password : "",
+        userType : 9,
         successMessage: null
     })
+
     const handleChange = (e) => {
         const {id , value} = e.target   
         setState(prevState => ({
@@ -19,34 +21,39 @@ function LoginForm(props) {
         }))
     }
 
-    const handleSubmitClick = (e) => {
-        e.preventDefault();
-        checkAccount()
+    const checkAccount = () => {
+        if(state.username.length && state.password.length && state.userType.length) {
+            axios.post(API_BASE_URL + '/api/login', {username:state.username, password:state.password, userType: state.userType}    )
+                .then(function (response) {
+                    if (response.status === 200) {
+                        setState(prevState => ({
+                            ...prevState,
+                            'successMessage' : 'Login successful. Redirecting to home page..'
+                        }));
+                        localStorage.token = response.data.token;
+                        redirectToHome();
+                    } else {
+                        props.showError("Some error occurred");
+                    }
+                })
+                .catch(function (error) {
+                    window.alert(error);
+                });
+        } else {
+            props.showError('Please enter valid username, user type, and password');
+        }
     }
-const checkAccount = (username, password, userType) => {
-    new Promise((resolve, reject) => {
-        let body = {
-            username: state.username,
-            password: state.password,
-            userType: state.userType
-        };
-        axios.post(API_BASE_URL + '/api/login', body, this.config)
-            .then(x => resolve())
-            .catch(error => reject(error));
- //       localStorage.setItem(ACCESS_TOKEN_NAME, response.data.token);
-    })
-    redirectToHome();
-}
+
     const redirectToHome = () => {
-        if(state.userType === 1){
+        if(state.userType === '1'){
             props.updateTitle('Member Homepage');
             props.history.push('/UserHomePage');
         }
-        else if(state.userType === 2){
+        else if(state.userType === '2'){
             props.updateTitle('Trainer Homepage');
             props.history.push('/TrainerHomePage');
         }
-        else if(state.userType === 3){
+        else if(state.userType === '3'){
             props.updateTitle('Gym Owner Homepage');
             props.history.push('/GymOwnerHomePage');
         }
@@ -55,10 +62,17 @@ const checkAccount = (username, password, userType) => {
             props.history.push('/home');
         }
     }
+
     const redirectToRegister = () => {
         props.history.push('/register'); 
         props.updateTitle('Register');
     }
+
+    const handleSubmitClick = (e) => {
+        e.preventDefault();
+        checkAccount()
+    }
+
     return(
         <div className="card">
             <form>
@@ -71,8 +85,8 @@ const checkAccount = (username, password, userType) => {
                         onChange={handleChange}>
                         <option value="">choose an option</option>
                         <option value="1">Member</option>
-                        <option value="2">Owner</option>
-                        <option value="3">Trainer</option>
+                        <option value="3">Owner</option>
+                        <option value="2">Trainer</option>
                     </select>
                 </div>
                 <div className="form-group text-left">

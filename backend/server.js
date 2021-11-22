@@ -11,11 +11,17 @@ const routes = require('./routes');
 const config = {
   name: 'sample-express-app',
   port: 8000,
-  host: '0.0.0.0',
+  host: '0.0.0.0'
 };
 
 // create the express.js object
-const app = express();
+const app = express()/*.use(function (req, res, next) {
+  if (req.header('x-forwarded-proto') != 'http') {
+    //console.log(res.hasHeader());
+    return;
+  }
+  next();
+})*/;
 
 // create a logger object.  Using logger is preferable to simply writing to the console.
 const logger = log({ console: true, file: false, label: config.name });
@@ -23,9 +29,11 @@ const logger = log({ console: true, file: false, label: config.name });
 // specify middleware to use
 app.use(bodyParser.json());
 app.use(cors({
-  origin: '*'
+  origin: 'http://localhost:3000',
+  allowedHeaders: 'Content-Type,Authorization',
+  credentials: true
 }));
-app.use(ExpressAPILogMiddleware(logger, { request: true }));
+app.use(ExpressAPILogMiddleware(logger, { request: true }));  
 app.use(express.json()) //For JSON requests
 app.use(express.urlencoded({extended: true}));
 
