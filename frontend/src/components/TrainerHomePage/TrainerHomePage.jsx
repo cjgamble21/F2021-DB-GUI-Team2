@@ -1,33 +1,71 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './TrainerHomePage.css';
-import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/apiConstants';
+import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
+import { TrainerRepository } from '../../api/TrainerRepository';
 
 //function TrainerHomePage(props)
 export default class Login extends React.Component {
+
+    trainerRepo = new TrainerRepository;
+
     constructor(props) {
         super(props);
-        this.state = {
-            editMode: false,
-            firstName: "John",
-            lastName : "Doe",
-            gender: "Male",
-            age: "22",
-            rate: "12",
-            email: "foo@bar.net",
-            phoneNumber: "123-456-7890",
-            photo: "https://via.placeholder.com/250",
-            credentials: ["foo", "bar"],
-            workouts:["bar", "foo"]
-    };
+        this.state = {};
+        this.state.editMode = false;
+        this.state.firstName = "John";
+        this.state.lastName = "Doe";
+        this.state.phone = "111-111-1111";
+        this.state.email = "email@email.com";
+        this.state.photo = "https://via.placeholder.com/250";
+        this.state.credentials = ["foo", "bar"];
+        this.state.workouts = ["bar", "foo"];
+        this.state.token = localStorage.token;
 
-    this.toggleEditMode = this.toggleEditMode.bind(this);
-}
+        this.toggleEditMode = this.toggleEditMode.bind(this);
+    }
 
     toggleEditMode () {
         this.setState({ editMode: !this.state.editMode })
     };
+
+    initalizeProfile(){
+        console.log(this.state.token);
+        this.trainerRepo.getTrainer(this.state.token).then(account => {
+            let accArray = account;
+            console.log(account);
+            if(accArray){
+                if (accArray.firstName.length > 0)
+                    this.setState({ firstName: accArray.firstName });
+                if (accArray.lastName.length > 0)
+                    this.setState({ lastName: accArray.lastName });
+                // if (accArray.age)
+                //     req.body.args.age = req.body.age;
+                // if (accArray.gender)
+                //     req.body.args.gender = req.body.gender;
+                // if (accArray.phone)
+                //     req.body.args.phone = req.body.phone;
+                // if (accArray.email)
+                //     req.body.args.email = req.body.email;
+                // if (accArray.pfp)
+                //     req.body.args.pfp = req.body.pfp;
+                // if (accArray.description)
+                //     req.body.args.description = req.body.description;
+
+            }
+
+
+        })
+            
+
+    }
+    
+    componentDidMount(){
+        this.initalizeProfile();
+    }
+
+    
 
     handleChange(e) {
         this.setState({value: e.target.value});
@@ -60,39 +98,28 @@ export default class Login extends React.Component {
                         <h2>{this.state.firstName} {this.state.lastName}</h2>
                         <p>Gender {this.state.gender}</p>
                         <p>Age {this.state.age}</p>
-                        <p>Rate: ${this.state.rate}/hr</p>
                         <h3>Contact Info</h3>
                         <p>{this.state.email}</p>
                         <p>{this.state.phoneNumber}</p>
                     </div> )}
-                    {/* html for edit mode */}
                     {this.state.editMode && (
                     <div id="basicTrainerInfo">
-                        {/* edit name */}
                         <input type="text" 
                         value = {this.state.firstName}
                         onChange={e => this.setState({ firstName: e.target.value })}/>
                         <input type="text" 
                         value = {this.state.lastName}
                         onChange={e => this.setState({ lastName: e.target.value })}/>
-                        {/* edit gender */}
                         <label>Gender</label>
                         <select value={this.state.gender}
                         onChange={e => this.setState({ gender: e.target.value })}>
                             <option>M</option>
                             <option>F</option>
                         </select>
-                        {/* edit age */}
                         <label>Age</label>
                         <input type="text" 
                         value={this.state.age}
                         onChange={e => this.setState({ age: e.target.value })}/>
-                        {/* edit rate */}
-                        <label>Rate</label>
-                        $<input type="text" 
-                        value={this.state.rate}
-                        onChange={e => this.setState({ rate: e.target.value })}/>/hr
-                        {/* edit contact info */}
                         <h3>Contact Info</h3>
                         <input type="text" 
                         value = {this.state.email}
