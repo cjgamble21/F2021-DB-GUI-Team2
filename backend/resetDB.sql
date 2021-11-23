@@ -2,15 +2,31 @@ CREATE DATABASE IF NOT EXISTS `db`;
 
 USE `db`;
 
+DROP TABLE IF EXISTS `machines`;
+DROP TABLE IF EXISTS `amenities`;
+DROP TABLE IF EXISTS `gymOwnership`;
+DROP TABLE IF EXISTS `gymInfo`;
 DROP TABLE IF EXISTS `sessions`;
 DROP TABLE IF EXISTS `offers`;
 DROP TABLE IF EXISTS `requests`;
 DROP TABLE IF EXISTS `trainerSkills`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `trainers`;
+DROP TABLE IF EXISTS `admins`;
 DROP TABLE IF EXISTS `profiles`;
 DROP TABLE IF EXISTS `userTypes`;
 DROP TABLE IF EXISTS `workouts`;
+
+/*
+ * Table of gymInfo
+ */
+CREATE TABLE `gymInfo`(
+    `gymID`  int     NOT NULL AUTO_INCREMENT,
+    `name`  varchar(50)		UNIQUE DEFAULT NULL,
+    `description`   varchar(500)    DEFAULT NULL,
+    `logo`  varchar(500)    DEFAULT NULL,
+    PRIMARY KEY(`gymID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*
  * Table of available workouts at the gym
@@ -70,9 +86,11 @@ CREATE TABLE `users` (
  */
 CREATE TABLE `trainers` (
 	`trainerID`		int				NOT NULL,
+	`gymID`         int             NOT NULL,
 	`rate`			decimal(8,2)	NOT NULL,
 	PRIMARY KEY(`trainerID`),
-	CONSTRAINT `trainers_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
+	CONSTRAINT `trainers_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE,
+    CONSTRAINT `trainers_ibfk_2` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*
@@ -133,3 +151,51 @@ CREATE TABLE `sessions` (
 	CONSTRAINT `sessions_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `trainers` (`trainerID`),
 	CONSTRAINT `sessions_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+/*
+ * Table of admins
+ */
+CREATE TABLE `admins`(
+    `adminID`  int     NOT NULL,
+    PRIMARY KEY(`adminID`),
+    CONSTRAINT `admins_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+/*
+ * Table connects gym and admin
+ */
+CREATE TABLE `gymOwnership`(
+    `gymID`     int     NOT NULL,
+    `adminID`   int     NOT NULL,
+    PRIMARY KEY(`gymID`, `adminID`),
+    KEY `gymID` (`gymID`),
+    KEY `adminID` (`adminID`),
+    CONSTRAINT `gymOwnership_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE,
+    CONSTRAINT `gymOwnership_ibfk_2` FOREIGN KEY (`adminID`) REFERENCES `admins` (`adminID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*
+ * Table of amenities
+ */
+CREATE TABLE `amenities`(
+    `amenityID`     int     NOT NULL,
+    `amenityType`   varchar(50)     NOT NULL,
+    `gymID`     int     NOT NULL,
+    PRIMARY KEY(`amenityID`),
+    KEY `gymID` (`gymID`),
+    CONSTRAINT `amenities_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*
+ * Table of machines
+ */
+CREATE TABLE `machines`(
+    `machineID`     int     NOT NULL AUTO_INCREMENT,
+    `machineName`   varchar(50)     NOT NULL,
+    `gymID`         int NOT NULL,
+    PRIMARY KEY(`machineID`),
+    KEY `gymID` (`gymID`),
+    CONSTRAINT `machines_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
