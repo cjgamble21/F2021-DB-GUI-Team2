@@ -43,7 +43,7 @@ module.exports = function routes(app, logger) {
   // TEST PATHS
   //////////////////////////////////////////////////
 
-  // /api/d/user/dashboard
+  // /api/UserDashboard
   app.get('/api/UserDashboard', middleware.checkAuthUser, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -62,8 +62,8 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // /api/UserDashboard
-  app.put('/api/UserDashboard', middleware.checkAuthUser, async (req, res) => {
+  // /api/UserDashboard/edit
+  app.put('/api/UserDashboard/edit', middleware.checkAuthUser, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -136,8 +136,8 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // /api/TrainerDashboard
-  app.put('/api/TrainerDashboard', middleware.checkAuthTrainer, async (req, res) => {
+  // /api/TrainerDashboard/edit
+  app.put('/api/TrainerDashboard/edit', middleware.checkAuthTrainer, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -183,6 +183,44 @@ module.exports = function routes(app, logger) {
         req.body.table = 'sessions';
         req.body.args = {};
         req.body.args.trainerID = req.user.profileID;
+        controller.getBody(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/getUsers
+  app.get('/api/getUsers', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem obtaining MySQL connection'
+        });
+      } else {
+        req.body.table = 'profiles';
+        req.body.args = {};
+        req.body.args.userType = 1;
+        controller.getBody(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/getTrainers
+  app.get('/api/getTrainers', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem obtaining MySQL connection'
+        });
+      } else {
+        req.body.table = 'profiles';
+        req.body.args = {};
+        req.body.args.userType = 2;
         controller.getBody(req, res, conn);
         conn.release();
       }
