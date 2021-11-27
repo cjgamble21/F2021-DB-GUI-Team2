@@ -340,7 +340,7 @@ module.exports = function routes(app, logger) {
   //////////////////////////////////////////////////
 
   // /api/d/{table}/{variable}
-  app.delete('/api/d/:table/:variable', middleware.checkAuthOwner, async (req, res) => {
+  app.delete('/api/d/:table/:variable/delete', middleware.checkAuthOwner, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
