@@ -96,6 +96,25 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  // /api/UserDashboard/delete
+  app.get('/api/UserDashboard/delete', middleware.checkAuthUser, async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem obtaining MySQL connection'
+        });
+      } else {
+        req.body.table = 'profiles';
+        req.body.args = {};
+        req.body.args.profileID = req.user.profileID;
+        controller.deleteBody(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
   // /api/UserSessions
   app.get('/api/UserSessions', middleware.checkAuthUser, async (req, res) => {
     pool.getConnection(function (err, conn) {
@@ -165,6 +184,25 @@ module.exports = function routes(app, logger) {
         if (req.body.description)
           req.body.args.description = req.body.description;
         controller.putBody(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/TrainerDashboard/delete
+  app.get('/api/TrainerDashboard/delete', middleware.checkAuthTrainer, async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem obtaining MySQL connection'
+        });
+      } else {
+        req.body.table = 'profiles';
+        req.body.args = {};
+        req.body.args.profileID = req.user.profileID;
+        controller.deleteBody(req, res, conn);
         conn.release();
       }
     });
@@ -283,8 +321,8 @@ module.exports = function routes(app, logger) {
   // POST 
   //////////////////////////////////////////////////
 
-  // /api/d/{table}
-  app.post('/api/d/:table', middleware.checkAuthOwner, async (req, res) => {
+  // /api/d/{table}/post
+  app.post('/api/d/:table/post', middleware.checkAuthOwner, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -303,8 +341,8 @@ module.exports = function routes(app, logger) {
   // PUT 
   //////////////////////////////////////////////////
 
-  // /api/d/{table}/{variable}
-  app.put('/api/d/:table/:variable', middleware.checkAuthOwner, async (req, res) => {
+  // /api/d/{table}/{variable}/put
+  app.put('/api/d/:table/:variable/put', middleware.checkAuthOwner, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -319,8 +357,8 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // /api/d/{table}/{variable}/{value}
-  app.put('/api/d/:table/:variable/:value', middleware.checkAuthOwner, async (req, res) => {
+  // /api/d/{table}/{variable}/{value}/put
+  app.put('/api/d/:table/:variable/:value/put', middleware.checkAuthOwner, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -339,7 +377,7 @@ module.exports = function routes(app, logger) {
   // DELETE
   //////////////////////////////////////////////////
 
-  // /api/d/{table}/{variable}
+  // /api/d/{table}/{variable}/delete
   app.delete('/api/d/:table/:variable/delete', middleware.checkAuthOwner, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -355,8 +393,8 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // /api/d/{table}/{variable}/{value}
-  app.delete('/api/d/:table/:variable/:value', middleware.checkAuthOwner, async (req, res) => {
+  // /api/d/{table}/{variable}/{value}/delete
+  app.delete('/api/d/:table/:variable/:value/delete', middleware.checkAuthOwner, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
