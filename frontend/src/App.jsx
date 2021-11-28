@@ -15,6 +15,7 @@ import {
   Route
 } from "react-router-dom";
 import AlertComponent from './components/AlertComponent/AlertComponent'; 
+import { routes } from './routes';
 
 // React functional component
 function App () {
@@ -33,87 +34,13 @@ function App () {
   // USE localhost OR ec2_url ACCORDING TO ENVIRONMENT
   const url = ec2 ? ec2_url : 'localhost'
 
-  // handle input field state change
-  const handleChange = (e) => {
-    setNumber(e.target.value);
-  }
-
-  const fetchBase = () => {
-    axios.get(`http://${url}:8000/`).then((res)=>{
-      alert(res.data);
-    })
-  }
-
-  // fetches vals of db via GET request
-  const fetchVals = () => {
-    axios.get(`http://${url}:8000/values`).then(
-      res => {
-        const values = res.data.data;
-        console.log(values);
-        setValues(values)
-    }).catch(err => {
-      console.log(err)
-    });
-  }
-
-  // handle input form submission to backend via POST request
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let prod = number * number;
-    axios.post(`http://${url}:8000/multplynumber`, {product: prod}).then(res => {
-      console.log(res);
-      fetchVals();
-    }).catch(err => {
-      console.log(err)
-    });;
-    setNumber("");
-  }
-
-  // handle intialization and setup of database table, can reinitialize to wipe db
-  const reset = () => {
-    axios.post(`http://${url}:8000/reset`).then(res => {
-      console.log(res);
-      fetchVals();
-    }).catch(err => {
-      console.log(err)
-    });;
-  }
-
-  // tell app to fetch values from db on first load (if initialized)
-  useEffect(() => {
-    fetchVals();
-  }, [])
-
   return (
     <Router>
     <div className="App">
         <div className="container d-flex align-items-center flex-column">
-          <Header title={title}/>
           <Switch>
-            <Route path="/" exact={true}>
-              <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
-            <Route path="/login">
-              <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
-            <Route path="/register">
-              <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
-            <Route path="/home">
-              <Home/>
-            </Route>
-            <Route path="/GymOwnerHomePage">
-                <GymOwnerHomePage showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
-            <Route path="/UserHomePage">
-                <UserHomePage showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
-            <Route path="/TrainerHomePage">
-                <TrainerHomePage showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
-            <Route path="/Gym">
-                <Gym showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
+
+          { routes.map((route, index) => <Route key={ index } exact { ...route }></Route>) }
           </Switch>
           <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
         </div>

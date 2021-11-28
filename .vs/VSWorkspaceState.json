@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\frontend",
+    "\\frontend\\src",
+    "\\frontend\\src\\components",
+    "\\frontend\\src\\components\\GymOwnerHomePage",
+    "\\frontend\\src\\components\\LoginForm",
+    "\\frontend\\src\\components\\RegistrationForm",
+    "\\frontend\\src\\components\\TrainerHomePage"
+  ],
+  "SelectedNode": "\\backend\\routes.js",
+  "PreviewInSolutionExplorer": false
+}

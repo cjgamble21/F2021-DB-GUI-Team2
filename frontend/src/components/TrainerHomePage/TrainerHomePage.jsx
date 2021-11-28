@@ -1,32 +1,71 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './TrainerHomePage.css';
-import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/apiConstants';
+import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
+import { TrainerRepository } from '../../api/TrainerRepository';
 
 //function TrainerHomePage(props)
 export default class Login extends React.Component {
+
+    trainerRepo = new TrainerRepository;
+
     constructor(props) {
         super(props);
-        this.state = {
-            editMode: false,
-            firstName: "John",
-            lastName : "Doe",
-            gender: "Male",
-            age: "22",
-            email: "foo@bar.net",
-            phoneNumber: "123-456-7890",
-            photo: "https://via.placeholder.com/250",
-            credentials: ["foo", "bar"],
-            workouts:["bar", "foo"]
-    };
+        this.state = {};
+        this.state.editMode = false;
+        this.state.firstName = "John";
+        this.state.lastName = "Doe";
+        this.state.phone = "111-111-1111";
+        this.state.email = "email@email.com";
+        this.state.photo = "https://via.placeholder.com/250";
+        this.state.credentials = ["foo", "bar"];
+        this.state.workouts = ["bar", "foo"];
+        this.state.token = localStorage.token;
 
-    this.toggleEditMode = this.toggleEditMode.bind(this);
-}
+        this.toggleEditMode = this.toggleEditMode.bind(this);
+    }
 
     toggleEditMode () {
         this.setState({ editMode: !this.state.editMode })
     };
+
+    initalizeProfile(){
+        console.log(this.state.token);
+        this.trainerRepo.getTrainer(this.state.token).then(account => {
+            let accArray = account;
+            console.log(account);
+            if(accArray){
+                if (accArray.firstName.length > 0)
+                    this.setState({ firstName: accArray.firstName });
+                if (accArray.lastName.length > 0)
+                    this.setState({ lastName: accArray.lastName });
+                // if (accArray.age)
+                //     req.body.args.age = req.body.age;
+                // if (accArray.gender)
+                //     req.body.args.gender = req.body.gender;
+                // if (accArray.phone)
+                //     req.body.args.phone = req.body.phone;
+                // if (accArray.email)
+                //     req.body.args.email = req.body.email;
+                // if (accArray.pfp)
+                //     req.body.args.pfp = req.body.pfp;
+                // if (accArray.description)
+                //     req.body.args.description = req.body.description;
+
+            }
+
+
+        })
+            
+
+    }
+    
+    componentDidMount(){
+        this.initalizeProfile();
+    }
+
+    
 
     handleChange(e) {
         this.setState({value: e.target.value});

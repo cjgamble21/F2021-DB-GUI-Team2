@@ -32,7 +32,7 @@ function RegistrationForm(props) {
                             ...prevState,
                             'successMessage' : 'Registration successful. Redirecting to home page..'
                         }))
-                        localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
+                        localStorage.setItem(ACCESS_TOKEN_NAME,response.token);
                         redirectToHome();
                         props.showError(null)
                     } else{
@@ -76,8 +76,8 @@ function RegistrationForm(props) {
                         onChange={handleChange}>
                         <option value="">choose an option</option>
                         <option value="1">Member</option>
-                        <option value="2">Owner</option>
-                        <option value="3">Trainer</option>
+                        <option value="3">Owner</option>
+                        <option value="2">Trainer</option>
                     </select>
                 </div>
                 <div className="form-group text-left">
