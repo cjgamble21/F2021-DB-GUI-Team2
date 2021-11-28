@@ -484,3 +484,47 @@ var getKeyValues = function(object) {
   }
   return [keyList, valueList];
 }
+
+exports.getUserSessions = function(req, res, conn) {
+  var profileID = req.params.profileID;
+  
+  conn.query("SELECT s.* from profiles p \
+  INNER JOIN users u ON p.profileID = u.userID \
+  INNER JOIN sessions s ON u.userID = s.userID WHERE p.profileID = ?", profileID, 
+  function(err, result) {
+    if (err) {
+      logger.error(err);
+      res.status(400).json({
+        code: 400,
+        message: "Error"
+      });
+    } else {
+      res.end(JSON.stringify(result));
+    }
+  });
+}
+
+exports.addUserSessions = function(req, res, conn) {
+  var userID = req.body.userID;
+  var trainerID = req.body.trainerID;
+  var date = req.body.date;
+  var price = req.body.price;
+
+  // trainerID and userID fields must be in users / trainers tables
+  conn.query("INSERT INTO sessions (trainerID, userID, date, price) VALUES \
+            (?, ?, ?, ?)", [trainerID, userID, date, price], 
+            function(err, result){
+              if (err) {
+                logger.error(err);
+                res.status(400).json({
+                  code: 400,
+                  message: "Error"
+                });
+              } else {
+                res.status(200).json({
+                  code: 200, 
+                  message: "Inserted into sessions table"
+                });
+              }
+            });
+}
