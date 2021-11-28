@@ -45,6 +45,7 @@ function LoginForm(props) {
     }
 
     const redirectToHome = () => {
+
         if(state.userType === '1'){
             props.updateTitle('Member Homepage');
             props.history.push('/UserHomePage');

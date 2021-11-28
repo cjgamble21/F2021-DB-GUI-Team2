@@ -7,6 +7,8 @@ import RegistrationForm from './components/RegistrationForm/RegistrationForm';
 import Home from './components/Home/Home';
 import GymOwnerHomePage from './components/GymOwnerHomePage/GymOwnerHomePage'
 import TrainerHomePage from './components/TrainerHomePage/TrainerHomePage';
+import UserHomePage from './components/UserHomePage/UserHomePage';
+import Gym from './components/Gym/Gym';
 import {
   BrowserRouter as Router,
   Switch,
@@ -37,6 +39,7 @@ function App () {
     <div className="App">
         <div className="container d-flex align-items-center flex-column">
           <Switch>
+
           { routes.map((route, index) => <Route key={ index } exact { ...route }></Route>) }
           </Switch>
           <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>

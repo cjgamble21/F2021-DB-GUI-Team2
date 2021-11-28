@@ -1,15 +1,15 @@
 /* CSS classes */
 
 .App {
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .App-logo {
-    height: 40vmin;
+    /* height: 40vmin; */
 }
 
 .App-header {
-    background-color: #282c34;
+    background-color: purple;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -17,6 +17,7 @@
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
+    margin: 50px;
 }
 
 .App-link {

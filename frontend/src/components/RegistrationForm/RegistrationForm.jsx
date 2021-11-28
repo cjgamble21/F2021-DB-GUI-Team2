@@ -66,7 +66,7 @@ function RegistrationForm(props) {
     return(
         <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
             <form>
-                <div clascsName="form-group text-left">
+                <div className="form-group text-left">
                     <br/>
                     <label htmlFor="exampleUserType">User Type</label>
                     <br/>

@@ -1,0 +1,15 @@
+.carousel-item {
+    height: 700px;
+    overflow: hidden;
+    width: 100%;
+    padding: 30px;
+    }
+    .carousel-item img {
+    width: 100%;
+    }
+.card{
+    margin-top: 10px;
+}
+.card-group>.card{
+    margin:30px;
+}
