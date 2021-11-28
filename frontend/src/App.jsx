@@ -13,6 +13,7 @@ import {
   Route
 } from "react-router-dom";
 import AlertComponent from './components/AlertComponent/AlertComponent'; 
+import { routes } from '../routes';
 
 // React functional component
 function App () {
