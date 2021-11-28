@@ -13,7 +13,7 @@ import {
   Route
 } from "react-router-dom";
 import AlertComponent from './components/AlertComponent/AlertComponent'; 
-import { routes } from '../routes';
+import { routes } from './routes';
 
 // React functional component
 function App () {
@@ -37,26 +37,7 @@ function App () {
     <div className="App">
         <div className="container d-flex align-items-center flex-column">
           <Switch>
-            <Route path="/" exact={true}>
-
-              <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
-            <Route path="/login">
-              <Header title={title}/>
-              <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
-            <Route path="/register">
-              <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
-            <Route path="/home">
-              <Home/>
-            </Route>
-            <Route path="/GymOwnerHomePage">
-                <GymOwnerHomePage/>
-            </Route>
-            <Route path="/TrainerHomePage">
-                <TrainerHomePage showError={updateErrorMessage} updateTitle={updateTitle}/>
-            </Route>
+          { routes.map((route, index) => <Route key={ index } exact { ...route }></Route>) }
           </Switch>
           <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
         </div>

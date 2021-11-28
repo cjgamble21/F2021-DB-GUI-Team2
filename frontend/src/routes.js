@@ -3,7 +3,7 @@ import LoginForm from './components/LoginForm/LoginForm';
 import RegistrationForm from './components/RegistrationForm/RegistrationForm';
 import Home from './components/Home/Home';
 import GymOwnerHomePage from './components/GymOwnerHomePage/GymOwnerHomePage'
-import UserHomePage from './components/TrainerHomePage/UserHomePage';
+import UserHomePage from './components/UserHomePage/UserHomePage';
 import TrainerHomePage from './components/TrainerHomePage/TrainerHomePage';
 
 
