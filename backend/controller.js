@@ -267,6 +267,31 @@ exports.getBody = function(req, res, conn) {
   });
 }
 
+exports.getTrainer = function(req, res, conn) {
+  var table1 = 'profiles';
+  var table2 = 'trainers';
+
+  var result = joinKeys(req,body.args, 'get');
+
+  var query = 'SELECT * FROM '.concat(table1).concat(' join ').concat(table2).concat(' ON ').concat(table1).concat('.profileID = ').concat(table2).concat('.trainerID ');
+
+  // append args if key-value pairs exist
+  if (result[0].length > 0) { query = query.concat(' WHERE ').concat(result[0]); }
+
+  // send the query
+  conn.query(query, async (err, result) => {
+    if (err) {
+      logger.error('Error getting data');
+      res.status(400).json({
+        code: 400,
+        message: 'Error fetching from '.concat(table).concat('.'),
+        error: err
+      });
+    }
+    else { res.json(result); }
+  });
+}
+
 exports.post = function(req, res, conn) {
   // get the params from the link
   var table = req.params.table;
