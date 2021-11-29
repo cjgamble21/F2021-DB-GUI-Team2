@@ -7,11 +7,12 @@ exports.registerUser = function(req, res, conn) {
     var userType = req.body.userType;
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
-    var age = req.body.birthday;
+    var age = req.body.age;
     var gender = req.body.gender;
     var phone = req.body.phone;
     var email = req.body.email;
     var description = req.body.description;
+    var pfp = req.body.pfp;
     if (!username || !password) {
       res.status(400).json({
           code: 400,
@@ -26,7 +27,8 @@ exports.registerUser = function(req, res, conn) {
             error: err
           });
         } else {
-          console.log(userType);
+          console.log("Age: ",age);
+          console.log(req.body);
           conn.query('INSERT INTO profiles (username, password, userType, firstName, lastName, age, gender, phone, email, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [username, hash, userType, firstName, lastName, age, gender, phone, email, description], 
           function (err) {
               if (err) {

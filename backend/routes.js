@@ -63,7 +63,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/UserDashboard/edit
-  app.put('/api/UserDashboard/edit', middleware.checkAuthUser, async (req, res) => {
+  app.put('/api/UserDashboard/edit', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -90,7 +90,7 @@ module.exports = function routes(app, logger) {
           req.body.args.pfp = req.body.pfp;
         if (req.body.description)
           req.body.args.description = req.body.description;
-        controller.putBody(req, res, conn);
+        controller.putUserInfo(req, res, conn);
         conn.release();
       }
     });

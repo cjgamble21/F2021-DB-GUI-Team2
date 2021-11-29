@@ -4,38 +4,66 @@ import './UserHomePage.css';
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
 import { TrainerRepository } from '../../api/TrainerRepository';
+import { UserRepository } from '../../api/UserRepository';
 import { Link } from 'react-router-dom';
 
-//function UserHomePage(props) {}
+
 export default class UserHomePage extends React.Component {
 
     trainerRepo = new TrainerRepository();
+    userRepo = new UserRepository();
     
     constructor(props) {
         super(props);
-        this.state = {
-            editMode: false,
-            userToken:'',
-            firstName: "John",
-            lastName : "Lawrimore",
-            gender: "Male",
-            age: "22",
-            email: "foo@bar.net",
-            phoneNumber: "123-456-7890",
-            photo: "https://via.placeholder.com/500",
-            trainers: []
-    };
+        this.state = {};
+        this.state.firstName = "";
+        this.state.lastName = "";
+        this.state.gender = "";
+        this.state.age = 0;
+        this.state.phone = "";
+        this.state.email = "";
+        this.state.photo = "https://via.placeholder.com/500";
+        this.state.token = localStorage.token;
 
     this.toggleEditMode = this.toggleEditMode.bind(this);
+    this.redirectToEdit = this.redirectToEdit.bind(this);
 }
-//     componentDidMount(){
-//         this.trainerRepo.getTrainer(window.username)
-//         .then(profile => {
-//             console.log(profile)
-//             let userProfile = profile[0]
-//             this.setState(userProfile)
-//     })
-// }
+    initalizeProfile(){
+        console.log(this.state.token);
+        this.userRepo.getUser(this.state.token).then(account => {
+            let accArray = account;
+            console.log(accArray.age);
+            if(accArray){
+                this.setState({ age: accArray.age });
+                if (accArray.firstName.length > 0)
+                    this.setState({ firstName: accArray.firstName });
+                if (accArray.lastName.length > 0)
+                    this.setState({ lastName: accArray.lastName });
+                if (accArray.gender.length > 0)
+                    this.setState({ gender: accArray.gender });
+                if (accArray.email.length > 0)
+                    this.setState({ email: accArray.email });
+                if (accArray.phone.length > 0)
+                    this.setState({ phone: accArray.phone });
+                // if (accArray.photo.length > 0)
+                //     this.setState({ photo: accArray.photo });
+
+            }
+
+
+        })
+            
+
+    }
+
+    componentDidMount(){
+        this.initalizeProfile();
+    }
+
+    redirectToEdit = () => {
+        this.props.history.push('/UserHomePage/edit');
+    }
+
 
     toggleEditMode () {
         this.setState({ editMode: !this.state.editMode })
@@ -75,7 +103,7 @@ export default class UserHomePage extends React.Component {
                                 <p>Age {this.state.age}</p>
                                 <h3>Contact Info</h3>
                                 <p>{this.state.email}</p>
-                                <p>{this.state.phoneNumber}</p>
+                                <p>{this.state.phone}</p>
                             </div> )}
                             {this.state.editMode && (
                             <div id="basicUserInfo">
@@ -100,7 +128,7 @@ export default class UserHomePage extends React.Component {
                                 value = {this.state.email}
                                 onChange={e => this.setState({ email: e.target.value })}/>
                                 <input type="text" 
-                                value = {this.state.phoneNumber}
+                                value = {this.state.phone}
                                 onChange={e => this.setState({ phoneNumber: e.target.value })}/>
                             </div> )}
 
@@ -111,7 +139,10 @@ export default class UserHomePage extends React.Component {
                                 <button type="button" class="btn btn-primary" onClick = {this.toggleEditMode}>Save Changes</button>
                                 )}
 
-                                <Link to={'/UserHomePage/edit'} className = "btn btn-primary">Edit Profile</Link>
+                                {/* <Link to={'/UserHomePage/edit'} className = "btn btn-primary">Edit Profile</Link> */}
+
+                                <span className="loginText" onClick={() => this.redirectToEdit()}>Edit here</span> 
+
                         </div>
                     </div>
                 
