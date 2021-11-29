@@ -176,6 +176,32 @@ exports.putUserInfo = function(req, res, conn) {
   }
 }
 
+//////////////////Functions for GYMS/////////////////
+
+//post new Gym
+exports.postGymInfo = function(req, res, conn) {
+  var name = req.body.name
+  var description = req.body.description
+  var logo = req.body.logo
+
+  conn.query('INSERT INTO gymInfo (gymID,name,description,logo) VALUES(NULL,?,?,?)',[name,description,logo],
+      async (err, result) => {
+      if (err) {
+            logger.error('Error inserting data');
+            res.status(400).json({
+              code: 400,
+              message: 'Error inserting data',
+              error: err
+            });
+      } else {
+        res.status(200).json({
+          code: 200,
+          message: 'Data inserted!'
+        });
+      }
+  });
+}
+
 //get specific gym info
 exports.getGymInfo = function(req, res, conn) {
   var gymID = req.params.gymID;
