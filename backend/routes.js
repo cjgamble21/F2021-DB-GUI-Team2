@@ -269,6 +269,9 @@ module.exports = function routes(app, logger) {
     
   /////////////////////////////////////////////////
   //REST METHOD FOR GYM INFO//
+  /////////////////////////////////////////////////
+  
+  //routes GET specific gym
   app.get('/api/gym/:gymID', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -284,6 +287,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  //routes GET gyms list
   app.get('/api/d/gymInfo', async (req,res)=>{
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -299,6 +303,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  //routes UPDATE specific gym
   app.put('/api/gym/:gymID/updateInfo', middleware.checkAuthOwner, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -309,6 +314,22 @@ module.exports = function routes(app, logger) {
         });
       } else {
         controller.putGymInfo(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+    
+  //routes INSERT new gym
+  app.post('/api/d/gymInfo',middleware.checkAuthOwner, async(req,res)=> {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.postGymInfo(req, res, conn);
         conn.release();
       }
     });
