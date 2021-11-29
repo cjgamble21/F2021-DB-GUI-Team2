@@ -183,7 +183,9 @@ module.exports = function routes(app, logger) {
           req.body.args.pfp = req.body.pfp;
         if (req.body.description)
           req.body.args.description = req.body.description;
-        controller.putBody(req, res, conn);
+        if (req.body.rate)
+          req.body.args.rate = req.body.rate;
+        controller.putTrainer(req, res, conn);
         conn.release();
       }
     });

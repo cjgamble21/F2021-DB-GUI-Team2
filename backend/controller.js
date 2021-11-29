@@ -404,6 +404,53 @@ exports.putBody = function(req, res, conn) {
   });
 }
 
+exports.putTrainer = function(req, res, conn) {
+  // get the params from the body
+  var table = req.body.table;
+  var variable = req.body.variable;
+  var value = req.body.value;
+
+  // get the key-value pairs from the body args
+  req.body.args.profile = {};
+  const keys = Object.keys(object);
+
+  // initialization of the key and value lists
+  var keyList = [];
+  var valueList = [];
+
+  // push all of the keys and values to their lists with correct formatting
+  for (let i = 0; i < keys.length; i++) {
+    if (keys[i] != 'rate')
+      req.body.args.profile[keys[i]] = object[keys[i]];
+  }
+  var result = joinKeys(req.body.args.profile, 'put');
+
+  // set the initial query
+  var query = 'UPDATE '.concat(table).concat(' SET ').concat(result[0]);
+
+  // check for the params
+  if (value != null)
+    query = query.concat(' WHERE ').concat(variable).concat(' = ').concat(value);
+  else
+    query = query.concat(' WHERE ').concat(key[table][0]).concat(' = ').concat(variable);
+
+  // send the query
+  conn.query(query, async (err, result) => {
+    if (err) {
+      logger.error('Error updating table');
+      res.status(400).json({
+        code: 400,
+        message: 'Error updating '.concat(table).concat('.'),
+        error: err
+      });
+    }
+    else {
+      conn.query('UPDATE trainers SET rate = '.concat(req.body.args.rate).concat(' WHERE ').concat(key['trainers'][0]).concat(' = ').concat(variable));
+      res.json(result);
+    }
+  });
+}
+
 exports.delete = function(req, res, conn) {
   // get the params from the link
   var table = req.params.table;
