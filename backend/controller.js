@@ -176,6 +176,78 @@ exports.putUserInfo = function(req, res, conn) {
   }
 }
 
+//get specific gym info
+exports.getGymInfo = function(req, res, conn) {
+  var gymID = req.params.gymID;
+  if (!gymID) {
+    res.status(400).json({
+      code: 400,
+      message: 'Please provide a gymID'
+    });
+  } else {
+    conn.query('SELECT * FROM gymInfo WHERE gymID = ?', gymID,
+        async (err, result) => {
+          if (err) {
+            logger.error('Error fetching data.');
+            res.status(400).json({
+              code: 400,
+              message: 'Error fetching gym data.'
+            });
+          } else {
+            res.json(result);
+          }
+        });
+  }
+}
+
+//get gyms list
+exports.getGyms = function(req, res, conn) {
+  conn.query('SELECT * FROM gymInfo', async (err, result)=>{
+    if (err) {
+      logger.error('Error fetching data.');
+      res.status(400).json({
+        code: 400,
+        message: 'Error fetching gym data.'
+      });
+    }
+    else {
+      res.json(result);
+    }
+  });
+}
+
+//update specific gymInfo
+exports.putGymInfo = function(req, res, conn) {
+  var gymID = req.params.gymID;
+  var nameNew = req.body.nameNew;
+  var descriptionNew = req.body.descriptionNew;
+  var logoNew = req.body.logoNew;
+
+  if (!gymID) {
+    res.status(400).json({
+      code: 400,
+      message: 'Please provide a gymID'
+    });
+  } else {
+    conn.query('UPDATE gymInfo SET `name`=?, `description`=?, `logo`=? WHERE gymID = ?',
+        [nameNew, descriptionNew, logoNew, gymID],
+        async (err, result) => {
+          if (err) {
+            logger.error('Error inserting data');
+            res.status(400).json({
+              code: 400,
+              message: 'Error inserting data',
+              error: err
+            });
+          } else {
+            res.status(200).json({
+              code: 200,
+              message: 'Data inserted!'
+            });
+          }
+        });
+  }
+}
 //////////////////////////////////////////////////
 // DYNAMIC METHODS
 //////////////////////////////////////////////////
