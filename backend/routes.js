@@ -149,7 +149,7 @@ module.exports = function routes(app, logger) {
         req.body.table = 'profiles';
         req.body.args = {};
         req.body.args.profileID = req.user.profileID;
-        controller.getTrainer(req, res, conn);
+        controller.getBody(req, res, conn);
         conn.release();
       }
     });

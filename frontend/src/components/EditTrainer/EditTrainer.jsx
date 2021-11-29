@@ -3,19 +3,48 @@ import { withRouter, Link, Redirect } from "react-router-dom";
 import { TrainerRepository } from '../../api/TrainerRepository';
 
 export default class EditTrainer extends React.Component {
+
+    trainerRepo = new TrainerRepository;
+
     constructor(props) {
-        const trainerRepository = new TrainerRepository();
         super(props);
         this.state = {};
-        this.state.editMode = false;
-        this.state.firstName = "John";
-        this.state.lastName = "Doe";
-        this.state.phone = "111-111-1111";
-        this.state.email = "email@email.com";
-        this.state.photo = "https://via.placeholder.com/250";
-        this.state.credentials = ["foo", "bar"];
-        this.state.workouts = ["bar", "foo"];
+        this.state.firstName = "";
+        this.state.lastName = "";
+        this.state.age = "";
+        this.state.gender = "";
+        this.state.phone = "";
+        this.state.email = "";
+        this.state.pfp = "";
+        this.state.credentials = [];
+        this.state.workouts = [];
         this.state.token = localStorage.token;
+    }
+
+    initalizeProfile() {
+        console.log(this.state.token);
+        this.trainerRepo.getTrainer(this.state.token).then(account => {
+            let accArray = account;
+            console.log(accArray);
+            if (accArray) {
+                if (accArray.firstName.length > 0)
+                    this.setState({ firstName: accArray.firstName });
+                if (accArray.lastName.length > 0)
+                    this.setState({ lastName: accArray.lastName });
+                if (accArray.age)
+                    this.setState({ age: accArray.age });
+                if (accArray.gender)
+                    this.setState({ gender: accArray.gender });
+                if (accArray.phone)
+                    this.setState({ phone: accArray.phone });
+                if (accArray.email)
+                    this.setState({ pfp: accArray.email });
+                // if (accArray.pfp)
+                // this.setState({ pfp: accArray.pfp });
+                if (accArray.description)
+                    this.setState({ description: accArray.description });
+            }
+        })
     }
 
     ListItems(props) {

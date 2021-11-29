@@ -14,14 +14,15 @@ export default class TrainerHomePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
-        this.state.editMode = false;
-        this.state.firstName = "John";
-        this.state.lastName = "Doe";
-        this.state.phone = "111-111-1111";
-        this.state.email = "email@email.com";
-        this.state.photo = "https://via.placeholder.com/250";
-        this.state.credentials = ["foo", "bar"];
-        this.state.workouts = ["bar", "foo"];
+        this.state.firstName = "";
+        this.state.lastName = "";
+        this.state.age = "";
+        this.state.gender = "";
+        this.state.phone = "";
+        this.state.email = "";
+        this.state.pfp = "";
+        this.state.credentials = [];
+        this.state.workouts = [];
         this.state.token = localStorage.token;
     }
 
@@ -29,31 +30,26 @@ export default class TrainerHomePage extends React.Component {
         console.log(this.state.token);
         this.trainerRepo.getTrainer(this.state.token).then(account => {
             let accArray = account;
-            console.log(account);
+            console.log(accArray);
             if (accArray) {
                 if (accArray.firstName.length > 0)
                     this.setState({ firstName: accArray.firstName });
                 if (accArray.lastName.length > 0)
                     this.setState({ lastName: accArray.lastName });
-                // if (accArray.age)
-                //     req.body.args.age = req.body.age;
-                // if (accArray.gender)
-                //     req.body.args.gender = req.body.gender;
-                // if (accArray.phone)
-                //     req.body.args.phone = req.body.phone;
-                // if (accArray.email)
-                //     req.body.args.email = req.body.email;
+                if (accArray.age)
+                    this.setState({ age: accArray.age });
+                if (accArray.gender)
+                    this.setState({ gender: accArray.gender });
+                if (accArray.phone)
+                    this.setState({ phone: accArray.phone });
+                if (accArray.email)
+                    this.setState({ pfp: accArray.email });
                 // if (accArray.pfp)
-                //     req.body.args.pfp = req.body.pfp;
-                // if (accArray.description)
-                //     req.body.args.description = req.body.description;
-
+                // this.setState({ pfp: accArray.pfp });
+                if (accArray.description)
+                    this.setState({ description: accArray.description });
             }
-
-
         })
-
-
     }
 
     componentDidMount() {
@@ -83,7 +79,7 @@ export default class TrainerHomePage extends React.Component {
                 <div id="trainerCard" className="card mb-3 align-baseline">
                     <div className="row g-0">
                         <div id="trainerPhoto" className="col-md-4 align-self-center">
-                            <img src={this.state.photo} alt="trainer-photo" className="img-fluid rounded-start" />
+                            <img src={this.state.pfp} alt="trainer-photo" className="img-fluid rounded-start" />
                         </div>
                         <div id="trainerInfo" className="col-md-8">
                             <div className="card-body">
