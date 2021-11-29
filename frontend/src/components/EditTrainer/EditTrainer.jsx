@@ -1,8 +1,10 @@
 import React from 'react';
-import { withRouter } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
+import { TrainerRepository } from '../../api/TrainerRepository';
 
 export default class EditTrainer extends React.Component {
     constructor(props) {
+        const trainerRepository = new TrainerRepository();
         super(props);
         this.state = {};
         this.state.editMode = false;
@@ -16,6 +18,21 @@ export default class EditTrainer extends React.Component {
         this.state.token = localStorage.token;
     }
 
+    ListItems(props) {
+        const toList = props.items;
+        const listItems = toList.map((item) =>
+            <li><input type="text" value={item} /></li>
+        );
+        return (
+            <ul className="list-unstyled">{listItems}</ul>
+        );
+    };
+
+    onSaveSubmit() {
+        this.trainerRepository.updateTrainer(this.state)
+            .then(() => this.props.history.push('/TrainerHomePage'));
+    }
+
     render() {
         return (
             <div id="editTrainerPage">
@@ -25,37 +42,65 @@ export default class EditTrainer extends React.Component {
                         <div id="trainerPhoto" className="col-md-4 align-self-center">
                             <img src={this.state.photo} alt="trainer-photo" className="img-fluid rounded-start" />
                             <input type="file"
+                                className="form-control-file"
                                 onChange={e => this.setState({ photo: e.target.value })} />
                         </div>
                         <div id="trainerInfo" className="col-md-8">
                             <div className="card-body">
-                                <input type="text"
-                                    value={this.state.firstName}
-                                    onChange={e => this.setState({ firstName: e.target.value })} />
-                                <input type="text"
-                                    value={this.state.lastName}
-                                    onChange={e => this.setState({ lastName: e.target.value })} />
-                                <label className="card-title">Gender</label>
-                                <select value={this.state.gender}
-                                    onChange={e => this.setState({ gender: e.target.value })}>
-                                    <option>M</option>
-                                    <option>F</option>
-                                </select>
-                                <label className="card-title">Age</label>
-                                <input type="text"
-                                    value={this.state.age}
-                                    onChange={e => this.setState({ age: e.target.value })} />
-                                <h3 className="card-title">Contact Info</h3>
-                                <input type="text"
-                                    value={this.state.email}
-                                    onChange={e => this.setState({ email: e.target.value })} />
-                                <input type="text"
-                                    value={this.state.phoneNumber}
-                                    onChange={e => this.setState({ phoneNumber: e.target.value })} />
+                                <form>
+                                    <fieldset className="d-flex">
+                                        <div className="form-group d-grid">
+                                            <label htmlFor="firstName">First Name</label>
+                                            <input type="text"
+                                                id="firstName"
+                                                value={this.state.firstName}
+                                                onChange={e => this.setState({ firstName: e.target.value })} />
+                                        </div>
+                                        <div className="form-group d-grid">
+                                            <label htmlFor="lastName">Last Name</label>
+                                            <input type="text"
+                                                id="lastName"
+                                                value={this.state.lastName}
+                                                onChange={e => this.setState({ lastName: e.target.value })} />
+                                        </div>
+                                    </fieldset>
+                                    <fieldset className="d-flex">
+                                        <div className="form-group d-grid">
+                                            <label className="card-title" htmlFor="gender">Gender</label>
+                                            <select value={this.state.gender}
+                                                id="gender"
+                                                onChange={e => this.setState({ gender: e.target.value })}>
+                                                <option>M</option>
+                                                <option>F</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group d-grid">
+                                            <label className="card-title" htmlFor="age">Age</label>
+                                            <input type="number"
+                                                id="age"
+                                                value={this.state.age}
+                                                min="18"
+                                                onChange={e => this.setState({ age: e.target.value })} />
+                                        </div>
+                                    </fieldset>                                    <fieldset className="d-flex">
+                                        <div className="form-group d-grid">
+                                            <label htmlFor="email">Email</label>
+                                            <input type="email"
+                                                id="email"
+                                                value={this.state.email}
+                                                onChange={e => this.setState({ email: e.target.value })} />
+                                        </div>
+                                        <div className="form-group d-grid">
+                                            <label htmlFor="phoneNumber">Phone Number</label>
+                                            <input type="tel"
+                                                id="phoneNumber"
+                                                value={this.state.phoneNumber}
+                                                onChange={e => this.setState({ phoneNumber: e.target.value })} />
+                                        </div>
+                                    </fieldset>
+                                </form>
                             </div>
                         </div>
-                        <button className="btn btn-primary"
-                            onClick={this.toggleEditMode}>Save Changes</button>
                     </div>
                 </div>
                 <div id="trainerBody">
@@ -64,6 +109,11 @@ export default class EditTrainer extends React.Component {
                     <h2>Workouts</h2>
                     <this.ListItems items={this.state.workouts} />
                 </div>
+                <button className="btn btn-primary"
+                    onClick={this.onSaveSubmit}>Save Changes</button>
+                <Link to="/TrainerHomePage">
+                    <button className="btn btn-danger">Cancel</button>
+                </Link>
             </div>
         )
     }

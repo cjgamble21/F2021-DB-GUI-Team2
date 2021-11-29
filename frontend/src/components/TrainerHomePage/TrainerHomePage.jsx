@@ -72,7 +72,7 @@ export default class TrainerHomePage extends React.Component {
             <li>{item}</li>
         );
         return (
-            <ul>{listItems}</ul>
+            <ul className="list-unstyled">{listItems}</ul>
         );
     };
 
@@ -93,12 +93,10 @@ export default class TrainerHomePage extends React.Component {
                                 <p className="card-title">Age</p>
                                 <p className="card-text">{this.state.age}</p>
                                 <h5 className="card-title">Contact Info</h5>
-                                <p >{this.state.email}</p>
-                                <p className="card-text">{this.state.phoneNumber}</p>
+                                <p>Email: {this.state.email}</p>
+                                <p className="card-text">Phone: {this.state.phone}</p>
                             </div>
                         </div>
-                        <Link to={"/TrainerHomePage/edit"}><button className="btn btn-primary">Edit Info</button>
-                        </Link>
                     </div>
                 </div>
                 <div id="trainerBody">
@@ -107,6 +105,8 @@ export default class TrainerHomePage extends React.Component {
                     <h2>Workouts</h2>
                     <this.ListItems items={this.state.workouts} />
                 </div>
+                <Link to="/TrainerHomePage/edit"><button className="btn btn-primary">Edit Info</button>
+                </Link>
             </div>
         )
     }
