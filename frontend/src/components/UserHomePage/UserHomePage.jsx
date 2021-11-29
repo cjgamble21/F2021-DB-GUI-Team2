@@ -110,6 +110,8 @@ export default class UserHomePage extends React.Component {
                                 {this.state.editMode && (
                                 <button type="button" class="btn btn-primary" onClick = {this.toggleEditMode}>Save Changes</button>
                                 )}
+
+                                <Link to={'/UserHomePage/edit'} className = "btn btn-primary">Edit Profile</Link>
                         </div>
                     </div>
                 
