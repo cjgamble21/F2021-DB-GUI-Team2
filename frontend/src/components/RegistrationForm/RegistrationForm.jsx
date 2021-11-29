@@ -10,6 +10,14 @@ function RegistrationForm(props) {
         password : "",
         userType : 9,
         confirmPassword: "",
+        firstName: "",
+        lastName  : "",
+        birthday: "",
+        gender: "",
+        phone: "",
+        email: "",
+        description: "",
+
         successMessage: null
     })
     
@@ -34,25 +42,25 @@ function RegistrationForm(props) {
                         }))
                         localStorage.setItem(ACCESS_TOKEN_NAME,response.token);
                         redirectToHome();
-                        props.showError(null)
+                        //props.showError(null)
                     } else{
-                        props.showError("Some error ocurred");
+                        //props.showError("Some error ocurred");
                     }
                 })
                 .catch(function (error) {
                     window.alert(error);
                 });    
         } else {
-            props.showError('Please enter valid username, user type, and password')    
+            //props.showError('Please enter valid username, user type, and password')    
         }
         
     }
     const redirectToHome = () => {
-        props.updateTitle('Home')
+        //props.updateTitle('Home')
         props.history.push('/home');
     }
     const redirectToLogin = () => {
-        props.updateTitle('Login')
+        //props.updateTitle('Login')
         props.history.push('/login'); 
     }
     const handleSubmitClick = (e) => {
@@ -60,7 +68,7 @@ function RegistrationForm(props) {
         if(state.password === state.confirmPassword) {
             sendDetailsToServer();  
         } else {
-            props.showError('Passwords do not match');
+            //props.showError('Passwords do not match');
         }
     }
     return(
@@ -81,7 +89,7 @@ function RegistrationForm(props) {
                     </select>
                 </div>
                 <div className="form-group text-left">
-                    <label htmlFor="exampleInputUsername1">Username</label>
+                    <label htmlFor="username">Username</label>
                     <input type="username" 
                        className="form-control" 
                        id="username" 
@@ -91,7 +99,7 @@ function RegistrationForm(props) {
                 />
                 </div>
                 <div className="form-group text-left">
-                    <label htmlFor="exampleInputPassword1">Password</label>
+                    <label htmlFor="password">Password</label>
                     <input type="password" 
                         className="form-control" 
                         id="password" 
@@ -101,12 +109,82 @@ function RegistrationForm(props) {
                     />
                 </div>
                 <div className="form-group text-left">
-                    <label htmlFor="exampleInputPassword1">Confirm Password</label>
+                    <label htmlFor="confirmPassword">Confirm Password</label>
                     <input type="password" 
                         className="form-control" 
                         id="confirmPassword" 
                         placeholder="Confirm Password"
                         value={state.confirmPassword}
+                        onChange={handleChange} 
+                    />
+                </div>
+                <div className="form-group text-left">
+                    <label htmlFor="firstName">First Name</label>
+                    <input type="firstName" 
+                        className="form-control" 
+                        id="firstName" 
+                        placeholder="Enter First Name"
+                        value={state.firstName}
+                        onChange={handleChange} 
+                    />
+                </div>
+                <div className="form-group text-left">
+                    <label htmlFor="lastName">Last Name</label>
+                    <input type="lastName" 
+                        className="form-control" 
+                        id="lastName" 
+                        placeholder="Enter Last Name"
+                        value={state.lastName}
+                        onChange={handleChange} 
+                    />
+                </div>
+                <div className="form-group text-left">
+                    <label htmlFor="birthday">Age</label>
+                    <input type="age"
+                        className = "form-control"
+                        id = "age"
+                        placeholder="Enter Age"
+                        value = {state.age}
+                        onChange = {handleChange}
+                        />
+                </div>
+                <div className="form-group text-left">
+                    <label htmlFor="gender">Gender</label>
+                    <input type="gender" 
+                        className="form-control" 
+                        id="gender" 
+                        placeholder="Enter Gender"
+                        value={state.gender}
+                        onChange={handleChange} 
+                    />
+                </div>
+                <div className="form-group text-left">
+                    <label htmlFor="phone">Phone Number</label>
+                    <input type="phoneNumber" 
+                        className="form-control" 
+                        id="phone" 
+                        placeholder="Enter Phone Number"
+                        value={state.phone}
+                        onChange={handleChange} 
+                    />
+                </div>
+                <div className="form-group text-left">
+                    <label htmlFor="email">Email</label>
+                    <input type="email" 
+                        className="form-control" 
+                        id="email" 
+                        placeholder="Enter email"
+                        value={state.email}
+                        onChange={handleChange} 
+                    />
+                </div>
+                <div className="form-group text-left">
+                    <label htmlFor="description">Description</label>
+                    <input type="description" 
+                        className="form-control" 
+                        id="description" 
+                        placeholder="Tell us about yourself!"
+                        value={state.description}
                         onChange={handleChange} 
                     />
                 </div>

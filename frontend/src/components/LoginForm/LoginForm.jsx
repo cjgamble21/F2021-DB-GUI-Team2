@@ -9,6 +9,7 @@ function LoginForm(props) {
     const [state , setState] = useState({
         username : "",
         password : "",
+        firstName: "",
         userType : 9,
         successMessage: null
     })
@@ -33,40 +34,40 @@ function LoginForm(props) {
                         localStorage.token = response.data.token;
                         redirectToHome();
                     } else {
-                        props.showError("Some error occurred");
+                        //props.showError("Some error occurred");
                     }
                 })
                 .catch(function (error) {
                     window.alert(error);
                 });
         } else {
-            props.showError('Please enter valid username, user type, and password');
-        }
+            //props.showError('Please enter valid username, user type, and password');
+        }   
     }
 
     const redirectToHome = () => {
 
         if(state.userType === '1'){
-            props.updateTitle('Member Homepage');
+            ////props.updateTitle('Member Homepage');
             props.history.push('/UserHomePage');
         }
         else if(state.userType === '2'){
-            props.updateTitle('Trainer Homepage');
+            //props.updateTitle('Trainer Homepage');
             props.history.push('/TrainerHomePage');
         }
         else if(state.userType === '3'){
-            props.updateTitle('Gym Owner Homepage');
+            //props.updateTitle('Gym Owner Homepage');
             props.history.push('/GymOwnerHomePage');
         }
         else{
-            props.updateTitle('Home');
+            //props.updateTitle('Home');
             props.history.push('/home');
         }
     }
 
     const redirectToRegister = () => {
         props.history.push('/register'); 
-        props.updateTitle('Register');
+        ////props.updateTitle('Register');
     }
 
     const handleSubmitClick = (e) => {
@@ -112,6 +113,7 @@ function LoginForm(props) {
                        onChange={handleChange} 
                     />
                 </div>
+                
                 <div className="form-check">
                 </div>
                 <button 

@@ -17,6 +17,7 @@ import {
 import AlertComponent from './components/AlertComponent/AlertComponent'; 
 import { routes } from './routes';
 
+
 // React functional component
 function App () {
 
@@ -38,9 +39,10 @@ function App () {
     <Router>
     <div className="App">
         <div className="container d-flex align-items-center flex-column">
+          <Route component={Header}></Route>
           <Switch>
-
           { routes.map((route, index) => <Route key={ index } exact { ...route }></Route>) }
+          
           </Switch>
           <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
         </div>
