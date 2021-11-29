@@ -4,11 +4,12 @@ axios.defaults.withCredentials = true;
 
 export class TrainerRepository {
     //remember to change URL 
-    url = 'http://ec2-3-128-160-107.us-east-2.compute.amazonaws.com:8000';
+    url = 'http://localhost:8000';
 
     config = {
         withCredentials: true
     };
+    
 
     createTrainer(trainerID, firstName, lastName, age, gender, phone, email, pfp, description) {
         return new Promise((resolve, reject) => {
@@ -40,9 +41,11 @@ export class TrainerRepository {
         })
     }
 
-    getTrainer(trainerID){
+    getTrainer(trainerToken){
         return new Promise((resolve, reject) => {
-            axios.get(`${this.url}/trainersByID/` + trainerID, this.config)
+            axios.get(`${this.url}/api/TrainerDashboard`, {
+                params: { token: trainerToken }
+            })
                 .then(x => resolve(x.data && x.data.length === 1 ? x.data[0] : undefined))
                 .catch(error => {
                     reject(error);

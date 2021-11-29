@@ -152,7 +152,7 @@ export default class UserHomePage extends React.Component {
                     <div className = "col-sm-6 align-self-center">
                         <div className = "card w-100 border-light mb-3">
                             <table className = "table table-hover">
-                                <caption> Trainer List</caption>
+                                <caption> Upcoming Appointments</caption>
                                 <thead className = "table-dark">
                                     <tr>
                                         <th>Name</th>

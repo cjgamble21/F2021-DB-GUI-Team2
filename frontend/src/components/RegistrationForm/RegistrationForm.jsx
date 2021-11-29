@@ -84,7 +84,7 @@ function RegistrationForm(props) {
                         'successMessage' : 'Registration successful. Redirecting to home page..'
                     }))
                     localStorage.setItem(ACCESS_TOKEN_NAME,response.token);
-                    redirectToHome();
+                    redirectToLogin();
                     //props.showError(null)
                 } else{
                     //props.showError("Some error ocurred");
