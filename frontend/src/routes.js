@@ -6,6 +6,7 @@ import GymOwnerHomePage from './components/GymOwnerHomePage/GymOwnerHomePage'
 import UserHomePage from './components/UserHomePage/UserHomePage';
 import TrainerHomePage from './components/TrainerHomePage/TrainerHomePage';
 import EditUser from './components/EditUser/EditUser';
+import EditTrainer from './components/EditTrainer/EditTrainer';
 import Gym from './components/Gym/Gym';
 
 
@@ -17,6 +18,7 @@ export const routes = [
     { path: '/TrainerHomePage' ,exact : true, component: TrainerHomePage},
     { path: '/GymOwnerHomePage' ,exact : true, component: GymOwnerHomePage},
     { path: '/UserHomePage/edit' ,exact : true, component: EditUser},
+    { path: '/TrainerHomePage/edit' ,exact : true, component: EditTrainer},
     { path: '/Gym' ,exact : true, component: Gym}
 
 

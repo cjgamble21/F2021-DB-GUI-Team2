@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './TrainerHomePage.css';
-import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
-import { withRouter } from "react-router-dom";
+import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/apiConstants';
+import { withRouter, Link } from "react-router-dom";
 import { TrainerRepository } from '../../api/TrainerRepository';
+import EditTrainer from '../EditTrainer/EditTrainer';
 
 //function TrainerHomePage(props)
-export default class Login extends React.Component {
+export default class TrainerHomePage extends React.Component {
 
     trainerRepo = new TrainerRepository;
 
@@ -22,20 +23,14 @@ export default class Login extends React.Component {
         this.state.credentials = ["foo", "bar"];
         this.state.workouts = ["bar", "foo"];
         this.state.token = localStorage.token;
-
-        this.toggleEditMode = this.toggleEditMode.bind(this);
     }
 
-    toggleEditMode () {
-        this.setState({ editMode: !this.state.editMode })
-    };
-
-    initalizeProfile(){
+    initalizeProfile() {
         console.log(this.state.token);
         this.trainerRepo.getTrainer(this.state.token).then(account => {
             let accArray = account;
             console.log(account);
-            if(accArray){
+            if (accArray) {
                 if (accArray.firstName.length > 0)
                     this.setState({ firstName: accArray.firstName });
                 if (accArray.lastName.length > 0)
@@ -57,90 +52,61 @@ export default class Login extends React.Component {
 
 
         })
-            
+
 
     }
-    
-    componentDidMount(){
+
+    componentDidMount() {
         this.initalizeProfile();
     }
 
-    
+
 
     handleChange(e) {
-        this.setState({value: e.target.value});
+        this.setState({ value: e.target.value });
     }
 
-    ListItems (props) {
-    const toList = props.items;
-    const listItems = toList.map((item) =>
-        <li>{item}</li>
-      );
-      return (
-          <ul>{listItems}</ul>
-      );
+    ListItems(props) {
+        const toList = props.items;
+        const listItems = toList.map((item) =>
+            <li>{item}</li>
+        );
+        return (
+            <ul>{listItems}</ul>
+        );
     };
 
-    render () {
-        return(
+    render() {
+        return (
             <div id="trainerPage">
                 <h1>Trainer Home Page</h1>
-                <div id="trainerHeader">
-                    <div id="trainerPhoto">
-                        <img src={this.state.photo} alt="trainer-photo"/>
-                        {this.state.editMode && (
-                        <input type="file"
-                        onChange={e => this.setState({ photo: e.target.value })}/>
-                        )}
+                <div id="trainerCard" className="card mb-3 align-baseline">
+                    <div className="row g-0">
+                        <div id="trainerPhoto" className="col-md-4 align-self-center">
+                            <img src={this.state.photo} alt="trainer-photo" className="img-fluid rounded-start" />
+                        </div>
+                        <div id="trainerInfo" className="col-md-8">
+                            <div className="card-body">
+                                <h4 className="card-title">{this.state.firstName} {this.state.lastName}</h4>
+                                <p className="card-title">Gender</p>
+                                <p className="card-text"> {this.state.gender}</p>
+                                <p className="card-title">Age</p>
+                                <p className="card-text">{this.state.age}</p>
+                                <h5 className="card-title">Contact Info</h5>
+                                <p >{this.state.email}</p>
+                                <p className="card-text">{this.state.phoneNumber}</p>
+                            </div>
+                        </div>
+                        <Link to={"/TrainerHomePage/edit"}><button className="btn btn-primary">Edit Info</button>
+                        </Link>
                     </div>
-                    {!this.state.editMode && (
-                    <div id="basicTrainerInfo">
-                        <h2>{this.state.firstName} {this.state.lastName}</h2>
-                        <p>Gender {this.state.gender}</p>
-                        <p>Age {this.state.age}</p>
-                        <h3>Contact Info</h3>
-                        <p>{this.state.email}</p>
-                        <p>{this.state.phoneNumber}</p>
-                    </div> )}
-                    {this.state.editMode && (
-                    <div id="basicTrainerInfo">
-                        <input type="text" 
-                        value = {this.state.firstName}
-                        onChange={e => this.setState({ firstName: e.target.value })}/>
-                        <input type="text" 
-                        value = {this.state.lastName}
-                        onChange={e => this.setState({ lastName: e.target.value })}/>
-                        <label>Gender</label>
-                        <select value={this.state.gender}
-                        onChange={e => this.setState({ gender: e.target.value })}>
-                            <option>M</option>
-                            <option>F</option>
-                        </select>
-                        <label>Age</label>
-                        <input type="text" 
-                        value={this.state.age}
-                        onChange={e => this.setState({ age: e.target.value })}/>
-                        <h3>Contact Info</h3>
-                        <input type="text" 
-                        value = {this.state.email}
-                        onChange={e => this.setState({ email: e.target.value })}/>
-                        <input type="text" 
-                        value = {this.state.phoneNumber}
-                        onChange={e => this.setState({ phoneNumber: e.target.value })}/>
-                    </div> )}
                 </div>
                 <div id="trainerBody">
                     <h2>Credentials</h2>
-                    <this.ListItems items={this.state.credentials}/>
+                    <this.ListItems items={this.state.credentials} />
                     <h2>Workouts</h2>
-                    <this.ListItems items={this.state.workouts}/>
+                    <this.ListItems items={this.state.workouts} />
                 </div>
-                {!this.state.editMode && (
-                <button onClick = {this.toggleEditMode}>Edit Info</button>
-                )}
-                {this.state.editMode && (
-                <button onClick = {this.toggleEditMode}>Save Changes</button>
-                )}
             </div>
         )
     }

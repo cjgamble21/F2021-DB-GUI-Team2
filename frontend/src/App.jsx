@@ -9,6 +9,7 @@ import GymOwnerHomePage from './components/GymOwnerHomePage/GymOwnerHomePage'
 import TrainerHomePage from './components/TrainerHomePage/TrainerHomePage';
 import UserHomePage from './components/UserHomePage/UserHomePage';
 import Gym from './components/Gym/Gym';
+import EditTrainer from './components/EditTrainer/EditTrainer';
 import {
   BrowserRouter as Router,
   Switch,

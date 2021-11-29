@@ -132,14 +132,14 @@ export default class UserHomePage extends React.Component {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><Link to= "/TrainerHomepage">Bob the Builder</Link></td>
+                                        <td><Link to= "/TrainerHomePage">Bob the Builder</Link></td>
                                         <td>Dallas,TX</td>
                                         <td>Cardio, Strength</td>
                                         <td>$50</td>
                                         
                                     </tr>
                                     <tr>
-                                        <td><Link to= "/TrainerHomepage">Dora the Explorer</Link></td>
+                                        <td><Link to= "/TrainerHomePage">Dora the Explorer</Link></td>
                                         <td>Houston,TX</td>
                                         <td>Walking, Critical Thinking</td>
                                         <td>$60</td>

@@ -4,7 +4,7 @@ import './GymOwnerHomePage.css';
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
 
-export default class GynOwnerHomePage extends React.Component {
+export default class GymOwnerHomePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
