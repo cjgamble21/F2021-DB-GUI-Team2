@@ -1,153 +1,178 @@
-// import React, { useState } from 'react';
-// import { withRouter } from "react-router-dom";
-// import './EditUser.css';
+import React, { useState } from 'react';
+import { withRouter } from "react-router-dom";
+import './EditUser.css';
+import { UserRepository } from '../../api/UserRepository';
 
 
-// export class EditUser extends React.Component{
+export default class EditUser extends React.Component{
+
+    userRepo = new UserRepository();
+
+    
+    constructor(props) {
+        super(props);
+        this.state = {};
+        this.state.firstName = "";
+        this.state.lastName = "";
+        this.state.gender = "";
+        this.state.age = 0;
+        this.state.phone = "";
+        this.state.email = "";
+        this.state.photo = "https://via.placeholder.com/500";
+        this.state.token = localStorage.token;
+        this.state.profileID = 0;
+
+    
+}
+
+    initalizeProfile(){
+        console.log(this.state.token);
+        this.userRepo.getUser(this.state.token).then(account => {
+            let accArray = account;
+            console.log(accArray);
+            if(accArray){
+                this.setState({ age: accArray.age });
+                this.setState({ profileID : accArray.profileID})
+                if (accArray.firstName.length > 0)
+                    this.setState({ firstName: accArray.firstName });
+                if (accArray.lastName.length > 0)
+                    this.setState({ lastName: accArray.lastName });
+                if (accArray.gender.length > 0)
+                    this.setState({ gender: accArray.gender });
+                if (accArray.email.length > 0)
+                    this.setState({ email: accArray.email });
+                if (accArray.phone.length > 0)
+                    this.setState({ phone: accArray.phone });
+                // if (accArray.photo.length > 0)
+                //     this.setState({ photo: accArray.photo });
+
+            }
 
 
-
-
-
-//     render(){
-
-//         return(
-//             <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
-//                 <form>
-//                     <div className="form-group text-left">
-//                         <br/>
-//                         <label htmlFor="exampleUserType">User Type</label>
-//                         <br/>
-//                         <select className="User Type" 
-//                             id="userType"
-//                             value={state.userType} 
-//                             onChange={handleChange}>
-//                             <option value="">choose an option</option>
-//                             <option value="1">Member</option>
-//                             <option value="3">Owner</option>
-//                             <option value="2">Trainer</option>
-//                         </select>
-//                     </div>
-//                     <div className="form-group text-left">
-//                         <label htmlFor="username">Username</label>
-//                         <input type="username" 
-//                            className="form-control" 
-//                            id="username" 
-//                            aria-describedby="usernameHelp" 
-//                            placeholder="Enter username" 
-//                            onChange={handleChange}
-//                     />
-//                     </div>
-//                     <div className="form-group text-left">
-//                         <label htmlFor="password">Password</label>
-//                         <input type="password" 
-//                             className="form-control" 
-//                             id="password" 
-//                             placeholder="Password"
-//                             value={state.password}
-//                             onChange={handleChange} 
-//                         />
-//                     </div>
-//                     <div className="form-group text-left">
-//                         <label htmlFor="confirmPassword">Confirm Password</label>
-//                         <input type="password" 
-//                             className="form-control" 
-//                             id="confirmPassword" 
-//                             placeholder="Confirm Password"
-//                             value={state.confirmPassword}
-//                             onChange={handleChange} 
-//                         />
-//                     </div>
-//                     <div className="form-group text-left">
-//                         <label htmlFor="firstName">First Name</label>
-//                         <input type="firstName" 
-//                             className="form-control" 
-//                             id="firstName" 
-//                             placeholder="Enter First Name"
-//                             value={state.firstName}
-//                             onChange={handleChange} 
-//                         />
-//                     </div>
-//                     <div className="form-group text-left">
-//                         <label htmlFor="lastName">Last Name</label>
-//                         <input type="lastName" 
-//                             className="form-control" 
-//                             id="lastName" 
-//                             placeholder="Enter Last Name"
-//                             value={state.lastName}
-//                             onChange={handleChange} 
-//                         />
-//                     </div>
-//                     <div className="form-group text-left">
-//                         <label htmlFor="birthday">Age</label>
-//                         <input type="age"
-//                             className = "form-control"
-//                             id = "age"
-//                             placeholder="Enter Age"
-//                             value = {state.age}
-//                             onChange = {handleChange}
-//                             />
-//                     </div>
-//                     <div className="form-group text-left">
-//                         <label htmlFor="gender">Gender</label>
-//                         <input type="gender" 
-//                             className="form-control" 
-//                             id="gender" 
-//                             placeholder="Enter Gender"
-//                             value={state.gender}
-//                             onChange={handleChange} 
-//                         />
-//                     </div>
-//                     <div className="form-group text-left">
-//                         <label htmlFor="phone">Phone Number</label>
-//                         <input type="phoneNumber" 
-//                             className="form-control" 
-//                             id="phone" 
-//                             placeholder="Enter Phone Number"
-//                             value={state.phone}
-//                             onChange={handleChange} 
-//                         />
-//                     </div>
-//                     <div className="form-group text-left">
-//                         <label htmlFor="email">Email</label>
-//                         <input type="email" 
-//                             className="form-control" 
-//                             id="email" 
-//                             placeholder="Enter email"
-//                             value={state.email}
-//                             onChange={handleChange} 
-//                         />
-//                     </div>
-//                     <div className="form-group text-left">
-//                         <label htmlFor="description">Description</label>
-//                         <input type="description" 
-//                             className="form-control" 
-//                             id="description" 
-//                             placeholder="Tell us about yourself!"
-//                             value={state.description}
-//                             onChange={handleChange} 
-//                         />
-//                     </div>
-//                     <button 
-//                         type="submit" 
-//                         className="btn btn-primary"
-//                         onClick={handleSubmitClick}
-//                     >
-//                         Register
-//                     </button>
-//                 </form>
-//                 <div className="alert alert-success mt-2" style={{display: state.successMessage ? 'block' : 'none' }} role="alert">
-//                     {state.successMessage}
-//                 </div>
-//                 <div className="mt-2">
-//                     <span>Already have an account? </span>
-//                     <span className="loginText" onClick={() => redirectToLogin()}>Login here</span> 
-//                 </div>
-                
-//             </div>
-//         )
+        })
         
-//     }
 
-// }
-// export default withRouter(EditUser);
+}
+
+
+    componentDidMount(){
+        this.initalizeProfile();
+    }
+
+    handleChange = (e) => {
+        const {id , value} = e.target   
+        this.setState(prevState => ({
+            ...prevState,
+            [id] : value
+        }))
+    }
+
+    handleSubmitClick = (e) =>{
+            console.log(this.state.token)
+            console.log(this.state.profileID)
+            this.userRepo.updateUser(this.state.firstName,this.state.lastName,this.state.age,this.state.gender,this.state.phone,this.state.email,this.state.description,this.state.profileID)
+        
+    }
+
+
+
+    render(){
+
+        return(
+            <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
+                <form>
+                    
+                
+                    <div className="form-group text-left">
+                        <label htmlFor="firstName">First Name</label>
+                        <input type="firstName" 
+                            className="form-control" 
+                            id="firstName" 
+                            placeholder="Enter First Name"
+                            value={this.state.firstName}
+                            onChange={this.handleChange} 
+                        />
+                    </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="lastName">Last Name</label>
+                        <input type="lastName" 
+                            className="form-control" 
+                            id="lastName" 
+                            placeholder="Enter Last Name"
+                            value={this.state.lastName}
+                            onChange={this.handleChange} 
+                        />
+                    </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="birthday">Age</label>
+                        <input type="age"
+                            className = "form-control"
+                            id = "age"
+                            placeholder="Enter Age"
+                            value = {this.state.age}
+                            onChange = {this.handleChange}
+                            />
+                    </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="gender">Gender</label>
+                        <input type="gender" 
+                            className="form-control" 
+                            id="gender" 
+                            placeholder="Enter Gender"
+                            value={this.state.gender}
+                            onChange={this.handleChange} 
+                        />
+                    </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="phone">Phone Number</label>
+                        <input type="phoneNumber" 
+                            className="form-control" 
+                            id="phone" 
+                            placeholder="Enter Phone Number"
+                            value={this.state.phone}
+                            onChange={this.handleChange} 
+                        />
+                    </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="email">Email</label>
+                        <input type="email" 
+                            className="form-control" 
+                            id="email" 
+                            placeholder="Enter email"
+                            value={this.state.email}
+                            onChange={this.handleChange} 
+                        />
+                    </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="description">Description</label>
+                        <input type="description" 
+                            className="form-control" 
+                            id="description" 
+                            placeholder="Tell us about yourself!"
+                            value={this.state.description}
+                            onChange={this.handleChange} 
+                        />
+                    </div>
+                    <button 
+                    type="submit" 
+                    className="btn btn-primary"
+                    onClick={this.handleSubmitClick}
+                >
+                    Update Account
+                </button>
+                    
+                </form>
+                <div className="alert alert-success mt-2" style={{display: this.state.successMessage ? 'block' : 'none' }} role="alert">
+                    {this.state.successMessage}
+                </div>
+                <div className="mt-2">
+                    <span>Already have an account? </span>
+                    {/* <span className="loginText" onClick={() => redirectToLogin()}>Login here</span>  */}
+                </div>
+                
+            </div>
+        )
+        
+    }
+
+}
