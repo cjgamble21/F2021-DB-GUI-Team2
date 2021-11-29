@@ -266,6 +266,53 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+    
+  /////////////////////////////////////////////////
+  //REST METHOD FOR GYM INFO//
+  app.get('/api/gym/:gymID', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.getGymInfo(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  app.get('/api/d/gymInfo', async (req,res)=>{
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.getGyms(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  app.put('/api/gym/:gymID/updateInfo', middleware.checkAuthOwner, async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.putGymInfo(req, res, conn);
+        conn.release();
+      }
+    });
+  });
 
   //////////////////////////////////////////////////
   // GET 
