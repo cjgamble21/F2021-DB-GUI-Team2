@@ -4,7 +4,14 @@ const jwt = require('jsonwebtoken');
 exports.registerUser = function(req, res, conn) {
     var username = req.body.username;
     var password = req.body.password;
-    var userType = parseInt(req.body.userType);
+    var userType = req.body.userType;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var age = req.body.birthday;
+    var gender = req.body.gender;
+    var phone = req.body.phone;
+    var email = req.body.email;
+    var description = req.body.description;
     if (!username || !password) {
       res.status(400).json({
           code: 400,
@@ -19,8 +26,8 @@ exports.registerUser = function(req, res, conn) {
             error: err
           });
         } else {
-          console.log(req.body);
-          conn.query('INSERT INTO profiles (username, password, userType) VALUES (?, ?, ?)', [username, hash, userType], 
+          console.log(userType);
+          conn.query('INSERT INTO profiles (username, password, userType, firstName, lastName, age, gender, phone, email, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [username, hash, userType, firstName, lastName, age, gender, phone, email, description], 
           function (err) {
               if (err) {
                 logger.error('Username already exists', err);
