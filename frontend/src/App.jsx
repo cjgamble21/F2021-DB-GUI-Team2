@@ -39,15 +39,15 @@ function App () {
   return (
     <Router>
     <div className="App">
-    <GymOwnerHomePage></GymOwnerHomePage>
-        {/* <div className="container d-flex align-items-center flex-column">
+    {/* <GymOwnerHomePage></GymOwnerHomePage> */}
+        <div className="container d-flex align-items-center flex-column">
           <Route component={Header}></Route>
           <Switch>
           { routes.map((route, index) => <Route key={ index } exact { ...route }></Route>) }
           
           </Switch>
           <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
-        </div> */}
+        </div>
     </div>
     </Router>
   );

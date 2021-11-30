@@ -25,7 +25,7 @@ export default class UserHomePage extends React.Component {
         this.state.age = 0;
         this.state.phone = "";
         this.state.email = "";
-        this.state.photo = "https://via.placeholder.com/500";
+        this.state.photo = "https://miro.medium.com/max/1200/1*BDE-SkJBCG_7P4chK4vKnw.jpeg";
         this.state.token = localStorage.token;
         this.state.gyms = [];
         this.state.sessions = [];
@@ -50,8 +50,8 @@ export default class UserHomePage extends React.Component {
                     this.setState({ email: accArray.email });
                 if (accArray.phone.length > 0)
                     this.setState({ phone: accArray.phone });
-                // if (accArray.photo.length > 0)
-                //     this.setState({ photo: accArray.photo });
+                
+                    this.setState({ photo: accArray.pfp });
 
             }
         })
@@ -106,10 +106,7 @@ export default class UserHomePage extends React.Component {
                         <div className = "card w-70">
                             <div id="userPhoto">
                                 <img className = "card-img-top rounded-circle" src={this.state.photo} alt="user-photo"/>
-                                {this.state.editMode && (
-                                <input type="file"
-                                onChange={e => this.setState({ photo: e.target.value })}/>
-                                )}
+                                
                             </div>
                             
                             <div id="basicUserInfo">

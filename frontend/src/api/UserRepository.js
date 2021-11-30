@@ -34,7 +34,7 @@ export class UserRepository {
         })
     }
 
-    updateUser(firstName, lastName, age, gender, phone, email,description){
+    updateUser(firstName, lastName, age, gender, phone, email,description,pfp){
         return new Promise((resolve, reject) => {
             let body = {
 
@@ -45,6 +45,7 @@ export class UserRepository {
                 phone: phone,
                 email: email,
                 description: description,
+                pfp:pfp
                 
 
             }

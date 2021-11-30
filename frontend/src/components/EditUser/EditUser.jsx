@@ -44,8 +44,8 @@ export default class EditUser extends React.Component{
                     this.setState({ email: accArray.email });
                 if (accArray.phone.length > 0)
                     this.setState({ phone: accArray.phone });
-                // if (accArray.photo.length > 0)
-                //     this.setState({ photo: accArray.photo });
+                if (accArray.pfp.length > 0)
+                    this.setState({ photo: accArray.pfp });
 
             }
 
@@ -71,7 +71,7 @@ export default class EditUser extends React.Component{
     handleSubmitClick = (e) =>{
             console.log(this.state.token)
             console.log(this.state.profileID)
-            this.userRepo.updateUser(this.state.firstName,this.state.lastName,this.state.age,this.state.gender,this.state.phone,this.state.email,this.state.description,this.state.profileID)
+            this.userRepo.updateUser(this.state.firstName,this.state.lastName,this.state.age,this.state.gender,this.state.phone,this.state.email,this.state.description,this.state.pfp)
             //FIX THIS
             this.props.history.push('/UserHomePage')
 
