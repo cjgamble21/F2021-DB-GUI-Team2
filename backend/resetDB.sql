@@ -187,4 +187,6 @@ CREATE TABLE `reviews`(
     KEY `gymID`(`gymID`),
     CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE,
     CONSTRAINT `reviews_validRatings` CHECK (`rating` BETWEEN 1 AND 5)
+
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
+

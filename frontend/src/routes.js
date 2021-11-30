@@ -19,9 +19,6 @@ export const routes = [
     { path: '/GymOwnerHomePage' ,exact : true, component: GymOwnerHomePage},
     { path: '/UserHomePage/edit' ,exact : true, component: EditUser},
     { path: '/TrainerHomePage/edit' ,exact : true, component: EditTrainer},
-    { path: '/Gym' ,exact : true, component: Gym}
-
-
-
+    { path: '/Gym/:id' ,exact : true, component: Gym}
 ];
 export default routes;

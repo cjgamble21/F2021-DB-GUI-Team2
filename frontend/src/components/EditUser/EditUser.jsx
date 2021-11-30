@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { withRouter } from "react-router-dom";
 import './EditUser.css';
 import { UserRepository } from '../../api/UserRepository';
+import { Link } from 'react-router-dom';
 
 
 export default class EditUser extends React.Component{
@@ -71,6 +72,9 @@ export default class EditUser extends React.Component{
             console.log(this.state.token)
             console.log(this.state.profileID)
             this.userRepo.updateUser(this.state.firstName,this.state.lastName,this.state.age,this.state.gender,this.state.phone,this.state.email,this.state.description,this.state.profileID)
+            //FIX THIS
+            this.props.history.push('/UserHomePage')
+
         
     }
 
@@ -82,7 +86,16 @@ export default class EditUser extends React.Component{
             <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
                 <form>
                     
-                
+                <div className="form-group text-left">
+                        <label htmlFor="pfp">Profile Image Link</label>
+                        <input type="pfp" 
+                            className="form-control" 
+                            id="pfp" 
+                            placeholder="Enter Image URL"
+                            value={this.state.pfp}
+                            onChange={this.handleChange} 
+                        />
+                    </div>
                     <div className="form-group text-left">
                         <label htmlFor="firstName">First Name</label>
                         <input type="firstName" 
@@ -165,10 +178,7 @@ export default class EditUser extends React.Component{
                 <div className="alert alert-success mt-2" style={{display: this.state.successMessage ? 'block' : 'none' }} role="alert">
                     {this.state.successMessage}
                 </div>
-                <div className="mt-2">
-                    <span>Already have an account? </span>
-                    {/* <span className="loginText" onClick={() => redirectToLogin()}>Login here</span>  */}
-                </div>
+                
                 
             </div>
         )

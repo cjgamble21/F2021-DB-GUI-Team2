@@ -276,10 +276,48 @@ module.exports = function routes(app, logger) {
         });
       } else {
         controller.getTrainer(req, res, conn);
+
         conn.release();
       }
     });
   });
+
+  app.get('/api/getRatings/:id', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem obtaining MySQL connection'
+        });
+      } else {
+        req.body.table = 'reviews';
+        req.body.args = {};
+        req.body.args.gymID = req.params.id;
+        controller.getBody(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+  app.get('/api/getGyms/:id', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem obtaining MySQL connection'
+        });
+      } else {
+        req.body.table = 'gymInfo';
+        req.body.args = {};
+        req.body.args.gymID = req.params.id;
+        controller.getBody(req, res, conn);
+
+        conn.release();
+      }
+    });
+  });
+
 
   //////////////////////////////////////////////////
   // GET 
@@ -554,4 +592,3 @@ module.exports = function routes(app, logger) {
   });
 }
 
-  

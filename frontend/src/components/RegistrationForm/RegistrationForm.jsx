@@ -34,36 +34,6 @@ function RegistrationForm(props) {
         }))
     }
 
-    const sendDetailsToServer = () => {
-        if(state.username.length && state.password.length && state.userType.length) {
-            // axios.post(API_BASE_URL + '/api/register', {username:state.username, password:state.password, userType:state.userType})
-            axios.post(API_BASE_URL + '/api/register', {username:state.username, password:state.password, userType:state.userType})
-
-                .then(function (response) {
-                    if(response.status === 200){
-                        setState(prevState => ({
-                            ...prevState,
-                            'successMessage' : 'Registration successful. Redirecting to home page..'
-                        }))
-                        localStorage.setItem(ACCESS_TOKEN_NAME,response.token);
-                        redirectToHome();
-                        //props.showError(null)
-                    } else{
-                        //props.showError("Some error ocurred");
-                    }
-                })
-                .catch(function (error) {
-                    window.alert(error);
-                });    
-        } else {
-            //props.showError('Please enter valid username, user type, and password')    
-        }
-        
-    }
-    const redirectToHome = () => {
-        //props.updateTitle('Home')
-        props.history.push('/home');
-    }
     const redirectToLogin = () => {
         //props.updateTitle('Login')
         props.history.push('/login'); 
