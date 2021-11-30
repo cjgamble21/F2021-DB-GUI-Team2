@@ -53,6 +53,17 @@ export class TrainerRepository {
         })
     }
 
+    getTrainerByID(trainerId){
+        return new Promise((resolve, reject) => {
+            let body = {profileID: trainerId};
+            axios.get(`${this.url}/api/getTrainers`, body, this.config)
+                .then(x => resolve(x.data ? x.data[0] : undefined))
+                .catch(error => {
+                    reject(error);
+                });
+        })
+    }
+
     deleteTrainer(trainerID){
         return new Promise((resolve, reject) => {
             axios.delete(`${this.url}/trainer/${trainerID}/delete`, this.config)

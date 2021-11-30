@@ -29,7 +29,7 @@ const logger = log({ console: true, file: false, label: config.name });
 // specify middleware to use
 app.use(bodyParser.json());
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://ec2-3-139-91-59.us-east-2.compute.amazonaws.com:3000',
   allowedHeaders: 'Content-Type,Authorization',
   credentials: true
 }));

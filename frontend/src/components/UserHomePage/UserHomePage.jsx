@@ -16,8 +16,10 @@ export default class UserHomePage extends React.Component {
     trainerRepo = new TrainerRepository();
     userRepo = new UserRepository();
     gymRepo = new GymRepository();
+
     ratingsRepo = new RatingRepository();
     
+
     constructor(props) {
         super(props);
         this.state = {};
@@ -31,15 +33,17 @@ export default class UserHomePage extends React.Component {
         this.state.token = localStorage.token;
         this.state.gyms = [];
         this.state.sessions = [];
+        this.state.trainers = [];
 
 
-        
         this.redirectToEdit = this.redirectToEdit.bind(this);
+        this.getSessionTrainer = this.getSessionTrainer.bind(this);
     }
 
-    initalizeProfile(){
+    initalizeProfile() {
         this.userRepo.getUser(this.state.token).then(account => {
             let accArray = account;
+
             if(accArray){
                 this.setState({ age: accArray.age });
                 if (accArray.firstName.length > 0)
@@ -52,15 +56,16 @@ export default class UserHomePage extends React.Component {
                     this.setState({ email: accArray.email });
                 if (accArray.phone.length > 0)
                     this.setState({ phone: accArray.phone });
-                
-                    this.setState({ photo: accArray.pfp });
+
+                this.setState({ photo: accArray.pfp });
 
             }
         })
     }
 
-    initializeGyms(){
+    initializeGyms() {
         this.gymRepo.getGyms().then(gyms => {
+
             var gymsList = [];
             {gyms.map((gym) => {
                 var averageRating = 0
@@ -81,14 +86,16 @@ export default class UserHomePage extends React.Component {
                 this.setState({gyms: gymsList})
             }, 500)
 
+
         })
 
     }
 
-    initializeSessions(){
+    initializeSessions() {
         this.userRepo.getUserSessions(this.state.token).then(sessions => {
             var sessionsList = [];
             console.log(sessions)
+
             {sessions.map((session) => {
 
                 this.userRepo.getUserByID(session.trainerID).then(trainer => {
@@ -106,62 +113,60 @@ export default class UserHomePage extends React.Component {
                 this.setState({sessions: sessionsList})
             }, 1000)
 
+
         })
     }
 
-    componentDidMount(){
+
+    componentDidMount() {
         this.initalizeProfile();
         this.initializeGyms();
         this.initializeSessions();
+
+        this.initializeTrainers();
+
     }
 
     redirectToEdit = () => {
         this.props.history.push('/UserHomePage/edit');
     }
 
-
-    
-
-    handleChange(e) {
-        this.setState({value: e.target.value});
+    getSessionTrainer = (trainerID) => {
+        for (let i = 0; i < this.state.trainers.length; i++) {
+            console.log(this.state.trainers[i]);
+            if (trainerID == this.state.trainers[i].profileID) {
+                return (
+                    this.state.trainers[i].firstName + " " + this.state.trainers[i].lastName
+                );
+            }
+        }
     }
 
-    ListItems (props) {
-    const toList = props.items;
-    const listItems = toList.map((item, index) =>
-        <li key={index}>{item}</li>
-    );
-    return (
-        <ul>{listItems}</ul>
-    );
-    };
 
-    render(){
-        return(<>
-            
-                <div className = "row">
-                    <div className = "col-sm-6">
-                        <div className = "card w-70">
-                            <div id="userPhoto">
-                                <img className = "card-img-top rounded-circle" src={this.state.photo} alt="user-photo"/>
-                                
-                            </div>
-                            
-                            <div id="basicUserInfo">
-                                <h2>{this.state.firstName} {this.state.lastName}</h2>
-                                <p>Gender {this.state.gender}</p>
-                                <p>Age {this.state.age}</p>
-                                <h3>Contact Info</h3>
-                                <p>{this.state.email}</p>
-                                <p>{this.state.phone}</p>
-                            </div> 
-                            
+    handleChange(e) {
+        this.setState({ value: e.target.value });
+    }
 
-                                {/* <Link to={'/UserHomePage/edit'} className = "btn btn-primary">Edit Profile</Link> */}
+    // ListItems(props) {
+    //     const toList = props.items;
+    //     const listItems = toList.map((item, index) =>
+    //         <li key={index}>{item}</li>
+    //     );
+    //     return (
+    //         <ul>{listItems}</ul>
+    //     );
+    // };
 
-                                <span className="loginText" onClick={() => this.redirectToEdit()}>Edit here</span> 
+    render() {
+        return (<>
+            <div className="row">
+                <div className="col-sm-6">
+                    <div className="card w-70">
+                        <div id="userPhoto">
+                            <img className="card-img-top rounded-circle" src={this.state.photo} alt="user-photo" />
 
                         </div>
+
                     </div>
                      
                     <div className = "col-sm-6 align-self-center">
@@ -190,7 +195,14 @@ export default class UserHomePage extends React.Component {
                                     }
                                 </tbody>
                             </table>
+
                         </div>
+
+
+                        {/* <Link to={'/UserHomePage/edit'} className = "btn btn-primary">Edit Profile</Link> */}
+
+                        <span className="loginText" onClick={() => this.redirectToEdit()}>Edit here</span>
+
                     </div>
                 </div>
 
@@ -220,7 +232,37 @@ export default class UserHomePage extends React.Component {
                             }
                         </tbody>
                     </table>
+
                 </div>
+            </div>
+
+            <div className="row">
+                <table className="table table-image table-hover">
+                    <thead className="thead-dark">
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Rating</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.gyms.map((gym, index) =>
+                                <tr key={index}>
+                                    <td className="w-25">
+                                        <img src={gym.logo} className="img-fluid img-thumbnail" alt="Sheep" />
+                                    </td>
+                                    <td><Link to={"/Gym/" + gym.gymID}>{gym.name}</Link></td>
+                                    <td>{gym.address}</td>
+                                    <td><Rating value={1}></Rating></td>
+                                </tr>
+                            )
+                        }
+                    </tbody>
+                </table>
+            </div>
         </>);
     }
 }

@@ -75,8 +75,7 @@ export default class TrainerHomePage extends React.Component {
     render() {
         return (
             <div id="trainerPage">
-                <div className="row">
-                    <h1>Trainer Home Page</h1>
+                <div className="row justify-content-center">
                     <div id="trainerCard" className="card mb-3 w-70 col-md-6">
                         <div>
                             <div id="trainerPhoto">
