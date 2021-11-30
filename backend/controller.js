@@ -41,13 +41,13 @@ exports.registerUser = function(req, res, conn) {
                   if (!err) {
                     profileID = result[0].profileID;
                     if (userType === 1)
-                      conn.query('INSERT INTO users (userID) VALUES (?)', [profileID], function (err) {
+                      conn.query('INSERT INTO users (userID) VALUES (?)', profileID, function (err) {
                         if (err) {
                           logger.error('Something happened', err);
                         }
                       });
                     else if (userType === 2)
-                      conn.query('INSERT INTO trainers (trainerID) VALUES (?)', profileID, function (err) {
+                      conn.query('INSERT INTO trainers (trainerID, rate) VALUES (?, 0)', profileID, function (err) {
                         if (err) {
                           logger.error('Something happened', err);
                         }
