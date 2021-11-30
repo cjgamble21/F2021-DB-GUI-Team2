@@ -4,7 +4,7 @@ axios.defaults.withCredentials = true;
 
 export class UserRepository {
     //remember to change URL 
-    url = 'http://ec2-3-139-91-59.us-east-2.compute.amazonaws.com:8000';
+    url = 'http://localhost:8000';
 
     config = {
         withCredentials: true
@@ -16,6 +16,16 @@ export class UserRepository {
                 params: { token: userToken }
             })
                 .then(x => resolve(x.data && x.data.length === 1 ? x.data[0] : undefined))
+                .catch(error => {
+                    reject(error);
+                });
+        })
+    }
+
+    getUserByID(userID){
+        return new Promise((resolve, reject) => {
+            axios.get(`${this.url}/api/d/profiles/${userID}`, this.config)
+                .then(x => resolve(x.data))
                 .catch(error => {
                     reject(error);
                 });

@@ -30,7 +30,7 @@ export default class Gym extends React.Component {
     initializeRatings(){
         
         this.ratingsRepo.getRatings(this.state.gymID).then(ratings => {
-            console.log(ratings)
+            
             this.setState({ratings:ratings})
         })
     }
@@ -50,15 +50,25 @@ export default class Gym extends React.Component {
 
         this.gymRepo.getAmenities().then(amenities =>{
             let  accArray3 = amenities
-            console.log(accArray3)
+            
             this.setState({amenities:accArray3})
         })
     }
     initializeTrainers(){
         this.trainerRepo.getTrainers().then(trainers =>{
             let accArray2 = trainers
+            
+            // accArray2 = accArray2.filter(function(trainer){
+                
+            //     console.log(trainer.gymID)
+            //     return (trainer.gymID === this.state.gymID)
+            // } )
+            console.log(accArray2)
+            console.log(this.state.gymID)
+            accArray2 = accArray2.filter( obj => obj.gymID == this.state.gymID )
             console.log(accArray2)
             this.setState({trainers:accArray2})
+            console.log(this.state.trainers)
         })
         
     }
@@ -150,7 +160,7 @@ export default class Gym extends React.Component {
                     <thead className="thead-dark">
                         <tr>
                             <th>Name</th>
-                            <th>Rating</th>
+                            <th>Rate</th>
                         </tr>
 
                     </thead>
@@ -159,9 +169,9 @@ export default class Gym extends React.Component {
                             this.state.trainers.map((trainers, index) => 
                                 <tr key={index}>
                                     <td className = "w-25">
-                                    <p>{trainers.name}</p>
+                                    <p>{trainers.firstName} {trainers.lastName}</p>
                                     </td>
-                                    {/* <td><Rating value={trainers.rating}></Rating></td> */}
+                                    <td>${trainers.rate}</td>
                                 </tr>
                             )
                         }

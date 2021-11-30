@@ -8,6 +8,7 @@ import { UserRepository } from '../../api/UserRepository';
 import { Link } from 'react-router-dom';
 import { GymRepository } from '../../api/GymRepository';
 import { Rating } from '../Ratings/rating';
+import { RatingRepository } from '../../api/RatingRepository';
 
 
 export default class UserHomePage extends React.Component {
@@ -15,6 +16,9 @@ export default class UserHomePage extends React.Component {
     trainerRepo = new TrainerRepository();
     userRepo = new UserRepository();
     gymRepo = new GymRepository();
+
+    ratingsRepo = new RatingRepository();
+    
 
     constructor(props) {
         super(props);
@@ -31,6 +35,7 @@ export default class UserHomePage extends React.Component {
         this.state.sessions = [];
         this.state.trainers = [];
 
+
         this.redirectToEdit = this.redirectToEdit.bind(this);
         this.getSessionTrainer = this.getSessionTrainer.bind(this);
     }
@@ -38,8 +43,8 @@ export default class UserHomePage extends React.Component {
     initalizeProfile() {
         this.userRepo.getUser(this.state.token).then(account => {
             let accArray = account;
-            console.log(accArray)
-            if (accArray) {
+
+            if(accArray){
                 this.setState({ age: accArray.age });
                 if (accArray.firstName.length > 0)
                     this.setState({ firstName: accArray.firstName });
@@ -60,22 +65,55 @@ export default class UserHomePage extends React.Component {
 
     initializeGyms() {
         this.gymRepo.getGyms().then(gyms => {
-            console.log(gyms)
-            this.setState({ gyms: gyms })
+
+            var gymsList = [];
+            {gyms.map((gym) => {
+                var averageRating = 0
+
+                this.ratingsRepo.getRatings(gym.gymID).then(ratings => {
+                    ratings.forEach((rating) => {
+                        averageRating += rating.rating
+                    })
+                    averageRating /= ratings.length
+
+                    gym.averageRating = averageRating
+                    gymsList.push(gym)
+                })
+            })
+            }
+
+            setTimeout(() => {
+                this.setState({gyms: gymsList})
+            }, 500)
+
+
         })
+
     }
 
     initializeSessions() {
         this.userRepo.getUserSessions(this.state.token).then(sessions => {
+            var sessionsList = [];
             console.log(sessions)
-            this.setState({ sessions: sessions })
-        })
-    }
 
-    initializeTrainers() {
-        this.trainerRepo.getTrainers().then(trainers => {
-            console.log(trainers)
-            this.setState({ trainers: trainers })
+            {sessions.map((session) => {
+
+                this.userRepo.getUserByID(session.trainerID).then(trainer => {
+                    console.log(trainer)
+                    session.trainerName = trainer[0].firstName + " " + trainer[0].lastName
+                    sessionsList.push(session)
+                })
+            })
+            }
+
+            setTimeout(() => {
+                sessionsList = sessionsList.sort((session1, session2)=>{
+                    return session1.date.localeCompare(session2.date)
+                })
+                this.setState({sessions: sessionsList})
+            }, 1000)
+
+
         })
     }
 
@@ -84,7 +122,9 @@ export default class UserHomePage extends React.Component {
         this.initalizeProfile();
         this.initializeGyms();
         this.initializeSessions();
+
         this.initializeTrainers();
+
     }
 
     redirectToEdit = () => {
@@ -127,13 +167,35 @@ export default class UserHomePage extends React.Component {
 
                         </div>
 
-                        <div id="basicUserInfo">
-                            <h2>{this.state.firstName} {this.state.lastName}</h2>
-                            <p>Gender {this.state.gender}</p>
-                            <p>Age {this.state.age}</p>
-                            <h3>Contact Info</h3>
-                            <p>{this.state.email}</p>
-                            <p>{this.state.phone}</p>
+                    </div>
+                     
+                    <div className = "col-sm-6 align-self-center">
+                        <div className = "card w-100 border-light mb-3">
+                            <table className = "table table-hover">
+                                <caption> Upcoming Appointments</caption>
+                                <thead className = "table-dark">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Location</th>
+                                        <th>Date</th>
+                                        <th>Hourly Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        this.state.sessions.map((session, index) => 
+                                            <tr key={index}>
+                                                <td><Link to= "/TrainerHomePage">{session.trainerName}</Link></td>
+                                                <td>Dallas,TX</td>
+                                                <td>{session.date.substr(5,2)}/{session.date.substr(8,2)}/{session.date.substr(0,4)}</td>
+                                                <td>${session.price}</td>
+                                                
+                                            </tr>
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+
                         </div>
 
 
@@ -144,34 +206,33 @@ export default class UserHomePage extends React.Component {
                     </div>
                 </div>
 
-                <div className="col-sm-6 align-self-center">
-                    <div className="card w-100 border-light mb-3">
-                        <table className="table table-hover">
-                            <caption> Upcoming Appointments</caption>
-                            <thead className="table-dark">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Location</th>
-                                    <th>Date</th>
-                                    <th>Hourly Rate</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    this.state.sessions.map((session, index) =>
-                                        <tr key={index}>
-                                            <td><Link to="/TrainerHomePage">
-                                                {this.getSessionTrainer(session.trainerID)}
-                                            </Link></td>
-                                            <td>Dallas,TX</td>
-                                            <td>{session.date.substr(0, 10)}</td>
-                                            <td>${session.price}</td>
-                                        </tr>
-                                    )
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                <div className = "row">
+                    <table className = "table table-image table-hover">
+                        <thead className="thead-dark">
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Rating</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.gyms.map((gym, index) => 
+                                    <tr key={index}>
+                                        <td className = "w-25">
+                                        <img src={gym.logo} className="img-fluid img-thumbnail" alt="Sheep"/>
+                                        </td>
+                                        <td><Link to = {"/Gym/"+gym.gymID}>{gym.name}</Link></td>
+                                        <td>{gym.address}</td>
+                                        <td><Rating value={gym.averageRating}></Rating></td>
+                                    </tr>
+                                )
+                            }
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
 
