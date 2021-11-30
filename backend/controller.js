@@ -1010,7 +1010,7 @@ exports.postBody = function(req, res, conn) {
         error: err
       });
     }
-    else { res.json(result); }
+    else { /*res.json(result);*/ }
   });
 }
 
@@ -1074,7 +1074,7 @@ exports.putBody = function(req, res, conn) {
         error: err
       });
     }
-    else { /*res.json(result);*/ }
+    else { res.json(result); }
   });
 }
 
@@ -1180,7 +1180,7 @@ exports.deleteBody = function(req, res, conn) {
         error: err
       });
     }
-    else { /*res.json(result);*/ }
+    else { res.json(result); }
   });
 }
 

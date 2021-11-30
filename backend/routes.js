@@ -299,6 +299,7 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+  
   app.get('/api/getGyms/:id', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
