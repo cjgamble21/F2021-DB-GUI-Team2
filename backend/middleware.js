@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 // function for verification of a valid web token for access of protected routes
 exports.checkAuthUser = function(req, res, next) {
     try {
-      req.body.token = req.query.token;
+      if (!req.body.token)
+        req.body.token = req.query.token;
       const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
       req.user = decoded;
       if (decoded.userType == 1 || decoded.userType == 3) {
@@ -24,7 +25,8 @@ exports.checkAuthUser = function(req, res, next) {
 
 exports.checkAuthTrainer = function(req, res, next) {
     try {
-        req.body.token = req.query.token;
+        if (!req.body.token)
+          req.body.token = req.query.token;
         const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
         req.user = decoded;
         if (decoded.userType == 2 || decoded.userType == 3) {
@@ -45,6 +47,8 @@ exports.checkAuthTrainer = function(req, res, next) {
 
 exports.checkAuthOwner = function(req, res, next) {
     try {
+        if (!req.body.token)
+          req.body.token = req.query.token;
         const decoded = jwt.verify(req.body.token, process.env.JWT_KEY);
         req.user = decoded;
         if (decoded.userType == 3) {
