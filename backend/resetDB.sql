@@ -3,8 +3,6 @@ CREATE DATABASE IF NOT EXISTS `db`;
 USE `db`;
 
 DROP TABLE IF EXISTS `reviews`;
-DROP TABLE IF EXISTS `machines`;
-DROP TABLE IF EXISTS `amenities`;
 DROP TABLE IF EXISTS `gymOwnership`;
 DROP TABLE IF EXISTS `trainerSkills`;
 DROP TABLE IF EXISTS `requests`;
@@ -22,8 +20,9 @@ DROP TABLE IF EXISTS `workouts`;
  * Table of gymInfo
  */
 CREATE TABLE `gymInfo`(
-    `gymID`  int     NOT NULL AUTO_INCREMENT,
+    `gymID`  int     UNIQUE NOT NULL,
     `name`  varchar(50)		UNIQUE DEFAULT NULL,
+	`address`		varchar(200)	DEFAULT NULL,
     `description`   varchar(500)    DEFAULT NULL,
     `logo`  varchar(500)    DEFAULT NULL,
     PRIMARY KEY(`gymID`)
@@ -33,7 +32,7 @@ CREATE TABLE `gymInfo`(
  * Table of available workouts at the gym
  */
 CREATE TABLE `workouts` (
-	`workoutID`		int				NOT NULL AUTO_INCREMENT,
+	`workoutID`		int				UNIQUE NOT NULL,
 	`workout`		varchar(50)		UNIQUE NOT NULL,
 	`description`	varchar(500)	NOT NULL,
 	PRIMARY KEY(`workoutID`)
@@ -43,20 +42,20 @@ CREATE TABLE `workouts` (
  * Table of user types
  */
 CREATE TABLE `userTypes` (
-	`userType`		int				NOT NULL AUTO_INCREMENT,
+	`userType`		int				UNIQUE NOT NULL,
 	`description`	varchar(500)	NOT NULL,
 	PRIMARY KEY(`userType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `userTypes` (`description`) VALUES ("user");
-INSERT INTO `userTypes` (`description`) VALUES ("trainer");
-INSERT INTO `userTypes` (`description`) VALUES ("admin");
+INSERT INTO `userTypes` (`userType`, `description`) VALUES (1, "user");
+INSERT INTO `userTypes` (`userType`, `description`) VALUES (2, "trainer");
+INSERT INTO `userTypes` (`userType`, `description`) VALUES (3, "admin");
 
 /*
  * Table of generic profiles
  */
 CREATE TABLE `profiles` (
-	`profileID`		int				NOT NULL AUTO_INCREMENT,
+	`profileID`		int				UNIQUE NOT NULL,
 	`username`		varchar(50)		UNIQUE NOT NULL,
 	`password`		varchar(100)	NOT NULL,
 	`firstName`		varchar(50)		DEFAULT NULL,
@@ -65,7 +64,7 @@ CREATE TABLE `profiles` (
 	`gender`		varchar(50)		DEFAULT NULL,
 	`phone`			varchar(50)		UNIQUE DEFAULT NULL,
 	`email`			varchar(50) 	UNIQUE DEFAULT NULL,
-	`pfp`			varchar(50)		DEFAULT NULL,
+	`pfp`			varchar(500)	DEFAULT NULL,
 	`description`	varchar(500)	DEFAULT NULL,
 	`userType`		int				NOT NULL,
 	PRIMARY KEY(`profileID`),
@@ -81,14 +80,13 @@ CREATE TABLE `users` (
 	PRIMARY KEY(`userID`),
 	CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 /*
  * Table of trainers
  */
 CREATE TABLE `trainers` (
 	`trainerID`		int				NOT NULL,
-	`gymID`         int             NOT NULL,
-	`rate`			decimal(8,2)	NOT NULL,
+	`gymID`         int             DEFAULT NULL,
+	`rate`			decimal(8,2)	DEFAULT NULL,
 	PRIMARY KEY(`trainerID`),
 	CONSTRAINT `trainers_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE,
     CONSTRAINT `trainers_ibfk_2` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE
@@ -113,7 +111,7 @@ CREATE TABLE `trainerSkills` (
  * Table of requested sessions
  */
 CREATE TABLE `requests` (
-	`requestID`		int				NOT NULL AUTO_INCREMENT,
+	`requestID`		int				UNIQUE NOT NULL,
 	`userID`		int				NOT NULL,
 	`trainerID`		int				NOT NULL,
 	`date`			datetime		NOT NULL,
@@ -128,7 +126,7 @@ CREATE TABLE `requests` (
  * Table of offered sessions
  */
 CREATE TABLE `offers` (
-	`offerID`		int				NOT NULL AUTO_INCREMENT,
+	`offerID`		int				UNIQUE NOT NULL,
 	`trainerID`		int				NOT NULL,
 	`date`			datetime		NOT NULL,
 	`price`			decimal(10,2)	NOT NULL,
@@ -141,7 +139,7 @@ CREATE TABLE `offers` (
  * Table of sessions between trainers and users
  */
 CREATE TABLE `sessions` (
-	`sessionNumber`	int				NOT NULL AUTO_INCREMENT,
+	`sessionNumber`	int			    UNIQUE NOT NULL,
 	`trainerID`		int				NOT NULL,
 	`userID`		int 			NOT NULL,
 	`date`			datetime 		NOT NULL,
@@ -178,35 +176,10 @@ CREATE TABLE `gymOwnership`(
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*
- * Table of amenities
- */
-CREATE TABLE `amenities`(
-    `amenityID`     int     NOT NULL AUTO_INCREMENT,
-    `amenityImage`  varchar(200)    DEFAULT NULL,
-    `amenityDesc`   varchar(500)    DEFAULT NULL,
-    `gymID`     int     NOT NULL,
-    PRIMARY KEY(`amenityID`),
-    KEY `gymID` (`gymID`),
-    CONSTRAINT `amenities_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE
-)ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*
- * Table of machines
- */
-CREATE TABLE `machines`(
-    `machineID`     int     NOT NULL AUTO_INCREMENT,
-    `machineName`   varchar(50)     NOT NULL,
-    `gymID`         int NOT NULL,
-    PRIMARY KEY(`machineID`),
-    KEY `gymID` (`gymID`),
-    CONSTRAINT `machines_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE
-)ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*
  *  Table of Reviews
  */
 CREATE TABLE `reviews`(
-    `reviewID`  int     NOT NULL AUTO_INCREMENT,
+    `reviewID`  int     UNIQUE NOT NULL,
     `message`   varchar(500)    NOT NULL,
     `rating`    int     NOT NULL,
     `gymID`     int     NOT NULL,
