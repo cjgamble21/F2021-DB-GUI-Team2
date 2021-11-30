@@ -17,7 +17,7 @@ export default class EditTrainer extends React.Component {
         this.state.email = "";
         this.state.pfp = "https://via.placeholder.com/500";
         this.state.credentials = [];
-        this.state.workouts = [];
+        this.state.workouts = ["bench press", "squats"];
         this.state.token = localStorage.token;
     }
 
@@ -38,13 +38,17 @@ export default class EditTrainer extends React.Component {
                 if (accArray.phone)
                     this.setState({ phone: accArray.phone });
                 if (accArray.email)
-                    this.setState({ pfp: accArray.email });
+                    this.setState({ email: accArray.email });
                 // if (accArray.pfp)
                 // this.setState({ pfp: accArray.pfp });
                 if (accArray.description)
                     this.setState({ description: accArray.description });
             }
         })
+    }
+
+    componentDidMount() {
+        this.initalizeProfile();
     }
 
     ListItems(props) {
@@ -58,9 +62,10 @@ export default class EditTrainer extends React.Component {
     };
 
     onSaveSubmit() {
-        this.trainerRepository.updateTrainer(this.token, this.firstName,
-            this.lastName, this.age, this.gender, this.phone, this.email, this.pfp, this.description)
-            .then();
+        this.trainerRepo.updateTrainer(this.state.token, this.state.firstName,
+            this.state.lastName, this.state.age, this.state.gender, this.state.phone, this.state.email,
+            this.state.pfp, this.state.description)
+            .then(this.props.history('/TrainerHomePage'));
     }
 
     render() {
@@ -68,28 +73,30 @@ export default class EditTrainer extends React.Component {
             <div id="editTrainerPage" className="mt-5">
                 <div id="trainerCard">
                     <div>
-                        <div id="trainerPhoto" className="d-grid justify-content-center">
+                        <div id="trainerPhoto" className="justify-content-center">
                             <img src={this.state.pfp} alt="trainer-photo" className="rounded-circle w-50 m-auto mb-3" />
-                            <label htmlFor="pfpUrl">Profile Picture Url</label>
-                            <input type="text"
-                                id="pfpUrl"
-                                className="form-control m-auto"
-                                value={this.state.pfp}
-                                onChange={e => this.setState({ photo: e.target.value })} />
+                            <div className="form-group">
+                                <label htmlFor="pfpUrl">Profile Picture Url</label>
+                                <input type="text"
+                                    id="pfpUrl"
+                                    className="form-control m-auto"
+                                    value={this.state.pfp}
+                                    onChange={e => this.setState({ photo: e.target.value })} />
+                            </div>
                         </div>
                         <div id="trainerInfo">
                             <div>
                                 <form>
-                                    <fieldset className="d-flex justify-content-evenly">
-                                        <div className="form-group d-grid">
+                                    <fieldset className="d-flex justify-content-around">
+                                        <div className="form-group ">
                                             <label htmlFor="firstName">First Name</label>
                                             <input type="text"
                                                 id="firstName"
                                                 className="form-control"
-                                                value={this.firstName}
+                                                value={this.state.firstName}
                                                 onChange={e => this.setState({ firstName: e.target.value })} />
                                         </div>
-                                        <div className="form-group d-grid">
+                                        <div className="form-group ">
                                             <label htmlFor="lastName">Last Name</label>
                                             <input type="text"
                                                 id="lastName"
@@ -98,18 +105,18 @@ export default class EditTrainer extends React.Component {
                                                 onChange={e => this.setState({ lastName: e.target.value })} />
                                         </div>
                                     </fieldset>
-                                    <fieldset className="d-flex justify-content-evenly">
-                                        <div className="form-group d-grid">
+                                    <fieldset className="d-flex justify-content-around">
+                                        <div className="form-group ">
                                             <label htmlFor="gender">Gender</label>
                                             <select value={this.state.gender}
                                                 id="gender"
-                                                className="form-select"
+                                                className="form-control"
                                                 onChange={e => this.setState({ gender: e.target.value })}>
                                                 <option>M</option>
                                                 <option>F</option>
                                             </select>
                                         </div>
-                                        <div className="form-group d-grid">
+                                        <div className="form-group ">
                                             <label htmlFor="age">Age</label>
                                             <input type="number"
                                                 id="age"
@@ -119,22 +126,22 @@ export default class EditTrainer extends React.Component {
                                                 onChange={e => this.setState({ age: e.target.value })} />
                                         </div>
                                     </fieldset>
-                                    <fieldset className="d-flex justify-content-evenly">
-                                        <div className="form-group d-grid">
+                                    <fieldset className="d-flex justify-content-around">
+                                        <div className="form-group ">
                                             <label htmlFor="email">Email</label>
-                                            <input type="email"
+                                            <input type="text"
                                                 id="email"
                                                 className="form-control"
                                                 value={this.state.email}
                                                 onChange={e => this.setState({ email: e.target.value })} />
                                         </div>
-                                        <div className="form-group d-grid">
+                                        <div className="form-group ">
                                             <label htmlFor="phoneNumber">Phone Number</label>
                                             <input type="tel"
                                                 id="phoneNumber"
                                                 className="form-control"
-                                                value={this.state.phoneNumber}
-                                                onChange={e => this.setState({ phoneNumber: e.target.value })} />
+                                                value={this.state.phone}
+                                                onChange={e => this.setState({ phone: e.target.value })} />
                                         </div>
                                     </fieldset>
                                 </form>
@@ -144,11 +151,12 @@ export default class EditTrainer extends React.Component {
                 </div>
                 <div id="trainerBody" className="mb-4">
                     <h2>About Me</h2>
-                    <textarea className="form-control mb-5" />
+                    <textarea className="form-control mb-5"
+                        value={this.state.description} />
                     <h2>Workouts</h2>
                     <this.ListItems items={this.state.workouts} />
                 </div>
-                <div className="d-flex justify-content-evenly">
+                <div className="d-flex justify-content-around">
                     <button className="btn btn-primary"
                         onClick={this.onSaveSubmit}>Save Changes</button>
                     <Link to="/TrainerHomePage" className="btn btn-danger">
