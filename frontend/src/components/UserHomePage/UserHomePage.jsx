@@ -122,9 +122,6 @@ export default class UserHomePage extends React.Component {
         this.initalizeProfile();
         this.initializeGyms();
         this.initializeSessions();
-
-        this.initializeTrainers();
-
     }
 
     redirectToEdit = () => {
@@ -147,30 +144,46 @@ export default class UserHomePage extends React.Component {
         this.setState({ value: e.target.value });
     }
 
-    // ListItems(props) {
-    //     const toList = props.items;
-    //     const listItems = toList.map((item, index) =>
-    //         <li key={index}>{item}</li>
-    //     );
-    //     return (
-    //         <ul>{listItems}</ul>
-    //     );
-    // };
-
-    render() {
-        return (<>
-            <div className="row">
-                <div className="col-sm-6">
-                    <div className="card w-70">
-                        <div id="userPhoto">
-                            <img className="card-img-top rounded-circle" src={this.state.photo} alt="user-photo" />
-
+    ListItems (props) {
+        const toList = props.items;
+        const listItems = toList.map((item, index) =>
+            <li key={index}>{item}</li>
+        );
+        return (
+            <ul>{listItems}</ul>
+        );
+        };
+    
+        render(){
+            return(<>
+    
+                    <div className = "row">
+                        <div className = "col-sm-6">
+                            <div className = "card w-70">
+                                <div id="userPhoto">
+                                    <img className = "card-img-top rounded-circle" src={this.state.photo} alt="user-photo"/>
+    
+                                </div>
+    
+                                <div id="basicUserInfo">
+                                    <h2>{this.state.firstName} {this.state.lastName}</h2>
+                                    <p>Gender {this.state.gender}</p>
+                                    <p>Age {this.state.age}</p>
+                                    <h3>Contact Info</h3>
+                                    <p>{this.state.email}</p>
+                                    <p>{this.state.phone}</p>
+                                </div> 
+    
+    
+                                    {/* <Link to={'/UserHomePage/edit'} className = "btn btn-primary">Edit Profile</Link> */}
+    
+                                    <span className="loginText" onClick={() => this.redirectToEdit()}>Edit here</span> 
+    
+                            </div>
                         </div>
-
-                    </div>
-                     
-                    <div className = "col-sm-6 align-self-center">
-                        <div className = "card w-100 border-light mb-3">
+    
+                        <div className = "col-sm-6 align-self-center">
+                            <div className = "card w-100 border-light mb-3">
                             <table className = "table table-hover">
                                 <caption> Upcoming Appointments</caption>
                                 <thead className = "table-dark">
@@ -195,48 +208,11 @@ export default class UserHomePage extends React.Component {
                                     }
                                 </tbody>
                             </table>
-
+                            </div>
                         </div>
-
-
-                        {/* <Link to={'/UserHomePage/edit'} className = "btn btn-primary">Edit Profile</Link> */}
-
-                        <span className="loginText" onClick={() => this.redirectToEdit()}>Edit here</span>
-
                     </div>
-                </div>
-
-                <div className = "row">
-                    <table className = "table table-image table-hover">
-                        <thead className="thead-dark">
-                            <tr>
-                                <th>Image</th>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Rating</th>
-                            </tr>
-
-                        </thead>
-                        <tbody>
-                            {
-                                this.state.gyms.map((gym, index) => 
-                                    <tr key={index}>
-                                        <td className = "w-25">
-                                        <img src={gym.logo} className="img-fluid img-thumbnail" alt="Sheep"/>
-                                        </td>
-                                        <td><Link to = {"/Gym/"+gym.gymID}>{gym.name}</Link></td>
-                                        <td>{gym.address}</td>
-                                        <td><Rating value={gym.averageRating}></Rating></td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-
-            <div className="row">
+    
+                    <div className="row">
                 <table className="table table-image table-hover">
                     <thead className="thead-dark">
                         <tr>
@@ -256,13 +232,13 @@ export default class UserHomePage extends React.Component {
                                     </td>
                                     <td><Link to={"/Gym/" + gym.gymID}>{gym.name}</Link></td>
                                     <td>{gym.address}</td>
-                                    <td><Rating value={1}></Rating></td>
+                                    <td><Rating value={gym.averageRating}></Rating></td>
                                 </tr>
                             )
                         }
                     </tbody>
                 </table>
             </div>
-        </>);
-    }
+            </>);
+        }
 }
