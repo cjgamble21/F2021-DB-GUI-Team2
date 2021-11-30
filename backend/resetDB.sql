@@ -2,16 +2,17 @@ CREATE DATABASE IF NOT EXISTS `db`;
 
 USE `db`;
 
+DROP TABLE IF EXISTS `reviews`;
 DROP TABLE IF EXISTS `machines`;
 DROP TABLE IF EXISTS `amenities`;
 DROP TABLE IF EXISTS `gymOwnership`;
-DROP TABLE IF EXISTS `gymInfo`;
-DROP TABLE IF EXISTS `sessions`;
-DROP TABLE IF EXISTS `offers`;
-DROP TABLE IF EXISTS `requests`;
 DROP TABLE IF EXISTS `trainerSkills`;
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `requests`;
+DROP TABLE IF EXISTS `offers`;
+DROP TABLE IF EXISTS `sessions`;
 DROP TABLE IF EXISTS `trainers`;
+DROP TABLE IF EXISTS `gymInfo`;
+DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `admins`;
 DROP TABLE IF EXISTS `profiles`;
 DROP TABLE IF EXISTS `userTypes`;
@@ -180,8 +181,9 @@ CREATE TABLE `gymOwnership`(
  * Table of amenities
  */
 CREATE TABLE `amenities`(
-    `amenityID`     int     NOT NULL,
-    `amenityType`   varchar(50)     NOT NULL,
+    `amenityID`     int     NOT NULL AUTO_INCREMENT,
+    `amenityImage`  varchar(200)    DEFAULT NULL,
+    `amenityDesc`   varchar(500)    DEFAULT NULL,
     `gymID`     int     NOT NULL,
     PRIMARY KEY(`amenityID`),
     KEY `gymID` (`gymID`),
@@ -198,4 +200,18 @@ CREATE TABLE `machines`(
     PRIMARY KEY(`machineID`),
     KEY `gymID` (`gymID`),
     CONSTRAINT `machines_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*
+ *  Table of Reviews
+ */
+CREATE TABLE `reviews`(
+    `reviewID`  int     NOT NULL AUTO_INCREMENT,
+    `message`   varchar(500)    NOT NULL,
+    `rating`    int     NOT NULL,
+    `gymID`     int     NOT NULL,
+    PRIMARY KEY(`reviewID`),
+    KEY `gymID`(`gymID`),
+    CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE,
+    CONSTRAINT `reviews_validRatings` CHECK (`rating` BETWEEN 1 AND 5)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
