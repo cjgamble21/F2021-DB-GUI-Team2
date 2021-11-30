@@ -15,9 +15,10 @@ export default class EditTrainer extends React.Component {
         this.state.gender = "";
         this.state.phone = "";
         this.state.email = "";
-        this.state.pfp = "https://via.placeholder.com/500";
+        this.state.pfp = "";
         this.state.credentials = [];
         this.state.workouts = ["bench press", "squats"];
+        this.state.trainerId="";
         this.state.token = localStorage.token;
     }
 
@@ -39,8 +40,8 @@ export default class EditTrainer extends React.Component {
                     this.setState({ phone: accArray.phone });
                 if (accArray.email)
                     this.setState({ email: accArray.email });
-                // if (accArray.pfp)
-                // this.setState({ pfp: accArray.pfp });
+                if (accArray.pfp)
+                this.setState({ pfp: accArray.pfp });
                 if (accArray.description)
                     this.setState({ description: accArray.description });
             }
@@ -50,6 +51,15 @@ export default class EditTrainer extends React.Component {
     componentDidMount() {
         this.initalizeProfile();
     }
+
+    handleChange = (e) => {
+        const {id , value} = e.target   
+        this.setState(prevState => ({
+            ...prevState,
+            [id] : value
+        }))
+    }
+
 
     ListItems(props) {
         const toList = props.items;
@@ -61,11 +71,9 @@ export default class EditTrainer extends React.Component {
         );
     };
 
-    onSaveSubmit() {
-        this.trainerRepo.updateTrainer(this.state.token, this.state.firstName,
-            this.state.lastName, this.state.age, this.state.gender, this.state.phone, this.state.email,
-            this.state.pfp, this.state.description)
-            .then(this.props.history('/TrainerHomePage'));
+    handleSubmitClick = (e) => {
+        this.trainerRepo.updateTrainer(this.state.firstName, this.state.lastName, this.state.age, this.state.gender, this.state.phone, this.state.email, this.state.pfp, this.state.description)
+            //.then(this.props.history.push('/TrainerHomePage'));
     }
 
     render() {
@@ -81,8 +89,7 @@ export default class EditTrainer extends React.Component {
                                     id="pfpUrl"
                                     className="form-control m-auto"
                                     value={this.state.pfp}
-                                    onChange={e => this.setState({ photo: e.target.value })} />
-                            </div>
+                                    onChange={this.handleChange} />                            </div>
                         </div>
                         <div id="trainerInfo">
                             <div>
@@ -94,7 +101,7 @@ export default class EditTrainer extends React.Component {
                                                 id="firstName"
                                                 className="form-control"
                                                 value={this.state.firstName}
-                                                onChange={e => this.setState({ firstName: e.target.value })} />
+                                                onChange={this.handleChange} />
                                         </div>
                                         <div className="form-group ">
                                             <label htmlFor="lastName">Last Name</label>
@@ -102,7 +109,7 @@ export default class EditTrainer extends React.Component {
                                                 id="lastName"
                                                 className="form-control"
                                                 value={this.state.lastName}
-                                                onChange={e => this.setState({ lastName: e.target.value })} />
+                                                onChange={this.handleChange} />
                                         </div>
                                     </fieldset>
                                     <fieldset className="d-flex justify-content-around">
@@ -111,7 +118,7 @@ export default class EditTrainer extends React.Component {
                                             <select value={this.state.gender}
                                                 id="gender"
                                                 className="form-control"
-                                                onChange={e => this.setState({ gender: e.target.value })}>
+                                                onChange={this.handleChange}>
                                                 <option>M</option>
                                                 <option>F</option>
                                             </select>
@@ -123,7 +130,7 @@ export default class EditTrainer extends React.Component {
                                                 className="form-control"
                                                 value={this.state.age}
                                                 min="18"
-                                                onChange={e => this.setState({ age: e.target.value })} />
+                                                onChange={this.handleChange} />
                                         </div>
                                     </fieldset>
                                     <fieldset className="d-flex justify-content-around">
@@ -133,7 +140,7 @@ export default class EditTrainer extends React.Component {
                                                 id="email"
                                                 className="form-control"
                                                 value={this.state.email}
-                                                onChange={e => this.setState({ email: e.target.value })} />
+                                                onChange={this.handleChange} />
                                         </div>
                                         <div className="form-group ">
                                             <label htmlFor="phoneNumber">Phone Number</label>
@@ -141,7 +148,7 @@ export default class EditTrainer extends React.Component {
                                                 id="phoneNumber"
                                                 className="form-control"
                                                 value={this.state.phone}
-                                                onChange={e => this.setState({ phone: e.target.value })} />
+                                                onChange={this.handleChange} />
                                         </div>
                                     </fieldset>
                                 </form>
@@ -152,13 +159,14 @@ export default class EditTrainer extends React.Component {
                 <div id="trainerBody" className="mb-4">
                     <h2>About Me</h2>
                     <textarea className="form-control mb-5"
-                        value={this.state.description} />
+                        value={this.state.description}
+                        onChange={this.handleChange}  />
                     <h2>Workouts</h2>
                     <this.ListItems items={this.state.workouts} />
                 </div>
                 <div className="d-flex justify-content-around">
                     <button className="btn btn-primary"
-                        onClick={this.onSaveSubmit}>Save Changes</button>
+                        onClick={this.handleSubmitClick}>Save Changes</button>
                     <Link to="/TrainerHomePage" className="btn btn-danger">
                         Cancel
                     </Link>

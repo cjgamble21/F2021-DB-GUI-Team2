@@ -22,8 +22,10 @@ export default class TrainerHomePage extends React.Component {
         this.state.email = "";
         this.state.pfp = "https://via.placeholder.com/500";
         this.state.description = [];
-        this.state.workouts = [];
+        this.state.workouts = ["bench press", "squats"];
         this.state.token = localStorage.token;
+
+        this.redirectToEdit = this.redirectToEdit.bind(this);
     }
 
     initalizeProfile() {
@@ -56,7 +58,9 @@ export default class TrainerHomePage extends React.Component {
         this.initalizeProfile();
     }
 
-
+    redirectToEdit = () => {
+        this.props.history.push('/TrainerHomePage/edit');
+    }
 
     handleChange(e) {
         this.setState({ value: e.target.value });
@@ -101,8 +105,8 @@ export default class TrainerHomePage extends React.Component {
                         <h2 className="mt-5">Workouts</h2>
                         <this.ListItems items={this.state.workouts} />
                     </div>
-                    <Link to="/TrainerHomePage/edit"><button className="btn btn-primary">Edit Info</button>
-                    </Link>
+                    <button className="btn btn-primary"
+                        onClick={() => this.redirectToEdit()}>Edit Info</button>
                 </div>
             </div>
         )

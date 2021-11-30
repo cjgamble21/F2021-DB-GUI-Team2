@@ -75,9 +75,19 @@ export class TrainerRepository {
         });
     }
 
-    updateTrainer(trainerID, firstName, lastName, age, gender, phone, email, pfp, description){
+    updateTrainer(firstName, lastName, age, gender, phone, email, pfp, description){
         return new Promise((resolve, reject) => {
-            axios.put(`${this.url}/trainer/${trainerID}/changeinfo`, {trainerID, firstName, lastName, age, gender, phone, email, pfp, description}, this.config)
+            let body = {
+                firstName : firstName,
+                lastName: lastName,
+                age: age,
+                gender: gender,
+                phone: phone,
+                email: email,
+                pfp: pfp,
+                description: description
+            }
+            axios.put(`${this.url}/api/TrainerDashboard/edit?token=${localStorage.token}`,body,this.config)
                 .then(x => resolve(x.data))
                 .catch(error => {
                     alert("Error updating profile!");
