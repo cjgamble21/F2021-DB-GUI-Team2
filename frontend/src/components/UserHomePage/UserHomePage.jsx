@@ -25,7 +25,7 @@ export default class UserHomePage extends React.Component {
         this.state.age = 0;
         this.state.phone = "";
         this.state.email = "";
-        this.state.photo = "https://miro.medium.com/max/1200/1*BDE-SkJBCG_7P4chK4vKnw.jpeg";
+        this.state.photo = "";
         this.state.token = localStorage.token;
         this.state.gyms = [];
         this.state.sessions = [];

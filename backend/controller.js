@@ -1009,7 +1009,7 @@ exports.postBody = function(req, res, conn) {
         error: err
       });
     }
-    else { /*res.json(result);*/ }
+    else { res.json(result); }
   });
 }
 
@@ -1120,7 +1120,7 @@ exports.putTrainer = function(req, res, conn) {
     else {
       if (req.body.args.rate)
         conn.query('UPDATE trainers SET rate = '.concat(req.body.args.rate).concat(' WHERE ').concat(key['trainers'][0]).concat(' = ').concat(variable));
-      /*res.json(result);*/
+      res.json(result);
     }
   });
 }
