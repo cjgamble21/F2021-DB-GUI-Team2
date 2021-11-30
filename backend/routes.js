@@ -76,7 +76,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/UserDashboard/edit
-  app.put('/api/UserDashboard/edit', async (req, res) => {
+  app.put('/api/UserDashboard/edit', middleware.checkAuthUser, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -86,6 +86,8 @@ module.exports = function routes(app, logger) {
         });
       } else {
         req.body.table = 'profiles';
+        req.body.variable = req.user.profileID;
+
         req.body.args = {};
         if (req.body.firstName)
           req.body.args.firstName = req.body.firstName;
@@ -179,6 +181,8 @@ module.exports = function routes(app, logger) {
         });
       } else {
         req.body.table = 'profiles';
+        req.body.variable = req.user.profileID;
+        
         req.body.args = {};
         if (req.body.firstName)
           req.body.args.firstName = req.body.firstName;
