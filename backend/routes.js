@@ -272,7 +272,7 @@ module.exports = function routes(app, logger) {
   //////////////////////////////////////////////////
 
   // /api/d/{table}
-  app.get('/api/d/:table', middleware.checkAuthUser, async (req, res) => {
+  app.get('/api/d/:table', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -288,7 +288,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/{table}/{variable}
-  app.get('/api/d/:table/:variable', middleware.checkAuthUser, async (req, res) => {
+  app.get('/api/d/:table/:variable', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -304,7 +304,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/{table}/{variable}/{value}
-  app.get('/api/d/:table/:variable/:value', middleware.checkAuthUser, async (req, res) => {
+  app.get('/api/d/:table/:variable/:value', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -324,7 +324,7 @@ module.exports = function routes(app, logger) {
   //////////////////////////////////////////////////
 
   // /api/d/{table}/post
-  app.post('/api/d/:table/post', middleware.checkAuthOwner, async (req, res) => {
+  app.post('/api/d/:table/post', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -344,7 +344,7 @@ module.exports = function routes(app, logger) {
   //////////////////////////////////////////////////
 
   // /api/d/{table}/{variable}/put
-  app.put('/api/d/:table/:variable/put', middleware.checkAuthOwner, async (req, res) => {
+  app.put('/api/d/:table/:variable/put', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -360,7 +360,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/{table}/{variable}/{value}/put
-  app.put('/api/d/:table/:variable/:value/put', middleware.checkAuthOwner, async (req, res) => {
+  app.put('/api/d/:table/:variable/:value/put', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -380,7 +380,7 @@ module.exports = function routes(app, logger) {
   //////////////////////////////////////////////////
 
   // /api/d/{table}/{variable}/delete
-  app.delete('/api/d/:table/:variable/delete', middleware.checkAuthOwner, async (req, res) => {
+  app.delete('/api/d/:table/:variable/delete', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -396,7 +396,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/{table}/{variable}/{value}/delete
-  app.delete('/api/d/:table/:variable/:value/delete', middleware.checkAuthOwner, async (req, res) => {
+  app.delete('/api/d/:table/:variable/:value/delete', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');

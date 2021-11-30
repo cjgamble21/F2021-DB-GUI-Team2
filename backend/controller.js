@@ -27,8 +27,6 @@ exports.registerUser = function(req, res, conn) {
             error: err
           });
         } else {
-          console.log("Age: ",age);
-          console.log(req.body);
           conn.query('INSERT INTO profiles (username, password, userType, firstName, lastName, age, gender, phone, email, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [username, hash, userType, firstName, lastName, age, gender, phone, email, description], 
           function (err) {
               if (err) {
@@ -38,29 +36,33 @@ exports.registerUser = function(req, res, conn) {
                     response: 'Username already taken.'
                 });
               } else {
-                if (userType === 1)
-                  conn.query('INSERT INTO users (userID) VALUES (?)', profileID, function (err) {
-                    if (err) {
-                      logger.error('Something happened', err);
-                      res.status(400).json({
-                        code: 400,
-                        response: 'Couldn\'t insert into table.'
-                      })
-                    }
-                  });
-                else if (userType === 2)
-                  conn.query('INSERT INTO trainers (trainerID) VALUES (?)', profileID, function (err) {
-                    if (err) {
-                      logger.error('Something happened', err);
-                      res.status(400).json({
-                        code: 400,
-                        response: 'Couldn\'t insert into table.'
-                      })
-                    }
-                  });
-                res.status(200).json({
-                  code: 200,
-                  response: 'User registration successful.'
+                var profileID;
+                conn.query('SELECT profileID FROM profiles WHERE username = ?', username, function(err, result) {
+                  if (!err) {
+                    profileID = result[0].profileID;
+                    if (userType === 1)
+                      conn.query('INSERT INTO users (userID) VALUES (?)', [profileID], function (err) {
+                        if (err) {
+                          logger.error('Something happened', err);
+                        }
+                      });
+                    else if (userType === 2)
+                      conn.query('INSERT INTO trainers (trainerID) VALUES (?)', profileID, function (err) {
+                        if (err) {
+                          logger.error('Something happened', err);
+                        }
+                      });
+                    else if (userType === 3)
+                      conn.query('INSERT INTO admins (adminID) VALUES (?)', profileID, function (err) {
+                        if (err) {
+                          logger.error('Something happened', err);
+                        }
+                      });
+                    res.status(200).json({
+                      code: 200,
+                      response: 'User registration successful.'
+                    });
+                  }
                 });
               }
           });
