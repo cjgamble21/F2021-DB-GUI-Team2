@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS `admins`;
 DROP TABLE IF EXISTS `profiles`;
 DROP TABLE IF EXISTS `userTypes`;
 DROP TABLE IF EXISTS `workouts`;
+DROP TABLE IF EXISTS `amenities`;
 
 /*
  * Table of gymInfo
@@ -36,6 +37,17 @@ CREATE TABLE `workouts` (
 	`workout`		varchar(50)		UNIQUE NOT NULL,
 	`description`	varchar(500)	NOT NULL,
 	PRIMARY KEY(`workoutID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*
+ * Table of available amenities
+ */
+CREATE TABLE `amenities` (
+	`amenityID`		int				UNIQUE NOT NULL,
+	`title`			varchar(50)		DEFAULT NULL,
+	`description`	varchar(500)	DEFAULT NULL,
+	`image`			varchar(500)	DEFAULT NULL,
+	PRIMARY KEY(`amenityID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*

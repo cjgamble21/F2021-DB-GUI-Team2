@@ -590,5 +590,21 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+
+  // /api/resetDB/nine
+  app.post('/api/resetDB/nine', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createAmenities(req, res, conn);
+        conn.release();
+      }
+    });
+  });
 }
 
