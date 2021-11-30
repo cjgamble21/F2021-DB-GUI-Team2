@@ -4,7 +4,7 @@ axios.defaults.withCredentials = true;
 
 export class RatingRepository{
     //remember to change URL 
-    url = 'http://localhost:8000';
+    url = 'http://ec2-3-139-91-59.us-east-2.compute.amazonaws.com:8000/';
 
     config = {
         withCredentials: true
