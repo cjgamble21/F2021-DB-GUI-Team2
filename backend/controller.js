@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const sqlite3 = require('sqlite3').verbose();
 
 exports.registerUser = function(req, res, conn) {
     var username = req.body.username;
@@ -134,6 +136,23 @@ exports.loginUser = function(req, res, conn) {
         });
       }
     }
+
+exports.resetDB = function(req, res, conn) {
+  const sqlStatements = fs.readFileSync('./resetDB.sql').toString().split(';');
+
+  conn.query('BEGIN TRANSACTION;');
+
+  sqlStatements.forEach((query) => {
+    if (query){
+      query += ';';
+      conn.query(query, (err) => {
+        if (err) logger.error(err);
+      });
+    }
+  });
+
+  conn.query('COMMIT;');
+}
 
 exports.userAuthTest = function(req, res, conn) {
   conn.query('SELECT * FROM profiles', async (err, result) => {

@@ -39,6 +39,19 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  // route for resetting the database
+  app.post('/api/resetDB', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        controller.resetDB(req, res, conn);
+        conn.release();
+      }
+    });
+  }
+
   //////////////////////////////////////////////////
   // TEST PATHS
   //////////////////////////////////////////////////
