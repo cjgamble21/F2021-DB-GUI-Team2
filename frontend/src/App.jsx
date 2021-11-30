@@ -30,11 +30,11 @@ function App () {
   const [values, setValues] = useState([])
 
   // ENTER YOUR EC2 PUBLIC IP/URL HERE
-  const ec2_url = ''
+  const ec2_url = 'http://ec2-3-139-91-59.us-east-2.compute.amazonaws.com:8000'
   // CHANGE THIS TO TRUE IF HOSTING ON EC2, MAKE SURE TO ADD IP/URL ABOVE
   const ec2 = false;
   // USE localhost OR ec2_url ACCORDING TO ENVIRONMENT
-  const url = ec2 ? ec2_url : 'localhost'
+  const url = ec2 ? ec2_url : 'http://localhost:8000'
 
   return (
     <Router>
