@@ -4,7 +4,7 @@ import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/apiConstants';
 import axios from 'axios'
 function Home(props) {
     useEffect(() => {
-        axios.get('http://http://ec2-3-139-91-59.us-east-2.compute.amazonaws.com:8000//user/me', { headers: { 'token': localStorage.getItem(ACCESS_TOKEN_NAME) }})
+        axios.get('http://http://ec2-3-139-91-59.us-east-2.compute.amazonaws.com:8000/user/me', { headers: { 'token': localStorage.getItem(ACCESS_TOKEN_NAME) }})
         .then(function (response) {
             if(response.status !== 200){
               redirectToLogin()
