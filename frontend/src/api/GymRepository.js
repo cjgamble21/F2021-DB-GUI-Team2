@@ -4,7 +4,7 @@ axios.defaults.withCredentials = true;
 
 export class GymRepository{
     //remember to change URL 
-    url = 'http://localhost:8000';
+    url = 'ec2-3-139-91-59.us-east-2.compute.amazonaws.com:8000';
 
     config = {
         withCredentials: true
@@ -22,12 +22,25 @@ export class GymRepository{
 
     getGym(gymID){
         return new Promise((resolve, reject) => {
-            axios.get(`${this.url}/api/getGyms/${gymID}`, this.config)
+            axios.get(`${this.url}/api/d/gymInfo/${gymID}`, this.config)
                 .then(x => resolve(x.data))
                 .catch(error => {
                     reject(error);
                 })
         })
     }
+
+    getAmenities(){
+        return new Promise((resolve, reject) => {
+            axios.get(`${this.url}/api/d/amenities`, this.config)
+                .then(x => resolve(x.data))
+                .catch(error => {
+                    reject(error);
+                })
+        })
+
+    }
+
+
 
 }

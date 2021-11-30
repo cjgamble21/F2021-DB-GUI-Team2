@@ -23,13 +23,14 @@ export default class Gym extends React.Component {
         this.state.logo = "";
         this.state.ratings = [];
         this.state.trainers = [];
+        this.state.amenities = [];
         this.state.gymID = this.props.match.params.id
     }
 
     initializeRatings(){
         
         this.ratingsRepo.getRatings(this.state.gymID).then(ratings => {
-            
+            console.log(ratings)
             this.setState({ratings:ratings})
         })
     }
@@ -46,6 +47,12 @@ export default class Gym extends React.Component {
             }
 
         })
+
+        this.gymRepo.getAmenities().then(amenities =>{
+            let  accArray3 = amenities
+            console.log(accArray3)
+            this.setState({amenities:accArray3})
+        })
     }
     initializeTrainers(){
         this.trainerRepo.getTrainers().then(trainers =>{
@@ -55,11 +62,13 @@ export default class Gym extends React.Component {
         })
         
     }
+    
 
     componentDidMount(){
         this.initializeRatings();
         this.initializeGym();
         this.initializeTrainers();
+        
     }
 
     render(){
@@ -100,30 +109,18 @@ export default class Gym extends React.Component {
             </div>
 
             <div className="card-group">
-                <div className="card border-light rounded">
-                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" className="card-img-top rounded" alt="..."/>
-                    <div className="card-body">
-                    <h5 className="card-title">Spacious Fitness Floor</h5>
-                    <p className="card-text">All the building blocks of fitness — cardio and strength machines, free weights, functional training areas and more.</p>
-                    
-                    </div>
+                {this.state.amenities.map((amenity,index) => 
+
+                <div className="card border-light rounded" key = {index}>
+                <img src={amenity.image} className="card-img-top rounded" alt="..."/>
+                <div className="card-body">
+                <h5 className="card-title">{amenity.title}</h5>
+                <p className="card-text">{amenity.description}</p>
+                
                 </div>
-                <div className="card border-light rounded">
-                    <img src="https://images.unsplash.com/photo-1623874514711-0f321325f318?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" className="card-img-top rounded" alt="..."/>
-                    <div className="card-body">
-                    <h5 className="card-title">Upscale Amenities</h5>
-                    <p className="card-text">Details like spacious locker rooms, fresh towel service and premium toiletries give our destinations a welcoming, resort-like feel.</p>
-                    
-                    </div>
-                </div>
-                <div className="card border-light rounded">
-                    <img src="https://previews.123rf.com/images/anatols/anatols1204/anatols120400019/13138871-active-children-climbing-up-the-gymnastic-wall-bars.jpg" className="card-img-top rounded" alt="..."/>
-                    <div className="card-body">
-                    <h5 className="card-title">Kids and Family</h5>
-                    <p className="card-text">Camps, classes, fitness and more. Create memories and be active as a family — or enjoy some time to yourself while we watch the kids.</p>
-                    
-                    </div>
-                </div>
+            </div>
+                )}
+                
             </div>
 
             <div className = "row">
