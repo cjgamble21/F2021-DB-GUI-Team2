@@ -3,8 +3,12 @@ import axios from 'axios';
 import './RegistrationForm.css';
 import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/apiConstants';
 import { withRouter } from "react-router-dom";
+import { UserRepository } from '../../api/UserRepository';
 
 function RegistrationForm(props) {
+
+    
+
     const [state , setState] = useState({
         username : "",
         password : "",
@@ -12,11 +16,12 @@ function RegistrationForm(props) {
         confirmPassword: "",
         firstName: "",
         lastName  : "",
-        birthday: "",
+        age: 0,
         gender: "",
         phone: "",
         email: "",
         description: "",
+        pfp: "https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/sheep-3.jpg",
 
         successMessage: null
     })
@@ -64,9 +69,31 @@ function RegistrationForm(props) {
         props.history.push('/login'); 
     }
     const handleSubmitClick = (e) => {
+
+        const userRepo = new UserRepository();
+        
         e.preventDefault();
         if(state.password === state.confirmPassword) {
-            sendDetailsToServer();  
+            //sendDetailsToServer();  
+            userRepo.createUser(state.username,state.password,state.userType,state.firstName,state.lastName,state.age,state.gender,state.phone,state.email,state.pfp,state.description)
+            .then(function (response) {
+                //console.log(response);
+                if(response.code === 200){
+                    setState(prevState => ({
+                        ...prevState,
+                        'successMessage' : 'Registration successful. Redirecting to home page..'
+                    }))
+                    localStorage.setItem(ACCESS_TOKEN_NAME,response.token);
+                    redirectToLogin();
+                    //props.showError(null)
+                } else{
+                    //props.showError("Some error ocurred");
+                }
+            })
+            .catch(function (error) {
+                window.alert(error);
+            });
+            
         } else {
             //props.showError('Passwords do not match');
         }
@@ -139,8 +166,8 @@ function RegistrationForm(props) {
                     />
                 </div>
                 <div className="form-group text-left">
-                    <label htmlFor="birthday">Age</label>
-                    <input type="age"
+                    <label htmlFor="age">Age</label>
+                    <input type="number"
                         className = "form-control"
                         id = "age"
                         placeholder="Enter Age"
