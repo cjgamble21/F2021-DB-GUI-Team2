@@ -855,7 +855,8 @@ var key = {
   'gymInfo': ['gymID'],
   'reviews': ['reviewID'],
   'offers': ['offerID'],
-  'requests': ['requestID']
+  'requests': ['requestID'],
+  'amenities': ['amenityID']
 };
 
 // DEFAULT VALS TO CHANGE FOR THE TABLES
