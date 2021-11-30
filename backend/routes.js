@@ -39,6 +39,19 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  // route for resetting the database
+  app.post('/api/resetDB', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        controller.resetDB(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
   //////////////////////////////////////////////////
   // TEST PATHS
   //////////////////////////////////////////////////
@@ -63,7 +76,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/UserDashboard/edit
-  app.put('/api/UserDashboard/edit', async (req, res) => {
+  app.put('/api/UserDashboard/edit', middleware.checkAuthUser, async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -73,6 +86,8 @@ module.exports = function routes(app, logger) {
         });
       } else {
         req.body.table = 'profiles';
+        req.body.variable = req.user.profileID;
+
         req.body.args = {};
         if (req.body.firstName)
           req.body.args.firstName = req.body.firstName;
@@ -90,7 +105,7 @@ module.exports = function routes(app, logger) {
           req.body.args.pfp = req.body.pfp;
         if (req.body.description)
           req.body.args.description = req.body.description;
-        controller.putUserInfo(req, res, conn);
+        controller.putBody(req, res, conn);
         conn.release();
       }
     });
@@ -166,6 +181,8 @@ module.exports = function routes(app, logger) {
         });
       } else {
         req.body.table = 'profiles';
+        req.body.variable = req.user.profileID;
+        
         req.body.args = {};
         if (req.body.firstName)
           req.body.args.firstName = req.body.firstName;
@@ -258,21 +275,54 @@ module.exports = function routes(app, logger) {
           message: 'Problem obtaining MySQL connection'
         });
       } else {
-        req.body.table = 'profiles';
+        controller.getTrainer(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  app.get('/api/getRatings/:id', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem obtaining MySQL connection'
+        });
+      } else {
+        req.body.table = 'reviews';
         req.body.args = {};
-        req.body.args.userType = 2;
+        req.body.args.gymID = req.params.id;
+        controller.getBody(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+  app.get('/api/getGyms/:id', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem obtaining MySQL connection'
+        });
+      } else {
+        req.body.table = 'gymInfo';
+        req.body.args = {};
+        req.body.args.gymID = req.params.id;
         controller.getBody(req, res, conn);
         conn.release();
       }
     });
   });
 
+
   //////////////////////////////////////////////////
   // GET 
   //////////////////////////////////////////////////
 
   // /api/d/{table}
-  app.get('/api/d/:table', middleware.checkAuthUser, async (req, res) => {
+  app.get('/api/d/:table', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -288,7 +338,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/{table}/{variable}
-  app.get('/api/d/:table/:variable', middleware.checkAuthUser, async (req, res) => {
+  app.get('/api/d/:table/:variable', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -304,7 +354,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/{table}/{variable}/{value}
-  app.get('/api/d/:table/:variable/:value', middleware.checkAuthUser, async (req, res) => {
+  app.get('/api/d/:table/:variable/:value', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -324,7 +374,7 @@ module.exports = function routes(app, logger) {
   //////////////////////////////////////////////////
 
   // /api/d/{table}/post
-  app.post('/api/d/:table/post', middleware.checkAuthOwner, async (req, res) => {
+  app.post('/api/d/:table/post', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -344,7 +394,7 @@ module.exports = function routes(app, logger) {
   //////////////////////////////////////////////////
 
   // /api/d/{table}/{variable}/put
-  app.put('/api/d/:table/:variable/put', middleware.checkAuthOwner, async (req, res) => {
+  app.put('/api/d/:table/:variable/put', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -360,7 +410,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/{table}/{variable}/{value}/put
-  app.put('/api/d/:table/:variable/:value/put', middleware.checkAuthOwner, async (req, res) => {
+  app.put('/api/d/:table/:variable/:value/put', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -380,7 +430,7 @@ module.exports = function routes(app, logger) {
   //////////////////////////////////////////////////
 
   // /api/d/{table}/{variable}/delete
-  app.delete('/api/d/:table/:variable/delete', middleware.checkAuthOwner, async (req, res) => {
+  app.delete('/api/d/:table/:variable/delete', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -396,7 +446,7 @@ module.exports = function routes(app, logger) {
   });
 
   // /api/d/{table}/{variable}/{value}/delete
-  app.delete('/api/d/:table/:variable/:value/delete', middleware.checkAuthOwner, async (req, res) => {
+  app.delete('/api/d/:table/:variable/:value/delete', async (req, res) => {
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error('Problem with MySQL connection');
@@ -406,6 +456,134 @@ module.exports = function routes(app, logger) {
         });
       } else {
         controller.delete(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/one
+  app.post('/api/resetDB/one', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createGymInfo(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/two
+  app.post('/api/resetDB/two', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createProfiles(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/three
+  app.post('/api/resetDB/three', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createGymOwnership(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/four
+  app.post('/api/resetDB/four', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createReviews(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/five
+  app.post('/api/resetDB/five', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createSessions(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/six
+  app.post('/api/resetDB/six', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createOffersRequests(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/seven
+  app.post('/api/resetDB/seven', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createWorkouts(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/eight
+  app.post('/api/resetDB/eight', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createTrainerSkills(req, res, conn);
         conn.release();
       }
     });

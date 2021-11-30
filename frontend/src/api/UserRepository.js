@@ -22,7 +22,19 @@ export class UserRepository {
         })
     }
 
-    updateUser(firstName, lastName, age, gender, phone, email,description,profileID){
+    getUserSessions(userToken){
+        return new Promise((resolve, reject) => {
+            axios.get(`${this.url}/api/UserSessions`, {
+                params: { token: userToken }
+            })
+                .then(x => resolve(x.data))
+                .catch(error => {
+                    reject(error);
+                });
+        })
+    }
+
+    updateUser(firstName, lastName, age, gender, phone, email,description){
         return new Promise((resolve, reject) => {
             let body = {
 
@@ -33,10 +45,12 @@ export class UserRepository {
                 phone: phone,
                 email: email,
                 description: description,
-                userID: profileID
+                
 
             }
-            axios.put(`${this.url}/api/UserDashboard/edit`,body,this.config)
+            console.log(localStorage.token)
+            console.log(firstName)
+            axios.put(`${this.url}/api/UserDashboard/edit?token=${localStorage.token}`,body,this.config)
                 
                 .then(x => resolve(x.data))
                 .catch(error => {
@@ -61,7 +75,7 @@ export class UserRepository {
                 pfp: pfp,
                 description: description
             };
-            console.log(body);
+            
             axios.post(`${this.url}/api/register`, body, this.config)
                 .then(x => resolve(x.data))
                 .catch(error => {
