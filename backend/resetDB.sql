@@ -3,8 +3,6 @@ CREATE DATABASE IF NOT EXISTS `db`;
 USE `db`;
 
 DROP TABLE IF EXISTS `reviews`;
-DROP TABLE IF EXISTS `machines`;
-DROP TABLE IF EXISTS `amenities`;
 DROP TABLE IF EXISTS `gymOwnership`;
 DROP TABLE IF EXISTS `trainerSkills`;
 DROP TABLE IF EXISTS `requests`;
@@ -65,7 +63,7 @@ CREATE TABLE `profiles` (
 	`gender`		varchar(50)		DEFAULT NULL,
 	`phone`			varchar(50)		UNIQUE DEFAULT NULL,
 	`email`			varchar(50) 	UNIQUE DEFAULT NULL,
-	`pfp`			varchar(50)		DEFAULT NULL,
+	`pfp`			varchar(500)	DEFAULT NULL,
 	`description`	varchar(500)	DEFAULT NULL,
 	`userType`		int				NOT NULL,
 	PRIMARY KEY(`profileID`),
@@ -81,13 +79,12 @@ CREATE TABLE `users` (
 	PRIMARY KEY(`userID`),
 	CONSTRAINT `users_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 /*
  * Table of trainers
  */
 CREATE TABLE `trainers` (
 	`trainerID`		int				NOT NULL,
-	`gymID`         int             NOT NULL,
+	`gymID`         int             DEFAULT NULL,
 	`rate`			decimal(8,2)	NOT NULL,
 	PRIMARY KEY(`trainerID`),
 	CONSTRAINT `trainers_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE,
@@ -176,31 +173,6 @@ CREATE TABLE `gymOwnership`(
     CONSTRAINT `gymOwnership_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE,
     CONSTRAINT `gymOwnership_ibfk_2` FOREIGN KEY (`adminID`) REFERENCES `admins` (`adminID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*
- * Table of amenities
- */
-CREATE TABLE `amenities`(
-    `amenityID`     int     NOT NULL AUTO_INCREMENT,
-    `amenityImage`  varchar(200)    DEFAULT NULL,
-    `amenityDesc`   varchar(500)    DEFAULT NULL,
-    `gymID`     int     NOT NULL,
-    PRIMARY KEY(`amenityID`),
-    KEY `gymID` (`gymID`),
-    CONSTRAINT `amenities_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE
-)ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*
- * Table of machines
- */
-CREATE TABLE `machines`(
-    `machineID`     int     NOT NULL AUTO_INCREMENT,
-    `machineName`   varchar(50)     NOT NULL,
-    `gymID`         int NOT NULL,
-    PRIMARY KEY(`machineID`),
-    KEY `gymID` (`gymID`),
-    CONSTRAINT `machines_ibfk_1` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE
-)ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*
  *  Table of Reviews
