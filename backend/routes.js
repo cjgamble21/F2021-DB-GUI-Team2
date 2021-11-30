@@ -50,7 +50,7 @@ module.exports = function routes(app, logger) {
         conn.release();
       }
     });
-  }
+  });
 
   //////////////////////////////////////////////////
   // TEST PATHS
@@ -271,10 +271,7 @@ module.exports = function routes(app, logger) {
           message: 'Problem obtaining MySQL connection'
         });
       } else {
-        req.body.table = 'profiles';
-        req.body.args = {};
-        req.body.args.userType = 2;
-        controller.getBody(req, res, conn);
+        controller.getTrainer(req, res, conn);
         conn.release();
       }
     });
@@ -423,4 +420,134 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+
+  // /api/resetDB/one
+  app.post('/api/resetDB/one', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createGymInfo(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/two
+  app.post('/api/resetDB/two', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createProfiles(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/three
+  app.post('/api/resetDB/three', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createGymOwnership(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/four
+  app.post('/api/resetDB/four', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createReviews(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/five
+  app.post('/api/resetDB/five', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createSessions(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/six
+  app.post('/api/resetDB/six', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createOffersRequests(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/seven
+  app.post('/api/resetDB/seven', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createWorkouts(req, res, conn);
+        conn.release();
+      }
+    });
+  });
+
+  // /api/resetDB/eight
+  app.post('/api/resetDB/eight', async (req, res) => {
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error('Problem with MySQL connection');
+        res.status(400).json({
+          code: 400,
+          message: 'Problem with MySQL connection'
+        });
+      } else {
+        controller.createTrainerSkills(req, res, conn);
+        conn.release();
+      }
+    });
+  });
 }
+
+  
