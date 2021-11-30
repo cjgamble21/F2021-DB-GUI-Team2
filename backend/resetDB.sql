@@ -27,6 +27,10 @@ CREATE TABLE `gymInfo`(
     PRIMARY KEY(`gymID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO gymInfo (name, description, logo) VALUES ("gym1", "the first gym", "logo");
+INSERT INTO gymInfo (name, description, logo) VALUES ("gym2", "the second gym", "logo");
+INSERT INTO gymInfo (name, description, logo) VALUES ("gym3", "the third gym", "logo");
+
 /*
  * Table of available workouts at the gym
  */
@@ -36,6 +40,10 @@ CREATE TABLE `workouts` (
 	`description`	varchar(500)	NOT NULL,
 	PRIMARY KEY(`workoutID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO workouts (workout, description) VALUES ("workout1", "the first workout");
+INSERT INTO workouts (workout, description) VALUES ("workout2", "the second workout");
+INSERT INTO workouts (workout, description) VALUES ("workout3", "the third workout");
 
 /*
  * Table of user types
@@ -85,7 +93,7 @@ CREATE TABLE `users` (
 CREATE TABLE `trainers` (
 	`trainerID`		int				NOT NULL,
 	`gymID`         int             DEFAULT NULL,
-	`rate`			decimal(8,2)	NOT NULL,
+	`rate`			decimal(8,2)	DEFAULT NULL,
 	PRIMARY KEY(`trainerID`),
 	CONSTRAINT `trainers_ibfk_1` FOREIGN KEY (`trainerID`) REFERENCES `profiles` (`profileID`) ON DELETE CASCADE,
     CONSTRAINT `trainers_ibfk_2` FOREIGN KEY (`gymID`) REFERENCES `gymInfo` (`gymID`) ON DELETE CASCADE
