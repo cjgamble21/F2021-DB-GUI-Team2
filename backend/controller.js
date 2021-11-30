@@ -809,6 +809,34 @@ exports.createTrainerSkills = function(req, res, conn) {
   });
 }
 
+exports.createAmenities = function(req, res, conn) {
+  req.body.table = 'amenities';
+  req.body.args = {};
+
+  req.body.args.amenityID = 1;
+  req.body.args.title = 'towels';
+  req.body.args.description = 'for drying off';
+  req.body.args.image = 'https://via.placeholder.com/500';
+  exports.postBody(req, res, conn);
+
+  req.body.args.amenityID = 2;
+  req.body.args.title = 'water fountains';
+  req.body.args.description = 'for drinking';
+  req.body.args.image = 'https://via.placeholder.com/500';
+  exports.postBody(req, res, conn);
+
+  req.body.args.amenityID = 3;
+  req.body.args.title = 'mats';
+  req.body.args.description = 'for lying on';
+  req.body.args.image = 'https://via.placeholder.com/500';
+  exports.postBody(req, res, conn);
+
+  res.status(200).json({
+    code: 200,
+    message: 'inserted amenities dummy data.'
+  });
+}
+
 //////////////////////////////////////////////////
 // DYNAMIC METHODS
 //////////////////////////////////////////////////
@@ -916,7 +944,7 @@ exports.getTrainer = function(req, res, conn) {
   var table1 = 'profiles';
   var table2 = 'trainers';
 
-  var result = joinKeys(req,body.args, 'get');
+  var result = joinKeys(req.body, 'get');
 
   var query = 'SELECT * FROM '.concat(table1).concat(' join ').concat(table2).concat(' ON ').concat(table1).concat('.profileID = ').concat(table2).concat('.trainerID ');
 
@@ -957,7 +985,7 @@ exports.post = function(req, res, conn) {
         error: err
       });
     }
-    else { /*res.json(result);*/ }
+    else { res.json(result); }
   });
 }
 
@@ -1013,7 +1041,7 @@ exports.put = function(req, res, conn) {
         error: err
       });
     }
-    else { /*res.json(result);*/ }
+    else { res.json(result); }
   });
 }
 
@@ -1127,7 +1155,7 @@ exports.delete = function(req, res, conn) {
         error: err
       });
     }
-    else { /*res.json(result);*/ }
+    else { res.json(result); }
   });
 }
 
