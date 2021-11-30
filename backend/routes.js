@@ -90,7 +90,7 @@ module.exports = function routes(app, logger) {
           req.body.args.pfp = req.body.pfp;
         if (req.body.description)
           req.body.args.description = req.body.description;
-        controller.putUserInfo(req, res, conn);
+        controller.putBody(req, res, conn);
         conn.release();
       }
     });

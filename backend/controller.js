@@ -447,7 +447,8 @@ exports.putTrainer = function(req, res, conn) {
       });
     }
     else {
-      conn.query('UPDATE trainers SET rate = '.concat(req.body.args.rate).concat(' WHERE ').concat(key['trainers'][0]).concat(' = ').concat(variable));
+      if (req.body.args.rate)
+        conn.query('UPDATE trainers SET rate = '.concat(req.body.args.rate).concat(' WHERE ').concat(key['trainers'][0]).concat(' = ').concat(variable));
       res.json(result);
     }
   });
