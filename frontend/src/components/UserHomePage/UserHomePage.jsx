@@ -8,6 +8,7 @@ import { UserRepository } from '../../api/UserRepository';
 import { Link } from 'react-router-dom';
 import { GymRepository } from '../../api/GymRepository';
 import { Rating } from '../Ratings/rating';
+import { RatingRepository } from '../../api/RatingRepository';
 
 
 export default class UserHomePage extends React.Component {
@@ -15,6 +16,7 @@ export default class UserHomePage extends React.Component {
     trainerRepo = new TrainerRepository();
     userRepo = new UserRepository();
     gymRepo = new GymRepository();
+    ratingsRepo = new RatingRepository();
     
     constructor(props) {
         super(props);
@@ -30,6 +32,7 @@ export default class UserHomePage extends React.Component {
         this.state.gyms = [];
         this.state.sessions = [];
 
+
         
         this.redirectToEdit = this.redirectToEdit.bind(this);
     }
@@ -37,7 +40,6 @@ export default class UserHomePage extends React.Component {
     initalizeProfile(){
         this.userRepo.getUser(this.state.token).then(account => {
             let accArray = account;
-            console.log(accArray)
             if(accArray){
                 this.setState({ age: accArray.age });
                 if (accArray.firstName.length > 0)
@@ -59,22 +61,58 @@ export default class UserHomePage extends React.Component {
 
     initializeGyms(){
         this.gymRepo.getGyms().then(gyms => {
-            console.log(gyms)
-            this.setState({gyms: gyms})
+            var gymsList = [];
+            {gyms.map((gym) => {
+                var averageRating = 0
+
+                this.ratingsRepo.getRatings(gym.gymID).then(ratings => {
+                    ratings.forEach((rating) => {
+                        averageRating += rating.rating
+                    })
+                    averageRating /= ratings.length
+
+                    gym.averageRating = averageRating
+                    gymsList.push(gym)
+                })
+            })
+            }
+
+            setTimeout(() => {
+                this.setState({gyms: gymsList})
+            }, 500)
+
         })
+
     }
 
     initializeSessions(){
         this.userRepo.getUserSessions(this.state.token).then(sessions => {
+            var sessionsList = [];
             console.log(sessions)
-            this.setState({sessions:sessions})
+            {sessions.map((session) => {
+
+                this.userRepo.getUserByID(session.trainerID).then(trainer => {
+                    console.log(trainer)
+                    session.trainerName = trainer[0].firstName + " " + trainer[0].lastName
+                    sessionsList.push(session)
+                })
+            })
+            }
+
+            setTimeout(() => {
+                sessionsList = sessionsList.sort((session1, session2)=>{
+                    return session1.date.localeCompare(session2.date)
+                })
+                this.setState({sessions: sessionsList})
+            }, 1000)
+
         })
     }
 
     componentDidMount(){
         this.initalizeProfile();
         this.initializeGyms();
-         this.initializeSessions();
+        this.initializeSessions();
     }
 
     redirectToEdit = () => {
@@ -142,10 +180,10 @@ export default class UserHomePage extends React.Component {
                                     {
                                         this.state.sessions.map((session, index) => 
                                             <tr key={index}>
-                                                <td><Link to= "/TrainerHomePage">Bob the Builder</Link></td>
+                                                <td><Link to= "/TrainerHomePage">{session.trainerName}</Link></td>
                                                 <td>Dallas,TX</td>
-                                                <td>{session.date}</td>
-                                                <td>{session.price}</td>
+                                                <td>{session.date.substr(5,2)}/{session.date.substr(8,2)}/{session.date.substr(0,4)}</td>
+                                                <td>${session.price}</td>
                                                 
                                             </tr>
                                         )
@@ -176,7 +214,7 @@ export default class UserHomePage extends React.Component {
                                         </td>
                                         <td><Link to = {"/Gym/"+gym.gymID}>{gym.name}</Link></td>
                                         <td>{gym.address}</td>
-                                        <td><Rating value={1}></Rating></td>
+                                        <td><Rating value={gym.averageRating}></Rating></td>
                                     </tr>
                                 )
                             }
