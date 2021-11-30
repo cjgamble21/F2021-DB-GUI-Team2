@@ -276,6 +276,7 @@ module.exports = function routes(app, logger) {
         });
       } else {
         controller.getTrainer(req, res, conn);
+
         conn.release();
       }
     });
@@ -311,6 +312,7 @@ module.exports = function routes(app, logger) {
         req.body.args = {};
         req.body.args.gymID = req.params.id;
         controller.getBody(req, res, conn);
+
         conn.release();
       }
     });
@@ -589,3 +591,4 @@ module.exports = function routes(app, logger) {
     });
   });
 }
+

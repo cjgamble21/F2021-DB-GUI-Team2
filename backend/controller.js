@@ -162,6 +162,7 @@ exports.resetDB = function(req, res, conn) {
   functions.push(exports.createWorkouts);
   functions.push(exports.createTrainerSkills);
   functions.reverse();
+
   exports.resetDBFunction(req, res, conn);
 */
   conn.query('COMMIT;');
@@ -819,8 +820,14 @@ var key = {
   'profiles': ['profileID'],
   'users': ['userID'],
   'trainers': ['trainerID'],
+  'admins': ['adminID'],
   'userTypes': ['userType'],
-  'workouts': ['workoutID']
+  'workouts': ['workoutID'],
+  'gymOwnership': ['gymID', 'adminID'],
+  'gymInfo': ['gymID'],
+  'reviews': ['reviewID'],
+  'offers': ['offerID'],
+  'requests': ['requestID']
 };
 
 // DEFAULT VALS TO CHANGE FOR THE TABLES
@@ -830,8 +837,14 @@ var val = {
   'profiles': ['description'],
   'users': ['userID'],
   'trainers': ['rate'],
+  'adminID': ['adminID'],
   'userTypes': ['description'],
-  'workouts': ['description']
+  'workouts': ['description'],
+  'gymOwnership': ['adminID'],
+  'gymInfo': ['description'],
+  'reviews': ['rating'],
+  'offers': ['date'],
+  'requests': ['date']
 };
 
 exports.get = function(req, res, conn) {
