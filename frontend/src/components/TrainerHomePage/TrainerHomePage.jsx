@@ -21,7 +21,7 @@ export default class TrainerHomePage extends React.Component {
         this.state.phone = "";
         this.state.email = "";
         this.state.pfp = "https://via.placeholder.com/500";
-        this.state.credentials = [];
+        this.state.description = [];
         this.state.workouts = [];
         this.state.token = localStorage.token;
     }
@@ -96,10 +96,10 @@ export default class TrainerHomePage extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div id="trainerBody" className="col-sm-6 align-self-center">
-                        <h2>Credentials</h2>
-                        <this.ListItems items={this.state.credentials} />
-                        <h2>Workouts</h2>
+                    <div id="trainerBody" className="col-sm-6 mt-5">
+                        <h2>About Me</h2>
+                        <p>{this.state.description} </p>
+                        <h2 className="mt-5">Workouts</h2>
                         <this.ListItems items={this.state.workouts} />
                     </div>
                     <Link to="/TrainerHomePage/edit"><button className="btn btn-primary">Edit Info</button>
