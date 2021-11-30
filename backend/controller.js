@@ -38,6 +38,26 @@ exports.registerUser = function(req, res, conn) {
                     response: 'Username already taken.'
                 });
               } else {
+                if (userType === 1)
+                  conn.query('INSERT INTO users (userID) VALUES (?)', profileID, function (err) {
+                    if (err) {
+                      logger.error('Something happened', err);
+                      res.status(400).json({
+                        code: 400,
+                        response: 'Couldn\'t insert into table.'
+                      })
+                    }
+                  });
+                else if (userType === 2)
+                  conn.query('INSERT INTO trainers (trainerID) VALUES (?)', profileID, function (err) {
+                    if (err) {
+                      logger.error('Something happened', err);
+                      res.status(400).json({
+                        code: 400,
+                        response: 'Couldn\'t insert into table.'
+                      })
+                    }
+                  });
                 res.status(200).json({
                   code: 200,
                   response: 'User registration successful.'
