@@ -6,11 +6,14 @@ import { Link } from "react-router-dom";
 import { RatingRepository } from '../../api/RatingRepository';
 import { Rating } from '../Ratings/rating';
 import { GymRepository } from '../../api/GymRepository';
+import { TrainerRepository } from '../../api/TrainerRepository';
 
 export default class Gym extends React.Component {
 
     ratingsRepo = new RatingRepository();
     gymRepo = new GymRepository();
+    trainerRepo = new TrainerRepository();
+
     
     constructor(props) {
         super(props);
@@ -19,6 +22,7 @@ export default class Gym extends React.Component {
         this.state.description = "";
         this.state.logo = "";
         this.state.ratings = [];
+        this.state.trainers = [];
         this.state.gymID = this.props.match.params.id
     }
 
@@ -32,7 +36,7 @@ export default class Gym extends React.Component {
 
     initializeGym()
     {
-        console.log(this.state.gymID)
+        
         this.gymRepo.getGym(this.state.gymID).then(gym => {
             let accArray = gym;
             
@@ -43,10 +47,19 @@ export default class Gym extends React.Component {
 
         })
     }
+    initializeTrainers(){
+        this.trainerRepo.getTrainers().then(trainers =>{
+            let accArray2 = trainers
+            console.log(accArray2)
+            this.setState({trainers:accArray2})
+        })
+        
+    }
 
     componentDidMount(){
         this.initializeRatings();
         this.initializeGym();
+        this.initializeTrainers();
     }
 
     render(){
@@ -130,6 +143,28 @@ export default class Gym extends React.Component {
                                     <p>{rating.message}</p>
                                     </td>
                                     <td><Rating value={rating.rating}></Rating></td>
+                                </tr>
+                            )
+                        }
+                    </tbody>
+                </table>
+            </div><div className = "row">
+                <table className = "table table-image table-hover">
+                    <thead className="thead-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Rating</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.trainers.map((trainers, index) => 
+                                <tr key={index}>
+                                    <td className = "w-25">
+                                    <p>{trainers.name}</p>
+                                    </td>
+                                    {/* <td><Rating value={trainers.rating}></Rating></td> */}
                                 </tr>
                             )
                         }

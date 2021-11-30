@@ -916,7 +916,7 @@ exports.getTrainer = function(req, res, conn) {
   var table1 = 'profiles';
   var table2 = 'trainers';
 
-  var result = joinKeys(req,body.args, 'get');
+  var result = joinKeys(req.body, 'get');
 
   var query = 'SELECT * FROM '.concat(table1).concat(' join ').concat(table2).concat(' ON ').concat(table1).concat('.profileID = ').concat(table2).concat('.trainerID ');
 
@@ -957,7 +957,7 @@ exports.post = function(req, res, conn) {
         error: err
       });
     }
-    else { /*res.json(result);*/ }
+    else { res.json(result); }
   });
 }
 
@@ -981,7 +981,7 @@ exports.postBody = function(req, res, conn) {
         error: err
       });
     }
-    else { /*res.json(result);*/ }
+    else { res.json(result); }
   });
 }
 
@@ -1013,7 +1013,7 @@ exports.put = function(req, res, conn) {
         error: err
       });
     }
-    else { /*res.json(result);*/ }
+    else { res.json(result); }
   });
 }
 
@@ -1092,7 +1092,7 @@ exports.putTrainer = function(req, res, conn) {
     else {
       if (req.body.args.rate)
         conn.query('UPDATE trainers SET rate = '.concat(req.body.args.rate).concat(' WHERE ').concat(key['trainers'][0]).concat(' = ').concat(variable));
-      /*res.json(result);*/
+      res.json(result);
     }
   });
 }
@@ -1127,7 +1127,7 @@ exports.delete = function(req, res, conn) {
         error: err
       });
     }
-    else { /*res.json(result);*/ }
+    else { res.json(result); }
   });
 }
 

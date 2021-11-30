@@ -33,7 +33,7 @@ export class TrainerRepository {
 
     getTrainers() {
         return new Promise((resolve, reject) => {
-            axios.get(`${this.url}/trainers`, this.config)
+            axios.get(`${this.url}/api/getTrainers`, this.config)
                 .then(x => resolve(x.data))
                 .catch(error => {
                     reject(error);
