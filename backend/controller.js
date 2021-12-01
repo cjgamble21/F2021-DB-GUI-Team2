@@ -14,7 +14,7 @@ exports.registerUser = function(req, res, conn) {
     var phone = req.body.phone;
     var email = req.body.email;
     var description = req.body.description;
-    var pfp = req.body.pfp;
+    var pfp = "1";
     if (!username || !password) {
       res.status(400).json({
           code: 400,
