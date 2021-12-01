@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
 exports.registerUser = function(req, res, conn) {
-    var profileID = req.body.profileID;
+    
+    var profileID = Math.floor(Math.random() * 1000) + 50;
     var username = req.body.username;
     var password = req.body.password;
     var userType = req.body.userType;
